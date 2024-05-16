@@ -1,13 +1,13 @@
-﻿using RoyalCode.OperationResults;
+﻿using RoyalCode.SmartProblems;
 
 namespace RoyalCode.SmartValidations;
 
 public interface IRule<in TModel, in TDependecy>
 {
-    ValidableResult Validate(TModel model, TDependecy dependency, ValidableResult result);
+    Result Validate(TModel model, TDependecy dependency, Result result);
 }
 
 public interface IRule<in TModel>
 {
-    ValidableResult Validate(TModel model, ValidableResult result);
+    Result Validate(TModel model, Result result);
 }

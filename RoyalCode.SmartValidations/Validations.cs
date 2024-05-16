@@ -1,5 +1,5 @@
 ﻿using System.Linq.Expressions;
-using RoyalCode.OperationResults;
+using RoyalCode.SmartProblems;
 
 namespace RoyalCode.SmartValidations;
 
@@ -44,5 +44,5 @@ public class PropertyValidatorBuilder<TModel, TProperty>
 
 public interface IPropertyRule<in TModel, in TProperty>
 {
-    public ValidableResult Validate(TModel model, TProperty property, ValidableResult result);
+    public Result Validate(TModel model, TProperty property, Result result);
 }
