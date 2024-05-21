@@ -91,17 +91,14 @@ public class RuleSetOptions
     public bool BreakOnFirstError { get; set; }
 }
 
-public interface IRuleSet<in TModel>
-{
-    bool HasProblems(TModel model, [NotNullWhen(true)] out Problems? problems);
-}
+
 
 public interface IRuleChainBuilder<TModel>
 {
     RuleChain<TModel> Must(Rule<TModel> rule);
 }
 
-public class RuleChain<TModel> : IRuleSet<TModel>, IRuleChainBuilder<TModel>
+public class RuleChain<TModel> : IRule<TModel>, IRuleChainBuilder<TModel>
 {
     private readonly RuleChain<TModel>? previous;
     private readonly Rule<TModel> rule;
@@ -157,29 +154,9 @@ public class RuleChain<TModel> : IRuleSet<TModel>, IRuleChainBuilder<TModel>
     }
 }
 
-public class DefaultRulesResources
+public static partial class Rules
 {
-}
-
-public static class Rules
-{
-    public static RuleFor<TModel> For<TModel>()
-    {
-        return new RuleFor<TModel>();
-    }
-
-    public static RuleChain<TModel> NotNull<TModel>(this IRuleChainBuilder<TModel> builder)
-    {
-        return builder.Must(DefaultRules.ModelNotNull);
-    }
-
-    public sealed class RuleFor<TModel> : IRuleChainBuilder<TModel>
-    {
-        public RuleChain<TModel> Must(Rule<TModel> rule)
-        {
-            return new RuleChain<TModel>(rule);
-        }
-    }
+    
 }
 
 internal static class DefaultRules

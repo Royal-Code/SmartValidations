@@ -3,6 +3,16 @@ using RoyalCode.SmartProblems;
 
 namespace RoyalCode.SmartValidations;
 
+public interface IValidationRule<in TModel, in TDependecy>
+{
+    Result Validate(TModel model, TDependecy dependency, Result result);
+}
+
+public interface IValidationRule<in TModel>
+{
+    Result Validate(TModel model, Result result);
+}
+
 public static class Validations
 {
     public static ValidatorBuilder<TModel> For<TModel>()
@@ -13,11 +23,11 @@ public static class Validations
 
 public class ValidatorBuilder<TModel>
 {
-    private readonly List<IRule<TModel>> rules = [];
+    private readonly List<IValidationRule<TModel>> rules = [];
     
-    public ValidatorBuilder<TModel> AddRule(IRule<TModel> rule)
+    public ValidatorBuilder<TModel> AddRule(IValidationRule<TModel> validationRule)
     {
-        rules.Add(rule);
+        rules.Add(validationRule);
         return this;
     }
 }

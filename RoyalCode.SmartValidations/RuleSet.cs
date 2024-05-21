@@ -1,13 +1,27 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using RoyalCode.SmartProblems;
 
 namespace RoyalCode.SmartValidations;
 
+public interface IRuleSet<out TSelf>
+    where TSelf: IRuleSet<TSelf>
+{
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    TSelf AddProblem(Problem problem);
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    string GetDisplayName(string? property);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    bool HasProblems([NotNullWhen(true)] out Problems? problems);
+}
+
 /// <summary>
-/// Struct para aplicar regras de validação e coletar o resultado.
+/// Struct to apply validation rules and collect the result.
 /// </summary>
-public readonly struct RuleSet
+public readonly struct RuleSet : IRuleSet<RuleSet> 
 {
     private readonly Type? type;
     private readonly Problems? problems;
@@ -19,11 +33,17 @@ public readonly struct RuleSet
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private RuleSet AddProblem(Problem problem)
+    public RuleSet AddProblem(Problem problem)
     {
         Problems resultProblems = problems ?? new();
         resultProblems.Add(problem);
         return new RuleSet(type, resultProblems);
+    }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public string GetDisplayName(string? property)
+    {
+        return Rules.Resources.DisplayNames.GetDisplayName(type, property);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -50,16 +70,16 @@ public readonly struct RuleSet
 
     #region Not Empty
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public RuleSet NotEmpty(
-        [NotNullWhen(true)] string? value,
-        [CallerArgumentExpression(nameof(value))] string? property = null)
-    {
-        if (!string.IsNullOrWhiteSpace(value))
-            return this;
-
-        return NullOrEmptyProblem(property);
-    }
+    // [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    // public RuleSet NotEmpty(
+    //     [NotNullWhen(true)] string? value,
+    //     [CallerArgumentExpression(nameof(value))] string? property = null)
+    // {
+    //     if (!string.IsNullOrWhiteSpace(value))
+    //         return this;
+    //
+    //     return NullOrEmptyProblem(property);
+    // }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet NotEmpty<T>(
@@ -67,10 +87,7 @@ public readonly struct RuleSet
         [CallerArgumentExpression(nameof(value))] string? property = null)
         where T: INumber<T>
     {
-        if (value != T.Zero)
-            return this;
-
-        return NullOrEmptyProblem(property);
+        return value != T.Zero ? this : NullOrEmptyProblem(property);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -95,20 +112,20 @@ public readonly struct RuleSet
         return NullOrEmptyProblem(property);
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public RuleSet NotEmpty<T>(
-        [NotNullWhen(true)] IEnumerable<T>? value,
-        [CallerArgumentExpression(nameof(value))] string? property = null)
-    {
-        if (value is not null && value.Any())
-            return this;
-
-        return NullOrEmptyProblem(property);
-    }
+    // [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    // public RuleSet NotEmpty<T>(
+    //     [NotNullWhen(true)] IEnumerable<T>? value,
+    //     [CallerArgumentExpression(nameof(value))] string? property = null)
+    // {
+    //     if (value is not null && value.Any())
+    //         return this;
+    //
+    //     return NullOrEmptyProblem(property);
+    // }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet NotEmpty(
-        [NotNullWhen(true)] DateTime value,
+        DateTime value,
         [CallerArgumentExpression(nameof(value))] string? property = null)
     {
         if (value != DateTime.MinValue && value != DateTime.UnixEpoch)
@@ -130,7 +147,7 @@ public readonly struct RuleSet
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet NotEmpty(
-        [NotNullWhen(true)] DateTimeOffset value,
+        DateTimeOffset value,
         [CallerArgumentExpression(nameof(value))] string? property = null)
     {
         if (value != DateTimeOffset.MinValue && value != DateTimeOffset.UnixEpoch)
@@ -152,7 +169,7 @@ public readonly struct RuleSet
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet NotEmpty(
-        [NotNullWhen(true)] DateOnly value,
+        DateOnly value,
         [CallerArgumentExpression(nameof(value))] string? property = null)
     {
         if (value != DateOnly.MinValue && value != new DateOnly(1970, 1, 1))
