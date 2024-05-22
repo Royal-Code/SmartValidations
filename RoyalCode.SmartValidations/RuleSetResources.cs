@@ -1,6 +1,6 @@
 ﻿namespace RoyalCode.SmartValidations;
 
-public class DefaultRuleSetResources
+public class RuleSetResources
 {
     public DisplayNames DisplayNames { get; } = new();
 

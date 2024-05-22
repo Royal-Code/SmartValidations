@@ -1,31 +1,41 @@
 ﻿namespace RoyalCode.SmartValidations;
 
 /// <summary>
-/// Tipo estático para gerir regras de validação de objetos.
+/// Static type for managing object validation rules.
 /// </summary>
-public static partial class Rules
+public static class Rules
 {
-    public static DefaultRuleSetResources Resources { get; } = new();
+    /// <summary>
+    /// The resources used by the built-in rules.
+    /// </summary>
+    public static RuleSetResources Resources { get; } = new();
 
+    /// <summary>
+    /// Create a new rule set to apply validation rules.
+    /// </summary>
+    /// <returns>A new rule set.</returns>
     public static RuleSet Set() => new();
 
+    /// <summary>
+    /// Create a new rule set to apply validation rules.
+    /// </summary>
+    /// <typeparam name="T">The type being validated.</typeparam>
+    /// <returns>A new rule set.</returns>
     public static RuleSet Set<T>() => new(typeof(T));
     
-    public static RuleFor<TModel> For<TModel>()
+    public static IRuleChainBuilder<RuleChain<TModel>, TModel> Builder<TModel>()
     {
-        return new RuleFor<TModel>();
+        return new RuleBuilder<TModel>();
     }
 
-    public static RuleChain<TModel> NotNull<TModel>(this IRuleChainBuilder<TModel> builder)
+    public static TBuilder NotNull<TBuilder, TModel>(this IRuleChainBuilder<TBuilder, TModel> builder)
+        where TBuilder : IRuleChainBuilder<TBuilder, TModel>
     {
         return builder.Must(DefaultRules.ModelNotNull);
     }
 
-    public sealed class RuleFor<TModel> : IRuleChainBuilder<TModel>
+    private sealed class RuleBuilder<TModel> : IRuleChainBuilder<RuleChain<TModel>, TModel>
     {
-        public RuleChain<TModel> Must(Rule<TModel> rule)
-        {
-            return new RuleChain<TModel>(rule);
-        }
+        public RuleChain<TModel> Must(Rule<TModel> rule) => new(rule);
     }
 }

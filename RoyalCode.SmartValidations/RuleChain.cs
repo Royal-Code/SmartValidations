@@ -93,12 +93,13 @@ public class RuleSetOptions
 
 
 
-public interface IRuleChainBuilder<TModel>
+public interface IRuleChainBuilder<out TSelf, TModel>
+    where TSelf : IRuleChainBuilder<TSelf, TModel>
 {
-    RuleChain<TModel> Must(Rule<TModel> rule);
+    TSelf Must(Rule<TModel> rule);
 }
 
-public class RuleChain<TModel> : IRule<TModel>, IRuleChainBuilder<TModel>
+public class RuleChain<TModel> : IRule<TModel>, IRuleChainBuilder<RuleChain<TModel>, TModel>
 {
     private readonly RuleChain<TModel>? previous;
     private readonly Rule<TModel> rule;
@@ -152,11 +153,6 @@ public class RuleChain<TModel> : IRule<TModel>, IRuleChainBuilder<TModel>
         problems.Add(problem);
         return true;
     }
-}
-
-public static partial class Rules
-{
-    
 }
 
 internal static class DefaultRules
