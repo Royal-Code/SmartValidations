@@ -6,6 +6,8 @@ public class RuleSetResources
 
     public string NotNullOrEmptyMessageTemplate { get; set; } = "O campo '{0}' deve ser informado";
 
+    public string NullOrNotMessageTemplate { get; set; } = "Os campo '{0}', quando informado, deve conter um valor";
+
     public string BothNullOrNotMessageTemplate { get; set; } = "Ambos os campos '{0}' e '{1}' deve ser informados juntos ou não informados";
 
     public string NotEqualMessageTemplate { get; set; } = "O campo '{0}' não deve ser igual a '{1}'";

@@ -196,6 +196,17 @@ public readonly struct RuleSet : IRuleSet<RuleSet>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet NullOrNotEmpty(
+        [NotNullWhen(true)] string? value,
+        [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        return value is null || BuildInPredicates.NotEmpty(value) 
+            ? this 
+            : AddProblem(Problems.InvalidParameter(
+                string.Format(Rules.Resources.NullOrNotMessageTemplate, property)));
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet BothNullOrNotEmpty(
         [NotNullWhen(true)] string? value1,
         [NotNullWhen(true)] string? value2,
@@ -356,6 +367,32 @@ public readonly struct RuleSet : IRuleSet<RuleSet>
         where T : IComparable<T>
     {
         if (BuildInPredicates.Min(value, min))
+            return this;
+
+        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+
+        return AddProblem(Problems.InvalidParameter(
+            string.Format(Rules.Resources.MinMessageTemplate, propertyName, min.ToString()), property));
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet Min<T>(T? value, T min, [CallerArgumentExpression(nameof(value))] string? property = null)
+        where T : struct, IComparable<T>
+    {
+        if (BuildInPredicates.Min(value, min))
+            return this;
+
+        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+
+        return AddProblem(Problems.InvalidParameter(
+            string.Format(Rules.Resources.MinMessageTemplate, propertyName, min.ToString()), property));
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet NullOrMin<T>(T? value, T min, [CallerArgumentExpression(nameof(value))] string? property = null)
+        where T : struct, IComparable<T>
+    {
+        if (!value.HasValue || BuildInPredicates.Min(value.Value, min))
             return this;
 
         var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
