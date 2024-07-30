@@ -29,7 +29,11 @@ public static class BuildInPredicates
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool NotEmpty<T>([NotNullWhen(true)] T value) where T: INumber<T> 
         => value != T.Zero;
-    
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool NotEmpty<T>([NotNullWhen(true)] T? value) where T : struct, INumber<T>
+        => value.HasValue && value.Value != T.Zero;
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool NotEmpty<T>([NotNullWhen(true)] T[]? value) 
         => value is not null && value.Length != 0;
@@ -76,13 +80,29 @@ public static class BuildInPredicates
     public static bool NotEmpty([NotNullWhen(true)] string? value) 
         => !string.IsNullOrWhiteSpace(value);
     
+    #endregion
+
+    #region NotNull Or Empty
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool NullOrNotEmpty<T>(T value) where T : INumber<T>
+        => value is null || value != T.Zero;
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool NullOrNotEmpty<T>(T? value) where T : struct, INumber<T>
+        => !value.HasValue || value.Value != T.Zero;
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool NullOrNotEmpty(string? value)
+        => value is null || !string.IsNullOrWhiteSpace(value);
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool BothNullOrNotEmpty(string? value1, string? value2)
     {
         return (value1 is null && value2 is null)
                || (!string.IsNullOrWhiteSpace(value1) && !string.IsNullOrWhiteSpace(value2));
     }
-    
+
     #endregion
 
     #region Equals NotEquals
@@ -174,13 +194,25 @@ public static class BuildInPredicates
     {
         return value.CompareTo(max) <= 0;
     }
-    
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool Max<T>(T? value, T max) where T : struct, IComparable<T>
+    {
+        return value.HasValue && value.Value.CompareTo(max) <= 0;
+    }
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool MinMax<T>(T value, T min, T max) where T: IComparable<T>
     {
         return value.CompareTo(min) >= 0 && value.CompareTo(max) <= 0;
     }
-    
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool MinMax<T>(T? value, T min, T max) where T : struct, IComparable<T>
+    {
+        return value.HasValue && value.Value.CompareTo(min) >= 0 && value.Value.CompareTo(max) <= 0;
+    }
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool MinLength(string? value, int length)
     {

@@ -87,6 +87,17 @@ public readonly struct RuleSet : IRuleSet<RuleSet>
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet NotEmpty<T>(
+        [NotNullWhen(true)] T? value,
+        [CallerArgumentExpression(nameof(value))] string? property = null)
+        where T : struct, INumber<T>
+    {
+        return BuildInPredicates.NotEmpty(value)
+            ? this
+            : NullOrEmptyProblem(property);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet NotEmpty<T>(
         [NotNullWhen(true)] T[]? value,
         [CallerArgumentExpression(nameof(value))] string? property = null)
     {
@@ -196,17 +207,6 @@ public readonly struct RuleSet : IRuleSet<RuleSet>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public RuleSet NullOrNotEmpty(
-        [NotNullWhen(true)] string? value,
-        [CallerArgumentExpression(nameof(value))] string? property = null)
-    {
-        return value is null || BuildInPredicates.NotEmpty(value) 
-            ? this 
-            : AddProblem(Problems.InvalidParameter(
-                string.Format(Rules.Resources.NullOrNotMessageTemplate, property)));
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet BothNullOrNotEmpty(
         [NotNullWhen(true)] string? value1,
         [NotNullWhen(true)] string? value2,
@@ -224,7 +224,77 @@ public readonly struct RuleSet : IRuleSet<RuleSet>
 
     #endregion
 
+    #region Null Or Not Empty
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet NullOrNotEmpty(
+        string? value,
+        [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        return BuildInPredicates.NullOrNotEmpty(value)
+            ? this
+            : AddProblem(Problems.InvalidParameter(
+                string.Format(Rules.Resources.NullOrNotMessageTemplate, property)));
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet NullOrNotEmpty<T>(
+        T value,
+        [CallerArgumentExpression(nameof(value))] string? property = null)
+        where T : INumber<T>
+    {
+        return BuildInPredicates.NullOrNotEmpty(value)
+            ? this
+            : AddProblem(Problems.InvalidParameter(
+                string.Format(Rules.Resources.NullOrNotMessageTemplate, property)));
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet NullOrNotEmpty<T>(
+        T? value,
+        [CallerArgumentExpression(nameof(value))] string? property = null)
+        where T : struct, INumber<T>
+    {
+        return BuildInPredicates.NullOrNotEmpty(value)
+            ? this
+            : AddProblem(Problems.InvalidParameter(
+                string.Format(Rules.Resources.NullOrNotMessageTemplate, property)));
+    }
+
+    #endregion
+
     #region Equal NotEqual
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet Equal(
+        string? value,
+        string expected,
+        StringComparison comparison = StringComparison.Ordinal,
+        [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        if (BuildInPredicates.Equal(value, expected, comparison))
+            return this;
+
+        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+
+        return AddProblem(Problems.InvalidParameter(
+            string.Format(Rules.Resources.EqualMessageTemplate, propertyName, expected), property));
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet Equal<T>(
+        T? value,
+        T expected,
+        [CallerArgumentExpression(nameof(value))] string? property = null) where T : IEquatable<T>
+    {
+        if (BuildInPredicates.Equal(value, expected))
+            return this;
+
+        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+
+        return AddProblem(Problems.InvalidParameter(
+            string.Format(Rules.Resources.EqualMessageTemplate, propertyName, expected), property));
+    }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet NotEqual(
@@ -258,34 +328,38 @@ public readonly struct RuleSet : IRuleSet<RuleSet>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public RuleSet Equal(
-        string? value,
-        string expected,
+    public RuleSet BothEqual(
+        string? value1,
+        string? value2,
         StringComparison comparison = StringComparison.Ordinal,
-        [CallerArgumentExpression(nameof(value))] string? property = null)
+        [CallerArgumentExpression(nameof(value1))] string? property1 = null,
+        [CallerArgumentExpression(nameof(value2))] string? property2 = null)
     {
-        if (BuildInPredicates.Equal(value, expected, comparison))
+        if (BuildInPredicates.BothEqual(value1, value2, comparison))
             return this;
 
-        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+        var property1Name = Rules.Resources.DisplayNames.GetDisplayName(type, property1);
+        var property2Name = Rules.Resources.DisplayNames.GetDisplayName(type, property2);
 
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.EqualMessageTemplate, propertyName, expected), property));
+            string.Format(Rules.Resources.BothEqualMessageTemplate, property1Name, property2Name)));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public RuleSet Equal<T>(
-        T? value,
-        T expected,
-        [CallerArgumentExpression(nameof(value))] string? property = null) where T: IEquatable<T>
+    public RuleSet BothEqual<T>(
+        T? value1,
+        T? value2,
+        [CallerArgumentExpression(nameof(value1))] string? property1 = null,
+        [CallerArgumentExpression(nameof(value2))] string? property2 = null) where T : IEquatable<T>
     {
-        if (BuildInPredicates.Equal(value, expected))
+        if (BuildInPredicates.BothEqual(value1, value2))
             return this;
 
-        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+        var property1Name = Rules.Resources.DisplayNames.GetDisplayName(type, property1);
+        var property2Name = Rules.Resources.DisplayNames.GetDisplayName(type, property2);
 
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.EqualMessageTemplate, propertyName, expected), property));
+            string.Format(Rules.Resources.BothEqualMessageTemplate, property1Name, property2Name)));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -321,41 +395,6 @@ public readonly struct RuleSet : IRuleSet<RuleSet>
 
         return AddProblem(Problems.InvalidParameter(
             string.Format(Rules.Resources.BothNotEqualMessageTemplate, property1Name, property2Name)));
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public RuleSet BothEqual(
-        string? value1,
-        string? value2,
-        StringComparison comparison = StringComparison.Ordinal,
-        [CallerArgumentExpression(nameof(value1))] string? property1 = null,
-        [CallerArgumentExpression(nameof(value2))] string? property2 = null)
-    {
-        if (BuildInPredicates.BothEqual(value1, value2, comparison))
-            return this;
-
-        var property1Name = Rules.Resources.DisplayNames.GetDisplayName(type, property1);
-        var property2Name = Rules.Resources.DisplayNames.GetDisplayName(type, property2);
-
-        return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.BothEqualMessageTemplate, property1Name, property2Name)));
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public RuleSet BothEqual<T>(
-        T? value1,
-        T? value2,
-        [CallerArgumentExpression(nameof(value1))] string? property1 = null,
-        [CallerArgumentExpression(nameof(value2))] string? property2 = null) where T: IEquatable<T>
-    {
-        if (BuildInPredicates.BothEqual(value1, value2))
-            return this;
-
-        var property1Name = Rules.Resources.DisplayNames.GetDisplayName(type, property1);
-        var property2Name = Rules.Resources.DisplayNames.GetDisplayName(type, property2);
-
-        return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.BothEqualMessageTemplate, property1Name, property2Name)));
     }
 
     #endregion
@@ -398,7 +437,7 @@ public readonly struct RuleSet : IRuleSet<RuleSet>
         var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
 
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.MinMessageTemplate, propertyName, min.ToString()), property));
+            string.Format(Rules.Resources.NullOrMinMessageTemplate, propertyName, min.ToString()), property));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -411,6 +450,18 @@ public readonly struct RuleSet : IRuleSet<RuleSet>
 
         return AddProblem(Problems.InvalidParameter(
             string.Format(Rules.Resources.MinLengthMessageTemplate, propertyName, minLength.ToString()), property));
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet NullOrMinLength(string? value, int minLength, [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        if (value is null || BuildInPredicates.MinLength(value, minLength))
+            return this;
+
+        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+
+        return AddProblem(Problems.InvalidParameter(
+            string.Format(Rules.Resources.NullOrMinLengthMessageTemplate, propertyName, minLength.ToString()), property));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -427,6 +478,32 @@ public readonly struct RuleSet : IRuleSet<RuleSet>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet Max<T>(T? value, T max, [CallerArgumentExpression(nameof(value))] string? property = null)
+        where T : struct, IComparable<T>
+    {
+        if (BuildInPredicates.Max(value, max))
+            return this;
+
+        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+
+        return AddProblem(Problems.InvalidParameter(
+            string.Format(Rules.Resources.MaxMessageTemplate, propertyName, max.ToString()), property));
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet NullOrMax<T>(T? value, T max, [CallerArgumentExpression(nameof(value))] string? property = null)
+        where T : struct, IComparable<T>
+    {
+        if (!value.HasValue || BuildInPredicates.Max(value.Value, max))
+            return this;
+
+        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+
+        return AddProblem(Problems.InvalidParameter(
+            string.Format(Rules.Resources.NullOrMaxMessageTemplate, propertyName, max.ToString()), property));
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet MaxLength(string? value, int maxLength, [CallerArgumentExpression(nameof(value))] string? property = null)
     {
         if (BuildInPredicates.MaxLength(value, maxLength))
@@ -436,6 +513,18 @@ public readonly struct RuleSet : IRuleSet<RuleSet>
 
         return AddProblem(Problems.InvalidParameter(
             string.Format(Rules.Resources.MaxLengthMessageTemplate, propertyName, maxLength.ToString()), property));
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet NullOrMaxLength(string? value, int maxLength, [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        if (value is null || BuildInPredicates.MaxLength(value, maxLength))
+            return this;
+
+        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+
+        return AddProblem(Problems.InvalidParameter(
+            string.Format(Rules.Resources.NullOrMaxLengthMessageTemplate, propertyName, maxLength.ToString()), property));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -449,6 +538,32 @@ public readonly struct RuleSet : IRuleSet<RuleSet>
 
         return AddProblem(Problems.InvalidParameter(
             string.Format(Rules.Resources.MinMaxMessageTemplate, propertyName, min.ToString(), max.ToString()), property));
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet MinMax<T>(T? value, T min, T max, [CallerArgumentExpression(nameof(value))] string? property = null)
+        where T : struct, IComparable<T>
+    {
+        if (BuildInPredicates.MinMax(value, min, max))
+            return this;
+
+        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+
+        return AddProblem(Problems.InvalidParameter(
+            string.Format(Rules.Resources.MinMaxMessageTemplate, propertyName, min.ToString(), max.ToString()), property));
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet NullOrMinMax<T>(T? value, T min, T max, [CallerArgumentExpression(nameof(value))] string? property = null)
+        where T : struct, IComparable<T>
+    {
+        if (!value.HasValue || BuildInPredicates.MinMax(value.Value, min, max))
+            return this;
+
+        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+
+        return AddProblem(Problems.InvalidParameter(
+            string.Format(Rules.Resources.NullOrMinMaxMessageTemplate, propertyName, min.ToString(), max.ToString()), property));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
