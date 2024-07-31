@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace RoyalCode.SmartValidations;
@@ -40,7 +41,9 @@ public class DisplayNames
     ///     Quando o tipo for nulo, será retornado o nome da propriedade, 
     ///     e se a propriedade for nula, retorna "?".
     /// </returns>
-    public string GetDisplayName(Type? type, string? property)
+    public string GetDisplayName(
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]Type? type,
+        string? property)
     {
         if (type is null || property is null)
             return property ?? "?";

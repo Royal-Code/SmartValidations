@@ -7,6 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoyalCode.SmartValidations"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoyalCode.SmartValidations.Tests", "RoyalCode.SmartValidations.Tests\RoyalCode.SmartValidations.Tests.csproj", "{69DA3619-4DCA-4661-86DC-2C8CE5CD7AB4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".items", ".items", "{132AE6EC-FBAA-4D33-9723-E129C9CF0C4B}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+		libs.targets = libs.targets
+		tests.targets = tests.targets
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -1,4 +1,6 @@
-﻿namespace RoyalCode.SmartValidations;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace RoyalCode.SmartValidations;
 
 /// <summary>
 /// Static type for managing object validation rules.
@@ -21,7 +23,7 @@ public static class Rules
     /// </summary>
     /// <typeparam name="T">The type being validated.</typeparam>
     /// <returns>A new rule set.</returns>
-    public static RuleSet Set<T>() => new(typeof(T));
+    public static RuleSet Set<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]T>() => RuleSet.For<T>();
     
     public static IRuleChainBuilder<RuleChain<TModel>, TModel> Builder<TModel>()
     {
