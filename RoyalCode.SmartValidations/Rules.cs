@@ -24,20 +24,4 @@ public static class Rules
     /// <typeparam name="T">The type being validated.</typeparam>
     /// <returns>A new rule set.</returns>
     public static RuleSet Set<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]T>() => RuleSet.For<T>();
-    
-    public static IRuleChainBuilder<RuleChain<TModel>, TModel> Builder<TModel>()
-    {
-        return new RuleBuilder<TModel>();
-    }
-
-    public static TBuilder NotNull<TBuilder, TModel>(this IRuleChainBuilder<TBuilder, TModel> builder)
-        where TBuilder : IRuleChainBuilder<TBuilder, TModel>
-    {
-        return builder.Must(DefaultRules.ModelNotNull);
-    }
-
-    private sealed class RuleBuilder<TModel> : IRuleChainBuilder<RuleChain<TModel>, TModel>
-    {
-        public RuleChain<TModel> Must(Rule<TModel> rule) => new(rule);
-    }
 }

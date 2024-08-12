@@ -59,5 +59,257 @@ namespace RoyalCode.SmartValidations {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field must be the same as the &apos;{1}&apos; field.
+        /// </summary>
+        internal static string BothEqualMessageTemplate {
+            get {
+                return ResourceManager.GetString("BothEqualMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field must not be the same as the &apos;{1}&apos; field.
+        /// </summary>
+        internal static string BothNotEqualMessageTemplate {
+            get {
+                return ResourceManager.GetString("BothNotEqualMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Both fields &apos;{0}&apos; and &apos;{1}&apos; must be entered together or not at all.
+        /// </summary>
+        internal static string BothNullOrNotMessageTemplate {
+            get {
+                return ResourceManager.GetString("BothNullOrNotMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field must be a valid e-mail address.
+        /// </summary>
+        internal static string EmailMessageTemplate {
+            get {
+                return ResourceManager.GetString("EmailMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The record for &apos;{0}&apos; was not found.
+        /// </summary>
+        internal static string EntityNotFound {
+            get {
+                return ResourceManager.GetString("EntityNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The record of &apos;{0}&apos; with {1} &apos;{2}&apos; was not found.
+        /// </summary>
+        internal static string EntityNotFoundBy {
+            get {
+                return ResourceManager.GetString("EntityNotFoundBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The record of &apos;{0}&apos; with id &apos;{1}&apos; was not found.
+        /// </summary>
+        internal static string EntityNotFoundById {
+            get {
+                return ResourceManager.GetString("EntityNotFoundById", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field must be equal to &apos;{1}&apos;.
+        /// </summary>
+        internal static string EqualMessageTemplate {
+            get {
+                return ResourceManager.GetString("EqualMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The value of the &apos;{0}&apos; field must be greater than the value of the &apos;{1}&apos; field.
+        /// </summary>
+        internal static string GreaterThanMessageTemplate {
+            get {
+                return ResourceManager.GetString("GreaterThanMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The value of the &apos;{0}&apos; field must be greater than or equal to the value of the &apos;{1}&apos; field..
+        /// </summary>
+        internal static string GreaterThanOrEqualMessageTemplate {
+            get {
+                return ResourceManager.GetString("GreaterThanOrEqualMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &quot;{0}&quot; field must have a length between &quot;{1}&quot; and &quot;{2}&quot; characters.
+        /// </summary>
+        internal static string LengthMessageTemplate {
+            get {
+                return ResourceManager.GetString("LengthMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The value of the &apos;{0}&apos; field must be less than the value of the &apos;{1}&apos; field.
+        /// </summary>
+        internal static string LessThanMessageTemplate {
+            get {
+                return ResourceManager.GetString("LessThanMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The value of the &apos;{0}&apos; field must be less than or equal to the value of the &apos;{1}&apos; field..
+        /// </summary>
+        internal static string LessThanOrEqualMessageTemplate {
+            get {
+                return ResourceManager.GetString("LessThanOrEqualMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field must have a maximum length of &apos;{1}&apos; character(s).
+        /// </summary>
+        internal static string MaxLengthMessageTemplate {
+            get {
+                return ResourceManager.GetString("MaxLengthMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field must have a maximum value of &apos;{1}&apos;.
+        /// </summary>
+        internal static string MaxMessageTemplate {
+            get {
+                return ResourceManager.GetString("MaxMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field must have a minimum length of &apos;{1}&apos; character(s).
+        /// </summary>
+        internal static string MinLengthMessageTemplate {
+            get {
+                return ResourceManager.GetString("MinLengthMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field must have a minimum value of &apos;{1}&apos; and a maximum value of &apos;{2}&apos;.
+        /// </summary>
+        internal static string MinMaxMessageTemplate {
+            get {
+                return ResourceManager.GetString("MinMaxMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field must have a minimum value of &apos;{1}&apos;.
+        /// </summary>
+        internal static string MinMessageTemplate {
+            get {
+                return ResourceManager.GetString("MinMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field must not be equal to &apos;{1}&apos;.
+        /// </summary>
+        internal static string NotEqualMessageTemplate {
+            get {
+                return ResourceManager.GetString("NotEqualMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field must be entered.
+        /// </summary>
+        internal static string NotNullOrEmptyMessageTemplate {
+            get {
+                return ResourceManager.GetString("NotNullOrEmptyMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field, when entered, must have a length between &apos;{1}&apos; and &apos;{2}&apos; characters.
+        /// </summary>
+        internal static string NullOrLengthMessageTemplate {
+            get {
+                return ResourceManager.GetString("NullOrLengthMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field, when entered, must have a maximum length of &apos;{1}&apos; character(s).
+        /// </summary>
+        internal static string NullOrMaxLengthMessageTemplate {
+            get {
+                return ResourceManager.GetString("NullOrMaxLengthMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field, when entered, must have a maximum value of &apos;{1}&apos;.
+        /// </summary>
+        internal static string NullOrMaxMessageTemplate {
+            get {
+                return ResourceManager.GetString("NullOrMaxMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field, when entered, must have a minimum length of &apos;{1}&apos; character(s).
+        /// </summary>
+        internal static string NullOrMinLengthMessageTemplate {
+            get {
+                return ResourceManager.GetString("NullOrMinLengthMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field, when entered, must have a minimum value of &apos;{1}&apos; and a maximum value of &apos;{2}&apos;.
+        /// </summary>
+        internal static string NullOrMinMaxMessageTemplate {
+            get {
+                return ResourceManager.GetString("NullOrMinMaxMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field, when entered, must have a minimum value of &apos;{1}&apos;.
+        /// </summary>
+        internal static string NullOrMinMessageTemplate {
+            get {
+                return ResourceManager.GetString("NullOrMinMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field, when entered, must contain a value.
+        /// </summary>
+        internal static string NullOrNotMessageTemplate {
+            get {
+                return ResourceManager.GetString("NullOrNotMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field must be a valid URL.
+        /// </summary>
+        internal static string UrlMessageTemplate {
+            get {
+                return ResourceManager.GetString("UrlMessageTemplate", resourceCulture);
+            }
+        }
     }
 }

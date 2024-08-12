@@ -7,17 +7,30 @@ namespace RoyalCode.SmartValidations;
 
 #pragma warning disable S1121 // Assignments should not be made from within sub-expressions
 
+/// <summary>
+/// Build-in predicates.
+/// </summary>
 public static class BuildInPredicates
 {
     private static readonly EmailAddressAttribute EmailAddressValidator = new();
     private static readonly UrlAttribute UrlValidator = new();
 
     #region Mist
-    
+
+    /// <summary>
+    /// Determines whether the specified value matches the pattern of a valid email address.
+    /// </summary>
+    /// <param name="value">The value to validate.</param>
+    /// <returns>True if the specified value is valid, otherwise false.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsEmail([NotNullWhen(true)] string? value) 
         => value is not null && EmailAddressValidator.IsValid(value);
-    
+
+    /// <summary>
+    /// Validates the format of the specified URL.
+    /// </summary>
+    /// <param name="value">The URL to validate.</param>
+    /// <returns>True if the URL format is valid, otherwise false.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsUrl([NotNullWhen(true)] string? value) 
         => value is not null && UrlValidator.IsValid(value);

@@ -736,4 +736,32 @@ public readonly struct RuleSet : IRuleSet<RuleSet>
         return AddProblem(Problems.InvalidParameter(
             string.Format(Rules.Resources.NotNullOrEmptyMessageTemplate, propertyName), property));
     }
+
+    #region Mist
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet Email(string? value, [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        if (BuildInPredicates.IsEmail(value))
+            return this;
+
+        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+
+        return AddProblem(Problems.InvalidParameter(
+            string.Format(Rules.Resources.EmailMessageTemplate, propertyName), property));
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet Url(string? value, [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        if (BuildInPredicates.IsUrl(value))
+            return this;
+
+        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+
+        return AddProblem(Problems.InvalidParameter(
+            string.Format(Rules.Resources.UrlMessageTemplate, propertyName), property));
+    }
+
+    #endregion
 }
