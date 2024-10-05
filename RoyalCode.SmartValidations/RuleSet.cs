@@ -581,6 +581,18 @@ public readonly struct RuleSet : IRuleSet<RuleSet>
             string.Format(Rules.Resources.LengthMessageTemplate, propertyName, minLength.ToString(), maxLength.ToString()), property));
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet NullOrLength(string? value, int minLength, int maxLength, [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        if (value is null || BuildInPredicates.Length(value, minLength, maxLength))
+            return this;
+
+        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+
+        return AddProblem(Problems.InvalidParameter(
+            string.Format(Rules.Resources.NullOrLengthMessageTemplate, propertyName, minLength.ToString(), maxLength.ToString()), property));
+    }
+
     #endregion
 
     #region Less/Greater Than Or Equal
