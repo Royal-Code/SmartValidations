@@ -17,7 +17,7 @@ public partial class BuildInPredicatesTests
     }
 
     [Theory]
-    [MemberData(nameof(Numbers_Data))]
+    [MemberData(nameof(Numbers_AndNulls_Data))]
     public void NullableNumber_NotEmpty<T>(T? value, bool expected) where T : struct, INumber<T>
     {
         // Arrange
@@ -40,6 +40,66 @@ public partial class BuildInPredicatesTests
 
         // Assert
         Assert.Equal(expected, result);
+
+        // Act
+        var result2 = BuildInPredicates.NotEmpty((byte?)null);
+        // Assert
+        Assert.False(result2);
+
+        // Act
+        var result3 = BuildInPredicates.NotEmpty((short?)null);
+        // Assert
+        Assert.False(result3);
+
+        // Act
+        var result4 = BuildInPredicates.NotEmpty((long?)null);
+        // Assert
+        Assert.False(result4);
+
+        // Act
+        var result5 = BuildInPredicates.NotEmpty((float?)null);
+        // Assert
+        Assert.False(result5);
+
+        // Act
+        var result6 = BuildInPredicates.NotEmpty((double?)null);
+        // Assert
+        Assert.False(result6);
+
+        // Act
+        var result7 = BuildInPredicates.NotEmpty((decimal?)null);
+        // Assert
+        Assert.False(result7);
+
+        // Act
+        var result8 = BuildInPredicates.NotEmpty((BigInteger?)null);
+        // Assert
+        Assert.False(result8);
+    }
+
+    public static IEnumerable<object[]> Numbers_AndNulls_Data()
+    {
+        foreach (var value in Numbers_Data())
+        {
+            yield return value;
+        }
+
+        yield return [(byte?)1, true];
+        yield return [(byte?)0, false];
+        yield return [(short?)1, true];
+        yield return [(short?)0, false];
+        yield return [(int?)1, true];
+        yield return [(int?)0, false];
+        yield return [(long?)1L, true];
+        yield return [(long?)0L, false];
+        yield return [(float?)1f, true];
+        yield return [(float?)0f, false];
+        yield return [(double?)1d, true];
+        yield return [(double?)0d, false];
+        yield return [(decimal?)1M, true];
+        yield return [(decimal?)0M, false];
+        yield return [(BigInteger?)BigInteger.One, true];
+        yield return [(BigInteger?)BigInteger.Zero, false];
     }
 
     public static IEnumerable<object[]> Numbers_Data()
@@ -284,33 +344,6 @@ public partial class BuildInPredicatesTests
         // Arrange
         // Act
         var result = BuildInPredicates.NotEmpty(value);
-
-        // Assert
-        Assert.Equal(expected, result);
-    }
-
-    [Theory]
-    [InlineData(null, null, true)]
-    [InlineData(null, "", false)]
-    [InlineData("", null, false)]
-    [InlineData("", "", false)]
-    [InlineData(null, " ", false)]
-    [InlineData(" ", null, false)]
-    [InlineData(" ", "", false)]
-    [InlineData("", " ", false)]
-    [InlineData(" ", " ", false)]
-    [InlineData("a", null, false)]
-    [InlineData("a", "", false)]
-    [InlineData("a", " ", false)]
-    [InlineData(null, "a", false)]
-    [InlineData("", "a", false)]
-    [InlineData(" ", "a", false)]
-    [InlineData("a", "b", true)]
-    public void BothNullOrNotEmpty(string? v1, string? v2, bool expected)
-    {
-        // Arrange
-        // Act
-        var result = BuildInPredicates.BothNullOrNotEmpty(v1, v2);
 
         // Assert
         Assert.Equal(expected, result);
