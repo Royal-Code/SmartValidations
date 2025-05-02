@@ -8,7 +8,7 @@ namespace RoyalCode.SmartValidations;
 /// <summary>
 /// Struct to apply validation rules and collect the result.
 /// </summary>
-public readonly struct RuleSet : IRuleSet<RuleSet> 
+public readonly ref struct RuleSet
 {
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]
     private readonly Type? type;
@@ -21,7 +21,7 @@ public readonly struct RuleSet : IRuleSet<RuleSet>
     /// </summary>
     /// <param name="type">The type being validated.</param>
     /// <param name="problems">The problems found, if any.</param>
-    private RuleSet(Type? type = null, Problems? problems = null)
+    private RuleSet([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] Type? type = null, Problems? problems = null)
     {
         this.type = type;
         this.problems = problems;
