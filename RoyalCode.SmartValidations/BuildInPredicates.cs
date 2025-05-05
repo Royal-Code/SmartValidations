@@ -404,24 +404,52 @@ public static class BuildInPredicates
 
     #region Min Max
 
+    /// <summary>
+    /// Validates whether the specified value is greater than or equal to the minimum value.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="min">The minimum value.</param>
+    /// <returns>True if the value is greater than or equal to the minimum value, otherwise false.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool Min<T>(T value, T min) where T: IComparable<T>
     {
         return value.CompareTo(min) >= 0;
     }
 
+    /// <summary>
+    /// Validates whether the specified value is greater than or equal to the minimum value.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="min">The minimum value.</param>
+    /// <returns>True if the value is greater than or equal to the minimum value, otherwise false.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool Min<T>(T? value, T min) where T : struct, IComparable<T>
     {
         return value.HasValue && value.Value.CompareTo(min) >= 0;
     }
 
+    /// <summary>
+    /// Validates whether the specified value is less than or equal to the maximum value.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="max">The maximum value.</param>
+    /// <returns>True if the value is less than or equal to the maximum value, otherwise false.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool Max<T>(T value, T max) where T: IComparable<T>
     {
         return value.CompareTo(max) <= 0;
     }
 
+    /// <summary>
+    /// Validates whether the specified value is less than or equal to the maximum value.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="max">The maximum value.</param>
+    /// <returns>True if the value is less than or equal to the maximum value, otherwise false.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool Max<T>(T? value, T max) where T : struct, IComparable<T>
     {

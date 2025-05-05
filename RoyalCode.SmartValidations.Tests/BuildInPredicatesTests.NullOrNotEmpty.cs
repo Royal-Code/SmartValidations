@@ -18,7 +18,7 @@ public partial class BuildInPredicatesTests
     }
 
     [Theory]
-    [MemberData(nameof(Numbers_AndNulls_Data))]
+    [MemberData(nameof(Nullable_Numbers_Data))]
     public void NullableNumber_NullOrNotEmpty<T>(T? value, bool expected)
         where T : struct, INumber<T>
     {
