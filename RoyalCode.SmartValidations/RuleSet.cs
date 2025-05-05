@@ -2,6 +2,7 @@
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using RoyalCode.SmartProblems;
+using RoyalCode.SmartProblems.Entities;
 
 namespace RoyalCode.SmartValidations;
 
@@ -14,6 +15,11 @@ public readonly ref struct RuleSet
     private readonly Type? type;
     private readonly Problems? problems;
 
+    /// <summary>
+    /// Create a new rule set for a model to apply validation rules.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public static RuleSet For<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]T>() => new(typeof(T));
     
     /// <summary>
@@ -40,7 +46,7 @@ public readonly ref struct RuleSet
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public string GetDisplayName(string? property)
     {
-        return Rules.Resources.DisplayNames.GetDisplayName(type, property);
+        return DisplayNames.Instance.GetDisplayName(type, property);
     }
 
     /// <inheritdoc />
@@ -53,6 +59,13 @@ public readonly ref struct RuleSet
 
     #region Not Null
 
+    /// <summary>
+    /// Validates a value to ensure that the value is not null.
+    /// </summary>
+    /// <typeparam name="TValue">The value type.</typeparam>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet NotNull<TValue>(
         [NotNullWhen(true)] TValue value,
@@ -67,6 +80,12 @@ public readonly ref struct RuleSet
 
     #region Not Empty
 
+    /// <summary>
+    /// Validates a string to ensure that the value is not null or empty.
+    /// </summary>
+    /// <param name="value">The string value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet NotEmpty(
         [NotNullWhen(true)] string? value,
@@ -77,6 +96,13 @@ public readonly ref struct RuleSet
             : NullOrEmptyProblem(property);
     }
 
+    /// <summary>
+    /// Validates a number to ensure that the value is not null or empty.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet NotEmpty<T>(
         [NotNullWhen(true)] T value,
@@ -88,6 +114,13 @@ public readonly ref struct RuleSet
             : NullOrEmptyProblem(property);
     }
 
+    /// <summary>
+    /// Validates a number to ensure that the value is not null or empty.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet NotEmpty<T>(
         [NotNullWhen(true)] T? value,
@@ -99,6 +132,13 @@ public readonly ref struct RuleSet
             : NullOrEmptyProblem(property);
     }
 
+    /// <summary>
+    /// Validates a collection to ensure that the value is not null or empty.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The collection to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet NotEmpty<T>(
         [NotNullWhen(true)] T[]? value,
@@ -109,6 +149,13 @@ public readonly ref struct RuleSet
             : NullOrEmptyProblem(property);
     }
 
+    /// <summary>
+    /// Validates a collection to ensure that the value is not null or empty.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The collection to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet NotEmpty<T>(
         [NotNullWhen(true)] ICollection<T>? value,
@@ -119,6 +166,13 @@ public readonly ref struct RuleSet
             : NullOrEmptyProblem(property);
     }
 
+    /// <summary>
+    /// Validates a collection to ensure that the value is not null or empty.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The collection to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet NotEmpty<T>(
         [NotNullWhen(true)] IEnumerable<T>? value,
@@ -129,6 +183,12 @@ public readonly ref struct RuleSet
             : NullOrEmptyProblem(property);
     }
 
+    /// <summary>
+    /// Validates a <see cref="DateTime"/> to ensure that the value is not null or empty.
+    /// </summary>
+    /// <param name="value">The <see cref="DateTime"/> value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet NotEmpty(
         DateTime value,
@@ -139,6 +199,12 @@ public readonly ref struct RuleSet
             : NullOrEmptyProblem(property);
     }
 
+    /// <summary>
+    /// Validates a <see cref="DateTime"/> to ensure that the value is not null or empty.
+    /// </summary>
+    /// <param name="value">The <see cref="DateTime"/> value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet NotEmpty(
         [NotNullWhen(true)] DateTime? value,
@@ -149,6 +215,12 @@ public readonly ref struct RuleSet
             : NullOrEmptyProblem(property);
     }
 
+    /// <summary>
+    /// Validates a <see cref="DateTimeOffset"/> to ensure that the value is not null or empty.
+    /// </summary>
+    /// <param name="value">The <see cref="DateTimeOffset"/> value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet NotEmpty(
         DateTimeOffset value,
@@ -159,6 +231,12 @@ public readonly ref struct RuleSet
             : NullOrEmptyProblem(property);
     }
 
+    /// <summary>
+    /// Validates a <see cref="DateTimeOffset"/> to ensure that the value is not null or empty.
+    /// </summary>
+    /// <param name="value">The <see cref="DateTimeOffset"/> value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet NotEmpty(
         [NotNullWhen(true)] DateTimeOffset? value,
@@ -169,6 +247,12 @@ public readonly ref struct RuleSet
             : NullOrEmptyProblem(property);
     }
 
+    /// <summary>
+    /// Validates a <see cref="DateOnly"/> to ensure that the value is not null or empty.
+    /// </summary>
+    /// <param name="value">The <see cref="DateOnly"/> value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet NotEmpty(
         DateOnly value,
@@ -179,6 +263,12 @@ public readonly ref struct RuleSet
             : NullOrEmptyProblem(property);
     }
 
+    /// <summary>
+    /// Validates a <see cref="DateOnly"/> to ensure that the value is not null or empty.
+    /// </summary>
+    /// <param name="value">The <see cref="DateOnly"/> value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet NotEmpty(
         [NotNullWhen(true)] DateOnly? value,
@@ -189,6 +279,12 @@ public readonly ref struct RuleSet
             : NullOrEmptyProblem(property);
     }
 
+    /// <summary>
+    /// Validates a <see cref="Guid"/> to ensure that the value is not null or empty.
+    /// </summary>
+    /// <param name="value">The <see cref="Guid"/> value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet NotEmpty(
         Guid value,
@@ -199,6 +295,12 @@ public readonly ref struct RuleSet
             : NullOrEmptyProblem(property);
     }
 
+    /// <summary>
+    /// Validates a <see cref="Guid"/> to ensure that the value is not null or empty.
+    /// </summary>
+    /// <param name="value">The <see cref="Guid"/> value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet NotEmpty(
         [NotNullWhen(true)] Guid? value,
@@ -209,6 +311,14 @@ public readonly ref struct RuleSet
             : NullOrEmptyProblem(property);
     }
 
+    /// <summary>
+    /// Validates if both values are null or, when one is filled, if both are not empty.
+    /// </summary>
+    /// <param name="value1">The first value to validate.</param>
+    /// <param name="value2">The second value to validate.</param>
+    /// <param name="property1">The first property name.</param>
+    /// <param name="property2">The second property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet BothNullOrNotEmpty(
         [NotNullWhen(true)] string? value1,
@@ -219,16 +329,22 @@ public readonly ref struct RuleSet
         if (BuildInPredicates.BothNullOrNotEmpty(value1, value2))
             return this;
         
-        var property1Name = Rules.Resources.DisplayNames.GetDisplayName(type, property1);
-        var property2Name = Rules.Resources.DisplayNames.GetDisplayName(type, property2);
+        var property1Name = DisplayNames.Instance.GetDisplayName(type, property1);
+        var property2Name = DisplayNames.Instance.GetDisplayName(type, property2);
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.BothNullOrNotMessageTemplate, property1Name, property2Name)));
+            string.Format(R.BothNullOrNotMessageTemplate, property1Name, property2Name)));
     }
 
     #endregion
 
     #region Null Or Not Empty
 
+    /// <summary>
+    /// Validates a value to ensure that the value is null or not empty.
+    /// </summary>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet NullOrNotEmpty(
         string? value,
@@ -236,10 +352,16 @@ public readonly ref struct RuleSet
     {
         return BuildInPredicates.NullOrNotEmpty(value)
             ? this
-            : AddProblem(Problems.InvalidParameter(
-                string.Format(Rules.Resources.NullOrNotMessageTemplate, property)));
+            : AddProblem(Problems.InvalidParameter(string.Format(R.NullOrNotMessageTemplate, property)));
     }
 
+    /// <summary>
+    /// Validates a number to ensure that the value is null or not empty.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The number to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet NullOrNotEmpty<T>(
         T value,
@@ -248,10 +370,16 @@ public readonly ref struct RuleSet
     {
         return BuildInPredicates.NullOrNotEmpty(value)
             ? this
-            : AddProblem(Problems.InvalidParameter(
-                string.Format(Rules.Resources.NullOrNotMessageTemplate, property)));
+            : AddProblem(Problems.InvalidParameter(string.Format(R.NullOrNotMessageTemplate, property)));
     }
 
+    /// <summary>
+    /// Validates a number to ensure that the value is null or not empty.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The number to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet NullOrNotEmpty<T>(
         T? value,
@@ -261,13 +389,21 @@ public readonly ref struct RuleSet
         return BuildInPredicates.NullOrNotEmpty(value)
             ? this
             : AddProblem(Problems.InvalidParameter(
-                string.Format(Rules.Resources.NullOrNotMessageTemplate, property)));
+                string.Format(R.NullOrNotMessageTemplate, property)));
     }
 
     #endregion
 
     #region Equal NotEqual
 
+    /// <summary>
+    /// Validates a string to ensure that the value is equal to the expected value.
+    /// </summary>
+    /// <param name="value">The string value to validate.</param>
+    /// <param name="expected">The expected value.</param>
+    /// <param name="comparison">The string comparison type.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet Equal(
         string? value,
@@ -278,12 +414,20 @@ public readonly ref struct RuleSet
         if (BuildInPredicates.Equal(value, expected, comparison))
             return this;
 
-        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
 
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.EqualMessageTemplate, propertyName, expected), property));
+            string.Format(R.EqualMessageTemplate, propertyName, expected), property));
     }
 
+    /// <summary>
+    /// Validates a value to ensure that the value is equal to the expected value.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="expected">The expected value.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet Equal<T>(
         T? value,
@@ -293,12 +437,43 @@ public readonly ref struct RuleSet
         if (BuildInPredicates.Equal(value, expected))
             return this;
 
-        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
 
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.EqualMessageTemplate, propertyName, expected), property));
+            string.Format(R.EqualMessageTemplate, propertyName, expected), property));
     }
 
+    /// <summary>
+    /// Validates a value to ensure that the value is equal to the expected value.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="expected">The expected value.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet Equal<T>(
+        T? value,
+        T expected,
+        [CallerArgumentExpression(nameof(value))] string? property = null) where T : struct, IEquatable<T>
+    {
+        if (BuildInPredicates.Equal(value, expected))
+            return this;
+
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
+
+        return AddProblem(Problems.InvalidParameter(
+            string.Format(R.EqualMessageTemplate, propertyName, expected), property));
+    }
+
+    /// <summary>
+    /// Validates a string to ensure that the value is not equal to the expected value.
+    /// </summary>
+    /// <param name="value">The string value to validate.</param>
+    /// <param name="expected">The expected value.</param>
+    /// <param name="comparison">The string comparison type.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet NotEqual(
         string? value, 
@@ -309,12 +484,20 @@ public readonly ref struct RuleSet
         if (BuildInPredicates.NotEqual(value, expected, comparison))
             return this;
 
-        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
 
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.NotEqualMessageTemplate, propertyName, expected), property));
+            string.Format(R.NotEqualMessageTemplate, propertyName, expected), property));
     }
 
+    /// <summary>
+    /// Validates a value to ensure that the value is not equal to the expected value.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="expected">The expected value.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet NotEqual<T>(
         T? value,
@@ -324,12 +507,44 @@ public readonly ref struct RuleSet
         if (BuildInPredicates.NotEqual(value, expected))
             return this;
 
-        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
 
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.NotEqualMessageTemplate, propertyName, expected), property));
+            string.Format(R.NotEqualMessageTemplate, propertyName, expected), property));
     }
 
+    /// <summary>
+    /// Validates a value to ensure that the value is not equal to the expected value.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="expected">The expected value.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet NotEqual<T>(
+        T? value,
+        T expected,
+        [CallerArgumentExpression(nameof(value))] string? property = null) where T : struct, IEquatable<T>
+    {
+        if (BuildInPredicates.NotEqual(value, expected))
+            return this;
+
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
+
+        return AddProblem(Problems.InvalidParameter(
+            string.Format(R.NotEqualMessageTemplate, propertyName, expected), property));
+    }
+
+    /// <summary>
+    /// Validates if both values are equal.
+    /// </summary>
+    /// <param name="value1">The first value to validate.</param>
+    /// <param name="value2">The second value to validate.</param>
+    /// <param name="comparison">The string comparison type.</param>
+    /// <param name="property1">The first property name.</param>
+    /// <param name="property2">The second property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet BothEqual(
         string? value1,
@@ -341,13 +556,22 @@ public readonly ref struct RuleSet
         if (BuildInPredicates.BothEqual(value1, value2, comparison))
             return this;
 
-        var property1Name = Rules.Resources.DisplayNames.GetDisplayName(type, property1);
-        var property2Name = Rules.Resources.DisplayNames.GetDisplayName(type, property2);
+        var property1Name = DisplayNames.Instance.GetDisplayName(type, property1);
+        var property2Name = DisplayNames.Instance.GetDisplayName(type, property2);
 
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.BothEqualMessageTemplate, property1Name, property2Name)));
+            string.Format(R.BothEqualMessageTemplate, property1Name, property2Name)));
     }
 
+    /// <summary>
+    /// Validates if both values are equal.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value1">The first value to validate.</param>
+    /// <param name="value2">The second value to validate.</param>
+    /// <param name="property1">The first property name.</param>
+    /// <param name="property2">The second property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet BothEqual<T>(
         T? value1,
@@ -358,13 +582,48 @@ public readonly ref struct RuleSet
         if (BuildInPredicates.BothEqual(value1, value2))
             return this;
 
-        var property1Name = Rules.Resources.DisplayNames.GetDisplayName(type, property1);
-        var property2Name = Rules.Resources.DisplayNames.GetDisplayName(type, property2);
+        var property1Name = DisplayNames.Instance.GetDisplayName(type, property1);
+        var property2Name = DisplayNames.Instance.GetDisplayName(type, property2);
 
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.BothEqualMessageTemplate, property1Name, property2Name)));
+            string.Format(R.BothEqualMessageTemplate, property1Name, property2Name)));
     }
 
+    /// <summary>
+    /// Validates if both values are equal.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value1">The first value to validate.</param>
+    /// <param name="value2">The second value to validate.</param>
+    /// <param name="property1">The first property name.</param>
+    /// <param name="property2">The second property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet BothEqual<T>(
+        T? value1,
+        T? value2,
+        [CallerArgumentExpression(nameof(value1))] string? property1 = null,
+        [CallerArgumentExpression(nameof(value2))] string? property2 = null) where T : struct, IEquatable<T>
+    {
+        if (BuildInPredicates.BothEqual(value1, value2))
+            return this;
+
+        var property1Name = DisplayNames.Instance.GetDisplayName(type, property1);
+        var property2Name = DisplayNames.Instance.GetDisplayName(type, property2);
+
+        return AddProblem(Problems.InvalidParameter(
+            string.Format(R.BothEqualMessageTemplate, property1Name, property2Name)));
+    }
+
+    /// <summary>
+    /// Validates if both values are not equal.
+    /// </summary>
+    /// <param name="value1">The first value to validate.</param>
+    /// <param name="value2">The second value to validate.</param>
+    /// <param name="comparison">The string comparison type.</param>
+    /// <param name="property1">The first property name.</param>
+    /// <param name="property2">The second property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet BothNotEqual(
         string? value1,
@@ -376,13 +635,22 @@ public readonly ref struct RuleSet
         if (BuildInPredicates.BothNotEqual(value1, value2, comparison))
             return this;
 
-        var property1Name = Rules.Resources.DisplayNames.GetDisplayName(type, property1);
-        var property2Name = Rules.Resources.DisplayNames.GetDisplayName(type, property2);
+        var property1Name = DisplayNames.Instance.GetDisplayName(type, property1);
+        var property2Name = DisplayNames.Instance.GetDisplayName(type, property2);
 
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.BothNotEqualMessageTemplate, property1Name, property2Name)));
+            string.Format(R.BothNotEqualMessageTemplate, property1Name, property2Name)));
     }
 
+    /// <summary>
+    /// Validates if both values are not equal.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value1">The first value to validate.</param>
+    /// <param name="value2">The second value to validate.</param>
+    /// <param name="property1">The first property name.</param>
+    /// <param name="property2">The second property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet BothNotEqual<T>(
         T? value1,
@@ -393,11 +661,37 @@ public readonly ref struct RuleSet
         if (BuildInPredicates.BothNotEqual(value1, value2))
             return this;
 
-        var property1Name = Rules.Resources.DisplayNames.GetDisplayName(type, property1);
-        var property2Name = Rules.Resources.DisplayNames.GetDisplayName(type, property2);
+        var property1Name = DisplayNames.Instance.GetDisplayName(type, property1);
+        var property2Name = DisplayNames.Instance.GetDisplayName(type, property2);
 
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.BothNotEqualMessageTemplate, property1Name, property2Name)));
+            string.Format(R.BothNotEqualMessageTemplate, property1Name, property2Name)));
+    }
+
+    /// <summary>
+    /// Validates if both values are not equal.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value1">The first value to validate.</param>
+    /// <param name="value2">The second value to validate.</param>
+    /// <param name="property1">The first property name.</param>
+    /// <param name="property2">The second property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet BothNotEqual<T>(
+        T? value1,
+        T? value2,
+        [CallerArgumentExpression(nameof(value1))] string? property1 = null,
+        [CallerArgumentExpression(nameof(value2))] string? property2 = null) where T : struct, IEquatable<T>
+    {
+        if (BuildInPredicates.BothNotEqual(value1, value2))
+            return this;
+
+        var property1Name = DisplayNames.Instance.GetDisplayName(type, property1);
+        var property2Name = DisplayNames.Instance.GetDisplayName(type, property2);
+
+        return AddProblem(Problems.InvalidParameter(
+            string.Format(R.BothNotEqualMessageTemplate, property1Name, property2Name)));
     }
 
     #endregion
@@ -411,10 +705,10 @@ public readonly ref struct RuleSet
         if (BuildInPredicates.Min(value, min))
             return this;
 
-        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
 
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.MinMessageTemplate, propertyName, min.ToString()), property));
+            string.Format(R.MinMessageTemplate, propertyName, min.ToString()), property));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -424,10 +718,10 @@ public readonly ref struct RuleSet
         if (BuildInPredicates.Min(value, min))
             return this;
 
-        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
 
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.MinMessageTemplate, propertyName, min.ToString()), property));
+            string.Format(R.MinMessageTemplate, propertyName, min.ToString()), property));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -437,10 +731,10 @@ public readonly ref struct RuleSet
         if (!value.HasValue || BuildInPredicates.Min(value.Value, min))
             return this;
 
-        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
 
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.NullOrMinMessageTemplate, propertyName, min.ToString()), property));
+            string.Format(R.NullOrMinMessageTemplate, propertyName, min.ToString()), property));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -449,10 +743,10 @@ public readonly ref struct RuleSet
         if (BuildInPredicates.MinLength(value, minLength))
             return this;
 
-        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
 
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.MinLengthMessageTemplate, propertyName, minLength.ToString()), property));
+            string.Format(R.MinLengthMessageTemplate, propertyName, minLength.ToString()), property));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -461,10 +755,10 @@ public readonly ref struct RuleSet
         if (value is null || BuildInPredicates.MinLength(value, minLength))
             return this;
 
-        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
 
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.NullOrMinLengthMessageTemplate, propertyName, minLength.ToString()), property));
+            string.Format(R.NullOrMinLengthMessageTemplate, propertyName, minLength.ToString()), property));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -474,10 +768,10 @@ public readonly ref struct RuleSet
         if (BuildInPredicates.Max(value, max))
             return this;
 
-        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
 
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.MaxMessageTemplate, propertyName, max.ToString()), property));
+            string.Format(R.MaxMessageTemplate, propertyName, max.ToString()), property));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -487,10 +781,10 @@ public readonly ref struct RuleSet
         if (BuildInPredicates.Max(value, max))
             return this;
 
-        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
 
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.MaxMessageTemplate, propertyName, max.ToString()), property));
+            string.Format(R.MaxMessageTemplate, propertyName, max.ToString()), property));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -500,10 +794,10 @@ public readonly ref struct RuleSet
         if (!value.HasValue || BuildInPredicates.Max(value.Value, max))
             return this;
 
-        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
 
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.NullOrMaxMessageTemplate, propertyName, max.ToString()), property));
+            string.Format(R.NullOrMaxMessageTemplate, propertyName, max.ToString()), property));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -512,10 +806,10 @@ public readonly ref struct RuleSet
         if (BuildInPredicates.MaxLength(value, maxLength))
             return this;
 
-        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
 
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.MaxLengthMessageTemplate, propertyName, maxLength.ToString()), property));
+            string.Format(R.MaxLengthMessageTemplate, propertyName, maxLength.ToString()), property));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -524,10 +818,10 @@ public readonly ref struct RuleSet
         if (value is null || BuildInPredicates.MaxLength(value, maxLength))
             return this;
 
-        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
 
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.NullOrMaxLengthMessageTemplate, propertyName, maxLength.ToString()), property));
+            string.Format(R.NullOrMaxLengthMessageTemplate, propertyName, maxLength.ToString()), property));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -537,10 +831,10 @@ public readonly ref struct RuleSet
         if (BuildInPredicates.MinMax(value, min, max))
             return this;
 
-        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
 
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.MinMaxMessageTemplate, propertyName, min.ToString(), max.ToString()), property));
+            string.Format(R.MinMaxMessageTemplate, propertyName, min.ToString(), max.ToString()), property));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -550,10 +844,10 @@ public readonly ref struct RuleSet
         if (BuildInPredicates.MinMax(value, min, max))
             return this;
 
-        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
 
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.MinMaxMessageTemplate, propertyName, min.ToString(), max.ToString()), property));
+            string.Format(R.MinMaxMessageTemplate, propertyName, min.ToString(), max.ToString()), property));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -563,10 +857,10 @@ public readonly ref struct RuleSet
         if (!value.HasValue || BuildInPredicates.MinMax(value.Value, min, max))
             return this;
 
-        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
 
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.NullOrMinMaxMessageTemplate, propertyName, min.ToString(), max.ToString()), property));
+            string.Format(R.NullOrMinMaxMessageTemplate, propertyName, min.ToString(), max.ToString()), property));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -575,10 +869,10 @@ public readonly ref struct RuleSet
         if (BuildInPredicates.Length(value, minLength, maxLength))
             return this;
 
-        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
 
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.LengthMessageTemplate, propertyName, minLength.ToString(), maxLength.ToString()), property));
+            string.Format(R.LengthMessageTemplate, propertyName, minLength.ToString(), maxLength.ToString()), property));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -587,10 +881,10 @@ public readonly ref struct RuleSet
         if (value is null || BuildInPredicates.Length(value, minLength, maxLength))
             return this;
 
-        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
 
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.NullOrLengthMessageTemplate, propertyName, minLength.ToString(), maxLength.ToString()), property));
+            string.Format(R.NullOrLengthMessageTemplate, propertyName, minLength.ToString(), maxLength.ToString()), property));
     }
 
     #endregion
@@ -608,11 +902,11 @@ public readonly ref struct RuleSet
         if (BuildInPredicates.LessThan(value1, value2))
             return this;
 
-        var property1Name = Rules.Resources.DisplayNames.GetDisplayName(type, property1);
-        var property2Name = Rules.Resources.DisplayNames.GetDisplayName(type, property2);
+        var property1Name = DisplayNames.Instance.GetDisplayName(type, property1);
+        var property2Name = DisplayNames.Instance.GetDisplayName(type, property2);
 
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.LessThanMessageTemplate, property1Name, property2Name)));
+            string.Format(R.LessThanMessageTemplate, property1Name, property2Name)));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -626,11 +920,11 @@ public readonly ref struct RuleSet
         if (BuildInPredicates.LessThanOrEqual(value1, value2))
             return this;
 
-        var property1Name = Rules.Resources.DisplayNames.GetDisplayName(type, property1);
-        var property2Name = Rules.Resources.DisplayNames.GetDisplayName(type, property2);
+        var property1Name = DisplayNames.Instance.GetDisplayName(type, property1);
+        var property2Name = DisplayNames.Instance.GetDisplayName(type, property2);
 
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.LessThanOrEqualMessageTemplate, property1Name, property2Name)));
+            string.Format(R.LessThanOrEqualMessageTemplate, property1Name, property2Name)));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -644,11 +938,11 @@ public readonly ref struct RuleSet
         if (BuildInPredicates.GreaterThan(value1, value2))
             return this;
 
-        var property1Name = Rules.Resources.DisplayNames.GetDisplayName(type, property1);
-        var property2Name = Rules.Resources.DisplayNames.GetDisplayName(type, property2);
+        var property1Name = DisplayNames.Instance.GetDisplayName(type, property1);
+        var property2Name = DisplayNames.Instance.GetDisplayName(type, property2);
 
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.GreaterThanMessageTemplate, property1Name, property2Name)));
+            string.Format(R.GreaterThanMessageTemplate, property1Name, property2Name)));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -662,11 +956,11 @@ public readonly ref struct RuleSet
         if (BuildInPredicates.GreaterThanOrEqual(value1, value2))
             return this;
 
-        var property1Name = Rules.Resources.DisplayNames.GetDisplayName(type, property1);
-        var property2Name = Rules.Resources.DisplayNames.GetDisplayName(type, property2);
+        var property1Name = DisplayNames.Instance.GetDisplayName(type, property1);
+        var property2Name = DisplayNames.Instance.GetDisplayName(type, property2);
 
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.GreaterThanOrEqualMessageTemplate, property1Name, property2Name)));
+            string.Format(R.GreaterThanOrEqualMessageTemplate, property1Name, property2Name)));
     }
 
     #endregion
@@ -682,7 +976,7 @@ public readonly ref struct RuleSet
         if (predicate(value)) 
             return this;
 
-        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
 
         return AddProblem(Problems.InvalidParameter(messageFormatter(propertyName, value), property));
     }
@@ -697,7 +991,7 @@ public readonly ref struct RuleSet
         if (predicate(value, param))
             return this;
 
-        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
 
         return AddProblem(Problems.InvalidParameter(messageFormatter(propertyName, value, param), property));
     }
@@ -713,8 +1007,8 @@ public readonly ref struct RuleSet
         if (predicate(value1, value2))
             return this;
 
-        var property1Name = Rules.Resources.DisplayNames.GetDisplayName(type, property1);
-        var property2Name = Rules.Resources.DisplayNames.GetDisplayName(type, property2);
+        var property1Name = DisplayNames.Instance.GetDisplayName(type, property1);
+        var property2Name = DisplayNames.Instance.GetDisplayName(type, property2);
 
         return AddProblem(Problems.InvalidParameter(messageFormatter(property1Name, property2Name, value1, value2)));
     }
@@ -731,8 +1025,8 @@ public readonly ref struct RuleSet
         if (predicate(value1, value2, param))
             return this;
 
-        var property1Name = Rules.Resources.DisplayNames.GetDisplayName(type, property1);
-        var property2Name = Rules.Resources.DisplayNames.GetDisplayName(type, property2);
+        var property1Name = DisplayNames.Instance.GetDisplayName(type, property1);
+        var property2Name = DisplayNames.Instance.GetDisplayName(type, property2);
 
         return AddProblem(Problems.InvalidParameter(
             messageFormatter(property1Name, property2Name, value1, value2, param)));
@@ -743,10 +1037,10 @@ public readonly ref struct RuleSet
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private RuleSet NullOrEmptyProblem(string? property)
     {
-        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
 
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.NotNullOrEmptyMessageTemplate, propertyName), property));
+            string.Format(R.NotNullOrEmptyMessageTemplate, propertyName), property));
     }
 
     #region Mist
@@ -757,10 +1051,10 @@ public readonly ref struct RuleSet
         if (BuildInPredicates.IsEmail(value))
             return this;
 
-        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
 
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.EmailMessageTemplate, propertyName), property));
+            string.Format(R.EmailMessageTemplate, propertyName), property));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -769,11 +1063,54 @@ public readonly ref struct RuleSet
         if (BuildInPredicates.IsUrl(value))
             return this;
 
-        var propertyName = Rules.Resources.DisplayNames.GetDisplayName(type, property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
 
         return AddProblem(Problems.InvalidParameter(
-            string.Format(Rules.Resources.UrlMessageTemplate, propertyName), property));
+            string.Format(R.UrlMessageTemplate, propertyName), property));
     }
 
     #endregion
+
+    /// <summary>
+    /// Create a new customizable rule set for a property and value.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet{T}"/> reference.</returns>
+    public RuleSet<T> For<T>(
+        T value,
+        [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        return new RuleSet<T>(
+            type,
+            value,
+            property ?? string.Empty,
+            problems);
+    }
+}
+
+/// <summary>
+/// A rule set for a specific type.
+/// </summary>
+/// <typeparam name="TValue"></typeparam>
+public readonly ref struct RuleSet<TValue>
+{
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]
+    private readonly Type? type;
+    private readonly TValue? value;
+    private readonly string property;
+    private readonly Problems? problems;
+
+    public RuleSet(
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] Type? type,
+        TValue? value,
+        string property,
+        Problems? problems)
+    {
+        this.type = type;
+        this.value = value;
+        this.property = property;
+        this.problems = problems;
+    }
 }

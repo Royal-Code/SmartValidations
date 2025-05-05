@@ -8,11 +8,6 @@ namespace RoyalCode.SmartValidations;
 public static class Rules
 {
     /// <summary>
-    /// The resources used by the built-in rules.
-    /// </summary>
-    public static RuleSetResources Resources { get; } = new();
-
-    /// <summary>
     /// Create a new rule set to apply validation rules.
     /// </summary>
     /// <returns>A new rule set.</returns>
