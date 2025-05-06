@@ -96,6 +96,84 @@ public partial class BuildInPredicatesTests
         Assert.Equal(expected, result);
     }
 
+    [Theory]
+    [MemberData(nameof(Comparable_MinMax_Data))]
+    public void Comparable_MinMax<T>(T value, T min, T max, bool expected)
+        where T : IComparable<T>
+    {
+        // Arrange
+        // Act
+        var result = BuildInPredicates.MinMax(value, min, max);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [MemberData(nameof(Comparable_MinMax_Data))]
+    [InlineData(null, 0, 0, false)]
+    [InlineData(null, 0, 1, false)]
+    [InlineData(null, 1, 3, false)]
+    public void Comparable_Nulls_MinMax(int? value, int min, int max, bool expected)
+    {
+        // Arrange
+        // Act
+        var result = BuildInPredicates.MinMax(value, min, max);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData(null, 0, false)]
+    [InlineData("", 0, true)]
+    [InlineData("a", 0, true)]
+    [InlineData("", 1, false)]
+    [InlineData("a", 1, true)]
+    [InlineData("ab", 1, true)]
+    public void String_MinLength(string? value, int minLength, bool expected)
+    {
+        // Arrange
+        // Act
+        var result = BuildInPredicates.MinLength(value, minLength);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData(null, 0, true)]
+    [InlineData("", 0, true)]
+    [InlineData("a", 0, false)]
+    [InlineData("", 1, true)]
+    [InlineData("a", 1, true)]
+    [InlineData("ab", 1, false)]
+    public void String_MaxLength(string? value, int maxLength, bool expected)
+    {
+        // Arrange
+        // Act
+        var result = BuildInPredicates.MaxLength(value, maxLength);
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData(null, 0, 0, false)]
+    [InlineData(null, 0, 1, false)]
+    [InlineData("", 0, 0, true)]
+    [InlineData("", 0, 1, true)]
+    [InlineData("a", 0, 0, false)]
+    [InlineData("a", 0, 1, true)]
+    [InlineData("ab", 0, 1, false)]
+    public void String_Length(string? value, int minLength, int maxLength, bool expected)
+    {
+        // Arrange
+        // Act
+        var result = BuildInPredicates.Length(value, minLength, maxLength);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
 
     public static IEnumerable<object[]> Nullable_Comparable_Data()
     {
@@ -164,5 +242,14 @@ public partial class BuildInPredicatesTests
         yield return [new BigInteger(0), BigInteger.One, -1];
         yield return [BigInteger.One, BigInteger.One, 0];
         yield return [new BigInteger(2), BigInteger.One, 1];
+    }
+
+    public static IEnumerable<object[]> Comparable_MinMax_Data()
+    {
+        yield return [0, 1, 3, false];
+        yield return [1, 1, 3, true];
+        yield return [2, 1, 3, true];
+        yield return [3, 1, 3, true];
+        yield return [4, 1, 3, false];
     }
 }

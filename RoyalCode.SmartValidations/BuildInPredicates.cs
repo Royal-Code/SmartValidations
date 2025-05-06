@@ -456,34 +456,69 @@ public static class BuildInPredicates
         return value.HasValue && value.Value.CompareTo(max) <= 0;
     }
 
+    /// <summary>
+    /// Validates whether the specified value is within the specified range (inclusive).
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="min">The minimum value.</param>
+    /// <param name="max">The maximum value.</param>
+    /// <returns>True if the value is within the specified range (inclusive), otherwise false.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool MinMax<T>(T value, T min, T max) where T: IComparable<T>
     {
         return value.CompareTo(min) >= 0 && value.CompareTo(max) <= 0;
     }
 
+    /// <summary>
+    /// Validates whether the specified value is within the specified range (inclusive).
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="min">The minimum value.</param>
+    /// <param name="max">The maximum value.</param>
+    /// <returns>True if the value is within the specified range (inclusive), otherwise false.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool MinMax<T>(T? value, T min, T max) where T : struct, IComparable<T>
     {
         return value.HasValue && value.Value.CompareTo(min) >= 0 && value.Value.CompareTo(max) <= 0;
     }
 
+    /// <summary>
+    /// Validates whether the specified string value has a minimum length.
+    /// </summary>
+    /// <param name="value">The string value to validate.</param>
+    /// <param name="length">The minimum length.</param>
+    /// <returns>True if the string value has a minimum length, otherwise false.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool MinLength(string? value, int length)
     {
-        return value?.Length >= length;
+        return value is not null && value.Length >= length;
     }
-    
+
+    /// <summary>
+    /// Validates whether the specified string value has a maximum length.
+    /// </summary>
+    /// <param name="value">The string value to validate.</param>
+    /// <param name="length">The maximum length.</param>
+    /// <returns>True if the string value has a maximum length, otherwise false.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool MaxLength(string? value, int length)
     {
-        return value?.Length <= length;
+        return value is null || value.Length <= length;
     }
-    
+
+    /// <summary>
+    /// Validates whether the specified string value has a length within the specified range (inclusive).
+    /// </summary>
+    /// <param name="value">The string value to validate.</param>
+    /// <param name="min">The minimum length.</param>
+    /// <param name="max">The maximum length.</param>
+    /// <returns>True if the string value has a length within the specified range (inclusive), otherwise false.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool Length(string? value, int min, int max)
     {
-        return value?.Length >= min && value.Length <= max;
+        return value is not null && value.Length >= min && value.Length <= max;
     }
     
     #endregion
