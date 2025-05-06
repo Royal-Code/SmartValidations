@@ -520,34 +520,114 @@ public static class BuildInPredicates
     {
         return value is not null && value.Length >= min && value.Length <= max;
     }
-    
+
     #endregion
-    
+
     #region Less/Greater Than Or Equal
-    
+
+    /// <summary>
+    /// Validates whether the specified value is less than the other value.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="other">The other value to compare with.</param>
+    /// <returns>True if the value is less than the other value, otherwise false.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool LessThan<T>(T value, T other) where T: IComparable<T>
     {
         return value.CompareTo(other) < 0;
     }
-    
+
+    /// <summary>
+    /// Validates whether the specified value is less than the other value.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="other">The other value to compare with.</param>
+    /// <returns>True if the value is less than the other value, otherwise false.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool LessThan<T>(T? value, T? other) where T : struct, IComparable<T>
+    {
+        return value is null && other.HasValue || (value.HasValue && other.HasValue && value.Value.CompareTo(other.Value) < 0);
+    }
+
+    /// <summary>
+    /// Validates whether the specified value is less than or equal to the other value.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="other">The other value to compare with.</param>
+    /// <returns>True if the value is less than or equal to the other value, otherwise false.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool LessThanOrEqual<T>(T value, T other) where T: IComparable<T>
     {
         return value.CompareTo(other) <= 0;
     }
-    
+
+    /// <summary>
+    /// Validates whether the specified value is less than or equal to the other value.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="other">The other value to compare with.</param>
+    /// <returns>True if the value is less than or equal to the other value, otherwise false.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool LessThanOrEqual<T>(T? value, T? other) where T : struct, IComparable<T>
+    {
+        return value is null || (other.HasValue && value.Value.CompareTo(other.Value) <= 0);
+    }
+
+    /// <summary>
+    /// Validates whether the specified value is greater than the other value.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="other">The other value to compare with.</param>
+    /// <returns>True if the value is greater than the other value, otherwise false.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool GreaterThan<T>(T value, T other) where T: IComparable<T>
     {
         return value.CompareTo(other) > 0;
     }
-    
+
+    /// <summary>
+    /// Validates whether the specified value is greater than the other value.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="other">The other value to compare with.</param>
+    /// <returns>True if the value is greater than the other value, otherwise false.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool GreaterThan<T>(T? value, T? other) where T : struct, IComparable<T>
+    {
+        return (other is null && value.HasValue) || (value.HasValue && other.HasValue && value.Value.CompareTo(other.Value) > 0);
+    }
+
+    /// <summary>
+    /// Validates whether the specified value is greater than or equal to the other value.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="other">The other value to compare with.</param>
+    /// <returns>True if the value is greater than or equal to the other value, otherwise false.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool GreaterThanOrEqual<T>(T value, T other) where T: IComparable<T>
     {
         return value.CompareTo(other) >= 0;
     }
-    
+
+    /// <summary>
+    /// Validates whether the specified value is greater than or equal to the other value.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="other">The other value to compare with.</param>
+    /// <returns>True if the value is greater than or equal to the other value, otherwise false.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool GreaterThanOrEqual<T>(T? value, T? other) where T : struct, IComparable<T>
+    {
+        return other is null || (value.HasValue && value.Value.CompareTo(other.Value) >= 0);
+    }
+
     #endregion
 }

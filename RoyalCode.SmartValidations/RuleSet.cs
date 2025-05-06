@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using RoyalCode.SmartProblems;
@@ -1029,6 +1030,15 @@ public readonly ref struct RuleSet
 
     #region Less/Greater Than Or Equal
 
+    /// <summary>
+    /// Validates if the first value is less than the second value.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value1">The first value to validate.</param>
+    /// <param name="value2">The second value to validate.</param>
+    /// <param name="property1">The first property name.</param>
+    /// <param name="property2">The second property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet LessThan<T>(
         T value1, 
@@ -1047,6 +1057,42 @@ public readonly ref struct RuleSet
             string.Format(R.LessThanMessageTemplate, property1Name, property2Name)));
     }
 
+    /// <summary>
+    /// Validates if the first value is less than the second value.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value1">The first value to validate.</param>
+    /// <param name="value2">The second value to validate.</param>
+    /// <param name="property1">The first property name.</param>
+    /// <param name="property2">The second property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet LessThan<T>(
+        T? value1,
+        T? value2,
+        [CallerArgumentExpression(nameof(value1))] string? property1 = null,
+        [CallerArgumentExpression(nameof(value2))] string? property2 = null)
+        where T : struct, IComparable<T>
+    {
+        if (BuildInPredicates.LessThan(value1, value2))
+            return this;
+
+        var property1Name = DisplayNames.Instance.GetDisplayName(type, property1);
+        var property2Name = DisplayNames.Instance.GetDisplayName(type, property2);
+
+        return WithProblem(Problems.InvalidParameter(
+            string.Format(R.LessThanMessageTemplate, property1Name, property2Name)));
+    }
+
+    /// <summary>
+    /// Validates if the first value is less than or equal to the second value.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value1">The first value to validate.</param>
+    /// <param name="value2">The second value to validate.</param>
+    /// <param name="property1">The first property name.</param>
+    /// <param name="property2">The second property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet LessThanOrEqual<T>(
         T value1,
@@ -1065,6 +1111,42 @@ public readonly ref struct RuleSet
             string.Format(R.LessThanOrEqualMessageTemplate, property1Name, property2Name)));
     }
 
+    /// <summary>
+    /// Validates if the first value is less than or equal to the second value.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value1">The first value to validate.</param>
+    /// <param name="value2">The second value to validate.</param>
+    /// <param name="property1">The first property name.</param>
+    /// <param name="property2">The second property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet LessThanOrEqual<T>(
+        T? value1,
+        T? value2,
+        [CallerArgumentExpression(nameof(value1))] string? property1 = null,
+        [CallerArgumentExpression(nameof(value2))] string? property2 = null)
+        where T : struct, IComparable<T>
+    {
+        if (BuildInPredicates.LessThanOrEqual(value1, value2))
+            return this;
+
+        var property1Name = DisplayNames.Instance.GetDisplayName(type, property1);
+        var property2Name = DisplayNames.Instance.GetDisplayName(type, property2);
+
+        return WithProblem(Problems.InvalidParameter(
+            string.Format(R.LessThanOrEqualMessageTemplate, property1Name, property2Name)));
+    }
+
+    /// <summary>
+    /// Validates if the first value is greater than the second value.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value1">The first value to validate.</param>
+    /// <param name="value2">The second value to validate.</param>
+    /// <param name="property1">The first property name.</param>
+    /// <param name="property2">The second property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet GreaterThan<T>(
         T value1,
@@ -1083,6 +1165,42 @@ public readonly ref struct RuleSet
             string.Format(R.GreaterThanMessageTemplate, property1Name, property2Name)));
     }
 
+    /// <summary>
+    /// Validates if the first value is greater than the second value.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value1">The first value to validate.</param>
+    /// <param name="value2">The second value to validate.</param>
+    /// <param name="property1">The first property name.</param>
+    /// <param name="property2">The second property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet GreaterThan<T>(
+        T? value1,
+        T? value2,
+        [CallerArgumentExpression(nameof(value1))] string? property1 = null,
+        [CallerArgumentExpression(nameof(value2))] string? property2 = null)
+        where T : struct, IComparable<T>
+    {
+        if (BuildInPredicates.GreaterThan(value1, value2))
+            return this;
+
+        var property1Name = DisplayNames.Instance.GetDisplayName(type, property1);
+        var property2Name = DisplayNames.Instance.GetDisplayName(type, property2);
+
+        return WithProblem(Problems.InvalidParameter(
+            string.Format(R.GreaterThanMessageTemplate, property1Name, property2Name)));
+    }
+
+    /// <summary>
+    /// Validates if the first value is greater than or equal to the second value.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value1">The first value to validate.</param>
+    /// <param name="value2">The second value to validate.</param>
+    /// <param name="property1">The first property name.</param>
+    /// <param name="property2">The second property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet GreaterThanOrEqual<T>(
         T value1,
@@ -1101,10 +1219,46 @@ public readonly ref struct RuleSet
             string.Format(R.GreaterThanOrEqualMessageTemplate, property1Name, property2Name)));
     }
 
+    /// <summary>
+    /// Validates if the first value is greater than or equal to the second value.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value1">The first value to validate.</param>
+    /// <param name="value2">The second value to validate.</param>
+    /// <param name="property1">The first property name.</param>
+    /// <param name="property2">The second property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet GreaterThanOrEqual<T>(
+        T? value1,
+        T? value2,
+        [CallerArgumentExpression(nameof(value1))] string? property1 = null,
+        [CallerArgumentExpression(nameof(value2))] string? property2 = null)
+        where T : struct, IComparable<T>
+    {
+        if (BuildInPredicates.GreaterThanOrEqual(value1, value2))
+            return this;
+
+        var property1Name = DisplayNames.Instance.GetDisplayName(type, property1);
+        var property2Name = DisplayNames.Instance.GetDisplayName(type, property2);
+
+        return WithProblem(Problems.InvalidParameter(
+            string.Format(R.GreaterThanOrEqualMessageTemplate, property1Name, property2Name)));
+    }
+
     #endregion
 
     #region Must
 
+    /// <summary>
+    /// Validates a value to ensure that the value satisfies the predicate.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="predicate">The predicate to validate.</param>
+    /// <param name="messageFormatter">The message formatter.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     public RuleSet Must<T>(
         T value, 
         Func<T, bool> predicate, 
@@ -1119,6 +1273,17 @@ public readonly ref struct RuleSet
         return WithProblem(Problems.InvalidParameter(messageFormatter(propertyName, value), property));
     }
 
+    /// <summary>
+    /// Validates a value to ensure that the value satisfies the predicate.
+    /// </summary>
+    /// <typeparam name="TValue">The value type.</typeparam>
+    /// <typeparam name="TParam">The parameter type.</typeparam>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="param">The parameter to validate.</param>
+    /// <param name="predicate">The predicate to validate.</param>
+    /// <param name="messageFormatter">The message formatter.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     public RuleSet Must<TValue, TParam>(
         TValue value,
         TParam param,
@@ -1134,6 +1299,18 @@ public readonly ref struct RuleSet
         return WithProblem(Problems.InvalidParameter(messageFormatter(propertyName, value, param), property));
     }
 
+    /// <summary>
+    /// Validates if both values satisfy the predicate.
+    /// </summary>
+    /// <typeparam name="T1">The first value type.</typeparam>
+    /// <typeparam name="T2">The second value type.</typeparam>
+    /// <param name="value1">The first value to validate.</param>
+    /// <param name="value2">The second value to validate.</param>
+    /// <param name="predicate">The predicate to validate.</param>
+    /// <param name="messageFormatter">The message formatter.</param>
+    /// <param name="property1">The first property name.</param>
+    /// <param name="property2">The second property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     public RuleSet BothMust<T1, T2>(
         T1 value1,
         T2 value2,
@@ -1151,6 +1328,20 @@ public readonly ref struct RuleSet
         return WithProblem(Problems.InvalidParameter(messageFormatter(property1Name, property2Name, value1, value2)));
     }
 
+    /// <summary>
+    /// Validates if both values satisfy the predicate.
+    /// </summary>
+    /// <typeparam name="T1">The first value type.</typeparam>
+    /// <typeparam name="T2">The second value type.</typeparam>
+    /// <typeparam name="TParam">The parameter type.</typeparam>
+    /// <param name="value1">The first value to validate.</param>
+    /// <param name="value2">The second value to validate.</param>
+    /// <param name="param">The parameter to validate.</param>
+    /// <param name="predicate">The predicate to validate.</param>
+    /// <param name="messageFormatter">The message formatter.</param>
+    /// <param name="property1">The first property name.</param>
+    /// <param name="property2">The second property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     public RuleSet BothMust<T1, T2, TParam>(
         T1 value1,
         T2 value2,
@@ -1174,6 +1365,17 @@ public readonly ref struct RuleSet
 
     #region Mist
 
+    /// <summary>
+    /// <para>
+    ///     Validates a string to ensure that the value is a valid email address.
+    /// </para>
+    /// <para>
+    ///     The validation is based on the <see cref="EmailAddressAttribute"/> attribute validation.
+    /// </para>
+    /// </summary>
+    /// <param name="value">The string value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet Email(string? value, [CallerArgumentExpression(nameof(value))] string? property = null)
     {
@@ -1186,6 +1388,17 @@ public readonly ref struct RuleSet
             string.Format(R.EmailMessageTemplate, propertyName), property));
     }
 
+    /// <summary>
+    /// <para>
+    ///     Validates a string to ensure that the value is a valid URL.
+    /// </para>
+    /// <para>
+    ///     The validation is based on the <see cref="UrlAttribute"/> attribute validation.
+    /// </para>
+    /// </summary>
+    /// <param name="value">The string value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet Url(string? value, [CallerArgumentExpression(nameof(value))] string? property = null)
     {
@@ -1240,6 +1453,13 @@ public readonly ref struct RuleSet<TValue>
     private readonly string property;
     private readonly Problems? problems;
 
+    /// <summary>
+    /// Create a new customizable rule set for a property and value.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="value"></param>
+    /// <param name="property"></param>
+    /// <param name="problems"></param>
     public RuleSet(
         [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] Type? type,
         TValue? value,
