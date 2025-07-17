@@ -13,6 +13,6 @@
         <SVPreview>-preview-1.0</SVPreview>
     </PropertyGroup>
     <PropertyGroup>
-        <SPVer>1.0.0-preview-3.0</SPVer>
+        <SPVer>1.0.0-preview-4.2</SPVer>
     </PropertyGroup>
 </Project>
