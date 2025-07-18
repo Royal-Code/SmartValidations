@@ -56,7 +56,50 @@ public class NestedTests
         // Assert
         Assert.True(hasProblems);
         Assert.NotNull(problems);
-        Assert.Equal(2, problems!.Count); // Expecting problems for TotalAmount and ShippingAddress.Street
+        Assert.Equal(2, problems.Count); // Expecting problems for TotalAmount and ShippingAddress.Street
+    }
+
+    [Fact]
+    public void NestedProperties_WithNestedProblems_And_NestedValidable()
+    {
+        // Arrange
+        var foo = new Foo
+        {
+            Bar = new Bar(),
+            Baz = new Baz
+            {
+                Value = "Baz Value" // This is valid
+            }
+        };
+
+        // Act
+        var hasProblems = foo.HasProblems(out var problems);
+
+        // Assert
+        Assert.True(hasProblems);
+        Assert.NotNull(problems);
+        Assert.Equal(2, problems.Count); // Foo.Value and Bar.Value should be empty
+    }
+
+    [Fact]
+    public void NestedProperties_WithNestedProblems_And_NestedValidable_And_NestedValidateFunc()
+    {
+        // Arrange
+        var foo = new Foo
+        {
+            Value = "Foo Value", // This is valid
+            Bar = new Bar
+            {
+                Value = "Bar Value" // This is valid
+            },
+            Baz = new Baz() // This will have problems
+        };
+        // Act
+        var hasProblems = foo.HasProblems(out var problems);
+        // Assert
+        Assert.True(hasProblems);
+        Assert.NotNull(problems);
+        Assert.Single(problems);
     }
 }
 
@@ -105,4 +148,46 @@ file class Address
 
     [DisplayName("Country")]
     public string Country { get; set; } = string.Empty;
+}
+
+file class Foo : IValidable
+{
+    public string? Value { get; set; } = string.Empty;
+
+    public Bar? Bar { get; set; }
+
+    public Baz? Baz { get; set; }
+
+    public bool HasProblems([NotNullWhen(true)] out Problems? problems)
+    {
+        return Rules.Set<Foo>()
+            .NotEmpty(Value)
+            .NotNullNested(Bar)
+            .Nested(Baz, b => b.HasProblems)
+            .HasProblems(out problems);
+    }
+}
+
+file class Bar : IValidable
+{
+    public string? Value { get; set; } = string.Empty;
+
+    public bool HasProblems([NotNullWhen(true)] out Problems? problems)
+    {
+        return Rules.Set<Bar>()
+            .NotEmpty(Value)
+            .HasProblems(out problems);
+    }
+}
+
+file class Baz
+{
+    public string? Value { get; set; } = string.Empty;
+
+    public bool HasProblems([NotNullWhen(true)] out Problems? problems)
+    {
+        return Rules.Set<Baz>()
+            .NotEmpty(Value)
+            .HasProblems(out problems);
+    }
 }
