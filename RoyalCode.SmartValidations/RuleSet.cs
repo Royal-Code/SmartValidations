@@ -1833,11 +1833,76 @@ public readonly ref struct RuleSet
 
     #endregion
 
+    #region Validate
+
+    /// <summary>
+    /// Validates a struct value to ensure, and implements the <see cref="IValidable"/> interface.
+    /// </summary>
+    /// <typeparam name="T">The type of the struct value.</typeparam>
+    /// <param name="value">The struct value to validate.</param>
+    /// <param name="property">The name of the property being validated.</param>
+    /// <returns>A RuleSet containing validation problems, if any.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet Validate<T>(
+        T value,
+        [CallerArgumentExpression(nameof(value))] string? property = null)
+        where T : struct, IValidable
+    {
+        if (value.HasProblems(out var nestedProblems))
+        {
+            nestedProblems.ForEach(RemovePrefix(property), (param, prop) => prop.ReplaceProperty(param));
+
+            if (problems is null)
+                return new RuleSet(type, nestedProblems, propertyPrefix);
+
+            problems.AddRange(nestedProblems);
+            return new RuleSet(type, problems, propertyPrefix);
+        }
+
+        return this;
+    }
+
+    /// <summary>
+    /// Validates a collection of struct values to ensure, and implements the <see cref="IValidable"/> interface.
+    /// </summary>
+    /// <typeparam name="T">The type of the struct value.</typeparam>
+    /// <param name="values">The collection of struct values to validate.</param>
+    /// <param name="property">The name of the property being validated.</param>
+    /// <returns>A RuleSet containing validation problems, if any.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet Validate<T>(
+        IEnumerable<T> values,
+        [CallerArgumentExpression(nameof(values))] string? property = null)
+        where T : struct, IValidable
+    {
+        if (values is null)
+            return this;
+
+        var allProblems = problems;
+
+        foreach (var value in values)
+            if (value.HasProblems(out var nestedProblems))
+            {
+                nestedProblems.ForEach(RemovePrefix(property), (param, prop) => prop.ReplaceProperty(param));
+
+                if (allProblems is null)
+                    allProblems = nestedProblems;
+                else
+                    allProblems.AddRange(nestedProblems);
+            }
+
+        if (allProblems is null)
+            return this;
+
+        return new RuleSet(type, allProblems, propertyPrefix);
+    }
+
+    #endregion
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private RuleSet NullOrEmptyProblem(string? property)
     {
-        property = RemovePrefix(property);
-        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
+        var propertyName = GetDisplayName(property);
 
         return WithProblem(Problems.InvalidParameter(
             string.Format(R.NotNullOrEmptyMessageTemplate, propertyName), property));
