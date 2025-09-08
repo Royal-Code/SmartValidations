@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -118,105 +118,145 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BothEqualMessageTemplate" xml:space="preserve">
-    <value>The '{0}' field must be the same as the '{1}' field</value>
+    <value>O campo "{0}" deve ser igual ao campo "{1}"</value>
   </data>
   <data name="BothNotEqualMessageTemplate" xml:space="preserve">
-    <value>The '{0}' field must not be the same as the '{1}' field</value>
+    <value>O campo "{0}" não deve ser igual ao campo "{1}"</value>
   </data>
   <data name="BothNullOrNotMessageTemplate" xml:space="preserve">
-    <value>Both fields '{0}' and '{1}' must be entered together or not at all</value>
+    <value>Ambos os campos "{0}" e "{1}" devem ser preenchidos ou deixados em branco</value>
   </data>
   <data name="ContainsMessageTemplate" xml:space="preserve">
-    <value>The '{0}' field must contains '{1}'</value>
+    <value>O campo "{0}" deve conter o valor "{1}"</value>
   </data>
   <data name="DoesNotContainMessageTemplate" xml:space="preserve">
-    <value>The '{0}' field must not contains '{1}'</value>
+    <value>O campo "{0}" não deve conter o valor "{1}"</value>
   </data>
   <data name="EmailMessageTemplate" xml:space="preserve">
-    <value>The '{0}' field must be a valid e-mail address</value>
+    <value>O campo "{0}" deve ter um endereço de e-mail válido</value>
   </data>
   <data name="EndsWithMessageTemplate" xml:space="preserve">
-    <value>The '{0}' field must end with '{1}'</value>
+    <value>O campo "{0}" deve terminar com "{1}"</value>
   </data>
   <data name="EntityNotFound" xml:space="preserve">
-    <value>The record for '{0}' was not found</value>
+    <value>O registro de "{0}" não foi encontrado</value>
   </data>
   <data name="EntityNotFoundBy" xml:space="preserve">
-    <value>The record of '{0}' with {1} '{2}' was not found</value>
+    <value>O registro de "{0}" com {1} "{2}" não foi encontrado</value>
   </data>
   <data name="EntityNotFoundById" xml:space="preserve">
-    <value>The record of '{0}' with id '{1}' was not found</value>
+    <value>O registro de "{0}" com id "{1}" não foi encontrado</value>
   </data>
   <data name="EqualMessageTemplate" xml:space="preserve">
-    <value>The '{0}' field must be equal to '{1}'</value>
+    <value>O campo "{0}" deve ser igual a "{1}"</value>
   </data>
   <data name="GreaterThanMessageTemplate" xml:space="preserve">
-    <value>The value of the '{0}' field must be greater than the value of the '{1}' field</value>
+    <value>O valor do campo "{0}" deve ser maior que o valor do campo "{1}"</value>
   </data>
   <data name="GreaterThanOrEqualMessageTemplate" xml:space="preserve">
-    <value>The value of the '{0}' field must be greater than or equal to the value of the '{1}' field</value>
+    <value>O valor do campo "{0}" deve ser maior ou igual ao valor do campo "{1}"</value>
   </data>
   <data name="LengthMessageTemplate" xml:space="preserve">
-    <value>The "{0}" field must have a length between "{1}" and "{2}" characters</value>
+    <value>O campo "{0}" deve ter um comprimento entre "{1}" e "{2}" caracteres</value>
   </data>
   <data name="LessThanMessageTemplate" xml:space="preserve">
-    <value>The value of the '{0}' field must be less than the value of the '{1}' field</value>
+    <value>O valor do campo "{0}" deve ser menor que o valor do campo "{1}"</value>
   </data>
   <data name="LessThanOrEqualMessageTemplate" xml:space="preserve">
-    <value>The value of the '{0}' field must be less than or equal to the value of the '{1}' field</value>
+    <value>O valor do campo "{0}" deve ser menor ou igual ao valor do campo "{1}"</value>
   </data>
   <data name="MatchesMessageTemplate" xml:space="preserve">
-    <value>The value “{0}” does not match the rule “{1}”</value>
+    <value>O valor campo "{0}" não corresponde a regra "{1}"</value>
   </data>
   <data name="MaxLengthMessageTemplate" xml:space="preserve">
-    <value>The '{0}' field must have a maximum length of '{1}' character(s)</value>
+    <value>O campo "{0}" deve ter um comprimento máximo de "{1}" caractere(s)</value>
   </data>
   <data name="MaxMessageTemplate" xml:space="preserve">
-    <value>The '{0}' field must have a maximum value of '{1}'</value>
+    <value>O campo "{0}" deve ter um valor máximo de "{1}"</value>
   </data>
   <data name="MinLengthMessageTemplate" xml:space="preserve">
-    <value>The '{0}' field must have a minimum length of '{1}' character(s)</value>
+    <value>O campo "{0}" deve ter um comprimento mínimo de "{1}" caractere(s)</value>
   </data>
-  <data name="MinMaxMessageTemplate" xml:space="preserve">
-    <value>The '{0}' field must have a minimum value of '{1}' and a maximum value of '{2}'</value>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="MinMaxMessageTemplate" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
   </data>
-  <data name="MinMessageTemplate" xml:space="preserve">
-    <value>The '{0}' field must have a minimum value of '{1}'</value>
+  <data name="MinMessageTemplate" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
   </data>
-  <data name="NotEqualMessageTemplate" xml:space="preserve">
-    <value>The '{0}' field must not be equal to '{1}'</value>
+  <data name="NotEqualMessageTemplate" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
   </data>
-  <data name="NotMatchesMessageTemplate" xml:space="preserve">
-    <value>The '{0}' field must not match '{1}'</value>
+  <data name="NotMatchesMessageTemplate" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
   </data>
-  <data name="NotNullOrEmptyMessageTemplate" xml:space="preserve">
-    <value>The '{0}' field must be entered</value>
+  <data name="NotNullOrEmptyMessageTemplate" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
   </data>
-  <data name="NullOrLengthMessageTemplate" xml:space="preserve">
-    <value>The '{0}' field, when entered, must have a length between '{1}' and '{2}' characters</value>
+  <data name="NullOrLengthMessageTemplate" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
   </data>
-  <data name="NullOrMaxLengthMessageTemplate" xml:space="preserve">
-    <value>The '{0}' field, when entered, must have a maximum length of '{1}' character(s)</value>
+  <data name="NullOrMaxLengthMessageTemplate" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
   </data>
-  <data name="NullOrMaxMessageTemplate" xml:space="preserve">
-    <value>The '{0}' field, when entered, must have a maximum value of '{1}'</value>
+  <data name="NullOrMaxMessageTemplate" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
   </data>
-  <data name="NullOrMinLengthMessageTemplate" xml:space="preserve">
-    <value>The '{0}' field, when entered, must have a minimum length of '{1}' character(s)</value>
+  <data name="NullOrMinLengthMessageTemplate" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
   </data>
-  <data name="NullOrMinMaxMessageTemplate" xml:space="preserve">
-    <value>The '{0}' field, when entered, must have a minimum value of '{1}' and a maximum value of '{2}'</value>
+  <data name="NullOrMinMaxMessageTemplate" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
   </data>
-  <data name="NullOrMinMessageTemplate" xml:space="preserve">
-    <value>The '{0}' field, when entered, must have a minimum value of '{1}'</value>
+  <data name="NullOrMinMessageTemplate" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
   </data>
-  <data name="NullOrNotMessageTemplate" xml:space="preserve">
-    <value>The '{0}' field, when entered, must contain a value</value>
+  <data name="NullOrNotMessageTemplate" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
   </data>
-  <data name="StartsWithMessageTemplate" xml:space="preserve">
-    <value>The '{0}' field must start with '{1}'</value>
+  <data name="StartsWithMessageTemplate" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
   </data>
   <data name="UrlMessageTemplate" xml:space="preserve">
-    <value>The '{0}' field must be a valid URL</value>
+    <value>O campo "{0}" deve ser um URL válido</value>
+  </data>
+  <data name="MinMaxMessageTemplate" xml:space="preserve">
+    <value>O campo "{0}" deve ter um valor mínimo de "{1}"e um valor máximo de "{2}"</value>
+  </data>
+  <data name="MinMessageTemplate" xml:space="preserve">
+    <value>O campo "{0}" deve ter um valor mínimo de "{1}"</value>
+  </data>
+  <data name="NotEqualMessageTemplate" xml:space="preserve">
+    <value>O campo "{0}" não deve ser igual a "{1}"</value>
+  </data>
+  <data name="NotMatchesMessageTemplate" xml:space="preserve">
+    <value>O campo "{0}" não deve corresponder a "{1}"</value>
+  </data>
+  <data name="NotNullOrEmptyMessageTemplate" xml:space="preserve">
+    <value>O campo "{0}" deve ser preenchido</value>
+  </data>
+  <data name="NullOrLengthMessageTemplate" xml:space="preserve">
+    <value>O campo "{0}", quando preenchido, deve ter um comprimento entre "{1}" e "{2}" caracteres</value>
+  </data>
+  <data name="NullOrMaxLengthMessageTemplate" xml:space="preserve">
+    <value>O campo "{0}", quando preenchido, deve ter um comprimento máximo de "{1}" caracteres</value>
+  </data>
+  <data name="NullOrMaxMessageTemplate" xml:space="preserve">
+    <value>O campo "{0}", quando preenchido, deve ter um valor máximo de "{1}"</value>
+  </data>
+  <data name="NullOrMinLengthMessageTemplate" xml:space="preserve">
+    <value>O campo "{0}", quando preenchido, deve ter um comprimento mínimo de "{1}" caractere(s)</value>
+  </data>
+  <data name="NullOrMinMaxMessageTemplate" xml:space="preserve">
+    <value>O campo "{0}", quando preenchido, deve ter um valor mínimo de "{1}" e um valor máximo de "{2}"</value>
+  </data>
+  <data name="NullOrMinMessageTemplate" xml:space="preserve">
+    <value>O campo "{0}", quando preenchido, deve ter um valor mínimo de "{1}"</value>
+  </data>
+  <data name="NullOrNotMessageTemplate" xml:space="preserve">
+    <value>O campo "{0}", quando preenchido, deve conter um valor</value>
+  </data>
+  <data name="StartsWithMessageTemplate" xml:space="preserve">
+    <value>O campo "{0}" deve começar com "{1}"</value>
   </data>
 </root>

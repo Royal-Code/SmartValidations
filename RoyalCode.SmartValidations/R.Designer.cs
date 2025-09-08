@@ -88,11 +88,38 @@ namespace RoyalCode.SmartValidations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field must contains &apos;{1}&apos;.
+        /// </summary>
+        internal static string ContainsMessageTemplate {
+            get {
+                return ResourceManager.GetString("ContainsMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field must not contains &apos;{1}&apos;.
+        /// </summary>
+        internal static string DoesNotContainMessageTemplate {
+            get {
+                return ResourceManager.GetString("DoesNotContainMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The &apos;{0}&apos; field must be a valid e-mail address.
         /// </summary>
         internal static string EmailMessageTemplate {
             get {
                 return ResourceManager.GetString("EmailMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field must end with &apos;{1}&apos;.
+        /// </summary>
+        internal static string EndsWithMessageTemplate {
+            get {
+                return ResourceManager.GetString("EndsWithMessageTemplate", resourceCulture);
             }
         }
         
@@ -142,7 +169,7 @@ namespace RoyalCode.SmartValidations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The value of the &apos;{0}&apos; field must be greater than or equal to the value of the &apos;{1}&apos; field..
+        ///   Looks up a localized string similar to The value of the &apos;{0}&apos; field must be greater than or equal to the value of the &apos;{1}&apos; field.
         /// </summary>
         internal static string GreaterThanOrEqualMessageTemplate {
             get {
@@ -169,11 +196,20 @@ namespace RoyalCode.SmartValidations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The value of the &apos;{0}&apos; field must be less than or equal to the value of the &apos;{1}&apos; field..
+        ///   Looks up a localized string similar to The value of the &apos;{0}&apos; field must be less than or equal to the value of the &apos;{1}&apos; field.
         /// </summary>
         internal static string LessThanOrEqualMessageTemplate {
             get {
                 return ResourceManager.GetString("LessThanOrEqualMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The value “{0}” does not match the rule “{1}”.
+        /// </summary>
+        internal static string MatchesMessageTemplate {
+            get {
+                return ResourceManager.GetString("MatchesMessageTemplate", resourceCulture);
             }
         }
         
@@ -228,6 +264,15 @@ namespace RoyalCode.SmartValidations {
         internal static string NotEqualMessageTemplate {
             get {
                 return ResourceManager.GetString("NotEqualMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field must not match &apos;{1}&apos;.
+        /// </summary>
+        internal static string NotMatchesMessageTemplate {
+            get {
+                return ResourceManager.GetString("NotMatchesMessageTemplate", resourceCulture);
             }
         }
         
@@ -300,6 +345,15 @@ namespace RoyalCode.SmartValidations {
         internal static string NullOrNotMessageTemplate {
             get {
                 return ResourceManager.GetString("NullOrNotMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field must start with &apos;{1}&apos;.
+        /// </summary>
+        internal static string StartsWithMessageTemplate {
+            get {
+                return ResourceManager.GetString("StartsWithMessageTemplate", resourceCulture);
             }
         }
         

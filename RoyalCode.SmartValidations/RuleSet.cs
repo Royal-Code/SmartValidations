@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using RoyalCode.SmartProblems;
 using RoyalCode.SmartProblems.Entities;
 
@@ -206,6 +207,23 @@ public readonly ref struct RuleSet
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet NotEmpty<T>(
         [NotNullWhen(true)] ICollection<T>? value,
+        [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        return BuildInPredicates.NotEmpty(value)
+            ? this
+            : NullOrEmptyProblem(property);
+    }
+
+    /// <summary>
+    /// Validates a readonly collection to ensure that the value is not null or empty.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The readonly collection to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet NotEmpty<T>(
+        [NotNullWhen(true)] IReadOnlyCollection<T>? value,
         [CallerArgumentExpression(nameof(value))] string? property = null)
     {
         return BuildInPredicates.NotEmpty(value)
@@ -760,6 +778,274 @@ public readonly ref struct RuleSet
 
         return WithProblem(Problems.InvalidParameter(
             string.Format(R.BothNotEqualMessageTemplate, property1Name, property2Name)));
+    }
+
+    #endregion
+
+    #region String and Pattern
+
+    /// <summary>
+    /// Validates a string to ensure that it matches the specified regular expression pattern.
+    /// </summary>
+    /// <param name="value">The string value to validate.</param>
+    /// <param name="pattern">The regular expression pattern to match.</param>
+    /// <param name="patternDescription">Optional, a human-readable description of the pattern to use in the error message.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    public RuleSet Matches(
+        string? value,
+        string pattern,
+        string? patternDescription = null,
+        [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        if (BuildInPredicates.Matches(value, pattern))
+            return this;
+
+        property = RemovePrefix(property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
+
+        return WithProblem(Problems.InvalidParameter(
+            string.Format(R.MatchesMessageTemplate, propertyName, patternDescription ?? pattern), property));
+    }
+
+    /// <summary>
+    /// Validates a string to ensure that it matches the specified regular expression.
+    /// </summary>
+    /// <param name="value">The string value to validate.</param>
+    /// <param name="regex">The compiled regular expression to match.</param>
+    /// <param name="patternDescription">A human-readable description of the pattern to use in the error message.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    public RuleSet Matches(
+        string? value,
+        Regex regex,
+        string patternDescription,
+        [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        if (BuildInPredicates.Matches(value, regex))
+            return this;
+
+        property = RemovePrefix(property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
+
+        return WithProblem(Problems.InvalidParameter(
+            string.Format(R.MatchesMessageTemplate, propertyName, patternDescription), property));
+    }
+
+    /// <summary>
+    /// Validates a string to ensure that it does not match the specified regular expression pattern.
+    /// </summary>
+    /// <param name="value">The string value to validate.</param>
+    /// <param name="pattern">The regular expression pattern that must not match.</param>
+    /// <param name="patternDescription">Optional, a human-readable description of the pattern to use in the error message.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    public RuleSet NotMatches(
+        string? value,
+        string pattern,
+        string? patternDescription = null,
+        [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        if (BuildInPredicates.NotMatches(value, pattern))
+            return this;
+        property = RemovePrefix(property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
+        return WithProblem(Problems.InvalidParameter(
+            string.Format(R.NotMatchesMessageTemplate, propertyName, patternDescription ?? pattern), property));
+    }
+
+    /// <summary>
+    /// Validates a string to ensure that it does not match the specified regular expression.
+    /// </summary>
+    /// <param name="value">The string value to validate.</param>
+    /// <param name="regex">The compiled regular expression that must not match.</param>
+    /// <param name="patternDescription">A human-readable description of the pattern to use in the error message.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    public RuleSet NotMatches(
+        string? value,
+        Regex regex,
+        string patternDescription,
+        [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        if (BuildInPredicates.NotMatches(value, regex))
+            return this;
+        property = RemovePrefix(property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
+        return WithProblem(Problems.InvalidParameter(
+            string.Format(R.NotMatchesMessageTemplate, propertyName, patternDescription), property));
+    }
+
+    /// <summary>
+    /// Validates a string to ensure that it starts with the expected value.
+    /// </summary>
+    /// <param name="value">The string value to validate.</param>
+    /// <param name="expectedStart">The expected starting substring.</param>
+    /// <param name="comparison">The string comparison type.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    public RuleSet StartsWith(
+        string? value,
+        string expectedStart,
+        StringComparison comparison = StringComparison.Ordinal,
+        [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        if (BuildInPredicates.StartsWith(value, expectedStart, comparison))
+            return this;
+
+        property = RemovePrefix(property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
+
+        return WithProblem(Problems.InvalidParameter(
+            string.Format(R.StartsWithMessageTemplate, propertyName, expectedStart), property));
+    }
+
+    /// <summary>
+    /// Validates a string to ensure that it ends with the expected value.
+    /// </summary>
+    /// <param name="value">The string value to validate.</param>
+    /// <param name="expectedEnd">The expected ending substring.</param>
+    /// <param name="comparison">The string comparison type.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    public RuleSet EndsWith(
+        string? value,
+        string expectedEnd,
+        StringComparison comparison = StringComparison.Ordinal,
+        [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        if (BuildInPredicates.EndsWith(value, expectedEnd, comparison))
+            return this;
+
+        property = RemovePrefix(property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
+
+        return WithProblem(Problems.InvalidParameter(
+            string.Format(R.EndsWithMessageTemplate, propertyName, expectedEnd), property));
+    }
+
+    /// <summary>
+    /// Validates a string to ensure that it contains the expected substring.
+    /// </summary>
+    /// <param name="value">The string value to validate.</param>
+    /// <param name="expectedSubstring">The expected substring to be contained.</param>
+    /// <param name="comparison">The string comparison type.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    public RuleSet Contains(
+        string? value,
+        string expectedSubstring,
+        StringComparison comparison = StringComparison.Ordinal,
+        [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        if (BuildInPredicates.Contains(value, expectedSubstring, comparison))
+            return this;
+
+        property = RemovePrefix(property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
+
+        return WithProblem(Problems.InvalidParameter(
+            string.Format(R.ContainsMessageTemplate, propertyName, expectedSubstring), property));
+    }
+
+    /// <summary>
+    /// Validates a string to ensure that it does not contain the unexpected substring.
+    /// </summary>
+    /// <param name="value">The string value to validate.</param>
+    /// <param name="unexpectedSubstring">The unexpected substring that must not be contained.</param>
+    /// <param name="comparison">The string comparison type.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    public RuleSet DoesNotContain(
+        string? value,
+        string unexpectedSubstring,
+        StringComparison comparison = StringComparison.Ordinal,
+        [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        if (BuildInPredicates.DoesNotContain(value, unexpectedSubstring, comparison))
+            return this;
+
+        property = RemovePrefix(property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
+
+        return WithProblem(Problems.InvalidParameter(
+            string.Format(R.DoesNotContainMessageTemplate, propertyName, unexpectedSubstring), property));
+    }
+
+    /// <summary>
+    /// Validates a string to ensure that it contains only letter characters.
+    /// </summary>
+    /// <param name="value">The string value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    public RuleSet OnlyLetters(
+        string? value,
+        [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        if (BuildInPredicates.OnlyLetters(value))
+            return this;
+
+        property = RemovePrefix(property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
+
+        return WithProblem(Problems.InvalidParameter(
+            string.Format(R.OnlyLettersMessageTemplate, propertyName), property));
+    }
+
+    /// <summary>
+    /// Validates a string to ensure that it contains only digit characters.
+    /// </summary>
+    /// <param name="value">The string value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    public RuleSet OnlyDigits(
+        string? value,
+        [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        if (BuildInPredicates.OnlyDigits(value))
+            return this;
+
+        property = RemovePrefix(property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
+
+        return WithProblem(Problems.InvalidParameter(
+            string.Format(R.OnlyDigitsMessageTemplate, propertyName), property));
+    }
+
+    /// <summary>
+    /// Validates a string to ensure that it contains only letter or digit characters.
+    /// </summary>
+    /// <param name="value">The string value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    public RuleSet OnlyLettersOrDigits(
+        string? value,
+        [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        if (BuildInPredicates.OnlyLettersOrDigits(value))
+            return this;
+        property = RemovePrefix(property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
+        return WithProblem(Problems.InvalidParameter(
+            string.Format(R.OnlyLettersOrDigitsMessageTemplate, propertyName), property));
+    }
+
+    /// <summary>
+    /// Validates a string to ensure that it does not contain any whitespace characters.
+    /// </summary>
+    /// <param name="value">The string value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    public RuleSet NoWhiteSpace(
+        string? value,
+        [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        if (BuildInPredicates.NoWhiteSpace(value))
+            return this;
+        property = RemovePrefix(property);
+        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
+        return WithProblem(Problems.InvalidParameter(
+            string.Format(R.NoWhiteSpaceMessageTemplate, propertyName), property));
     }
 
     #endregion

@@ -153,6 +153,18 @@ public partial class BuildInPredicatesTests
         Assert.Equal(expected, result);
     }
 
+    [Theory]
+    [MemberData(nameof(Collections_Data))]
+    public void ReadOnlyCollection_NotEmpty<T>(IReadOnlyCollection<T>? value, bool expected)
+    {
+        // Arrange
+        // Act
+        var result = BuildInPredicates.NotEmpty(value);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
     public static IEnumerable<object[]> Collections_Data()
     {
         yield return [new List<string> { "a" }, true];
