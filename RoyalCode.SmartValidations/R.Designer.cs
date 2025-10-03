@@ -286,6 +286,15 @@ namespace RoyalCode.SmartValidations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field must not contain any blank spaces.
+        /// </summary>
+        internal static string NoWhiteSpaceMessageTemplate {
+            get {
+                return ResourceManager.GetString("NoWhiteSpaceMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The &apos;{0}&apos; field, when entered, must have a length between &apos;{1}&apos; and &apos;{2}&apos; characters.
         /// </summary>
         internal static string NullOrLengthMessageTemplate {
@@ -345,6 +354,33 @@ namespace RoyalCode.SmartValidations {
         internal static string NullOrNotMessageTemplate {
             get {
                 return ResourceManager.GetString("NullOrNotMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field  must only contain digits (numbers).
+        /// </summary>
+        internal static string OnlyDigitsMessageTemplate {
+            get {
+                return ResourceManager.GetString("OnlyDigitsMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field  must contain only letters.
+        /// </summary>
+        internal static string OnlyLettersMessageTemplate {
+            get {
+                return ResourceManager.GetString("OnlyLettersMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field must contain only letters or digits (numbers).
+        /// </summary>
+        internal static string OnlyLettersOrDigitsMessageTemplate {
+            get {
+                return ResourceManager.GetString("OnlyLettersOrDigitsMessageTemplate", resourceCulture);
             }
         }
         

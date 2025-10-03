@@ -192,6 +192,9 @@
   <data name="NotNullOrEmptyMessageTemplate" xml:space="preserve">
     <value>The '{0}' field must be entered</value>
   </data>
+  <data name="NoWhiteSpaceMessageTemplate" xml:space="preserve">
+    <value>The '{0}' field must not contain any blank spaces</value>
+  </data>
   <data name="NullOrLengthMessageTemplate" xml:space="preserve">
     <value>The '{0}' field, when entered, must have a length between '{1}' and '{2}' characters</value>
   </data>
@@ -212,6 +215,15 @@
   </data>
   <data name="NullOrNotMessageTemplate" xml:space="preserve">
     <value>The '{0}' field, when entered, must contain a value</value>
+  </data>
+  <data name="OnlyDigitsMessageTemplate" xml:space="preserve">
+    <value>The '{0}' field  must only contain digits (numbers)</value>
+  </data>
+  <data name="OnlyLettersMessageTemplate" xml:space="preserve">
+    <value>The '{0}' field  must contain only letters</value>
+  </data>
+  <data name="OnlyLettersOrDigitsMessageTemplate" xml:space="preserve">
+    <value>The '{0}' field must contain only letters or digits (numbers)</value>
   </data>
   <data name="StartsWithMessageTemplate" xml:space="preserve">
     <value>The '{0}' field must start with '{1}'</value>

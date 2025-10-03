@@ -177,49 +177,6 @@
   <data name="MinLengthMessageTemplate" xml:space="preserve">
     <value>O campo "{0}" deve ter um comprimento mínimo de "{1}" caractere(s)</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="MinMaxMessageTemplate" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="MinMessageTemplate" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="NotEqualMessageTemplate" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="NotMatchesMessageTemplate" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="NotNullOrEmptyMessageTemplate" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="NullOrLengthMessageTemplate" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="NullOrMaxLengthMessageTemplate" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="NullOrMaxMessageTemplate" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="NullOrMinLengthMessageTemplate" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="NullOrMinMaxMessageTemplate" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="NullOrMinMessageTemplate" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="NullOrNotMessageTemplate" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="StartsWithMessageTemplate" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="UrlMessageTemplate" xml:space="preserve">
-    <value>O campo "{0}" deve ser um URL válido</value>
-  </data>
   <data name="MinMaxMessageTemplate" xml:space="preserve">
     <value>O campo "{0}" deve ter um valor mínimo de "{1}"e um valor máximo de "{2}"</value>
   </data>
@@ -258,5 +215,20 @@
   </data>
   <data name="StartsWithMessageTemplate" xml:space="preserve">
     <value>O campo "{0}" deve começar com "{1}"</value>
+  </data>
+  <data name="UrlMessageTemplate" xml:space="preserve">
+    <value>O campo "{0}" deve ser um URL válido</value>
+  </data>
+  <data name="OnlyLettersMessageTemplate" xml:space="preserve">
+    <value>O campo '{0}' deve ter apenas letras</value>
+  </data>
+  <data name="OnlyDigitsMessageTemplate" xml:space="preserve">
+    <value>O campo '{0}' deve ter apenas dígitos (números)</value>
+  </data>
+  <data name="OnlyLettersOrDigitsMessageTemplate" xml:space="preserve">
+    <value>O campo '{0}' deve ter apenas letras ou dígitos (números)</value>
+  </data>
+  <data name="NoWhiteSpaceMessageTemplate" xml:space="preserve">
+    <value>O campo '{0}' não deve ter espaços em branco</value>
   </data>
 </root>
