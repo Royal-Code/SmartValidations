@@ -24,6 +24,8 @@
 		<None Include="../README.md" Pack="true" PackagePath="/"/>
 	</ItemGroup>
 	<PropertyGroup>
-		<DotNetCoreVersion Condition="'$(TargetFramework)' == 'net8'">8.0.0</DotNetCoreVersion>
+		<DotNetCoreVersion Condition="'$(TargetFramework)' == 'net8.0'">8.0.0</DotNetCoreVersion>
+		<DotNetCoreVersion Condition="'$(TargetFramework)' == 'net9.0'">9.0.0</DotNetCoreVersion>
+		<DotNetCoreVersion Condition="'$(TargetFramework)' == 'net10.0'">10.0.0</DotNetCoreVersion>
 	</PropertyGroup>
 </Project>

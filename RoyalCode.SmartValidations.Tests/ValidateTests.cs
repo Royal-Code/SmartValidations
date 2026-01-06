@@ -38,6 +38,64 @@ public class ValidateTests
         Assert.True(hasProblems);
         Assert.NotNull(problems);
         Assert.Equal(3, problems.Count); // Name, Quantity, Price
+
+        // Assert property names for each problem
+        var problemList = problems.ToList();
+        Assert.Contains(problemList, p => p.Property == nameof(product));
+    }
+
+    [Fact]
+    public void Validate_ClassWithStruct_WithProblems()
+    {
+        // Arrange
+        var catalog = new Catalog
+        {
+            Title = "My Catalog",
+            Products =
+            [
+                new Product(), // invalid -> 3 problems
+                new Product { Name = "Valid", Quantity = 1, Price = 0.01m } // valid
+            ]
+        };
+        // Act
+        var hasProblems = catalog.HasProblems(out var problems);
+
+        // Assert
+        Assert.True(hasProblems);
+        Assert.NotNull(problems);
+        Assert.Equal(3, problems.Count); // Only the first product has problems
+
+        // Assert property names for each problem
+        var problemList = problems.ToList();
+        Assert.Contains(problemList, p => p.Property == nameof(Catalog.Products));
+    }
+
+    [Fact]
+    public void Validate_Nestes_ClassWithStruct_WithProblems()
+    {
+        // Arrange
+        var catalog = new Catalog
+        {
+            Title = "My Catalog",
+            Products =
+            [
+                new Product(), // invalid -> 3 problems
+                new Product { Name = "Valid", Quantity = 1, Price = 0.01m } // valid
+            ]
+        };
+        // Act
+        var rules = Rules.Set().Nested(catalog);
+        var hasProblems = rules.HasProblems(out var problems);
+
+        // Assert
+        Assert.True(hasProblems);
+        Assert.NotNull(problems);
+        Assert.Equal(3, problems.Count); // Only the first product has problems
+
+        // Assert property names for each problem
+        var problemList = problems.ToList();
+        var expectedPropertyName = $"{nameof(catalog)}.{nameof(Catalog.Products)}";
+        Assert.Contains(problemList, p => p.Property == expectedPropertyName);
     }
 
     [Fact]
@@ -107,6 +165,19 @@ file struct Product : IValidable
             .NotEmpty(Name)
             .Min(Quantity, 1)
             .Min(Price, 0.01m)
+            .HasProblems(out problems);
+    }
+}
+
+file class Catalog : IValidable
+{
+    public string? Title { get; set; }
+    public Product[]? Products { get; set; }
+    public bool HasProblems(out Problems? problems)
+    {
+        return Rules.Set<Catalog>()
+            .NotEmpty(Title)
+            .Validate(Products)
             .HasProblems(out problems);
     }
 }

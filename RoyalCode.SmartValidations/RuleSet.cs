@@ -1810,28 +1810,6 @@ public readonly ref struct RuleSet
     }
 
     /// <summary>
-    /// Validates a collection of nested values to ensure that it is not null and applies the specified nested validations.
-    /// </summary>
-    /// <typeparam name="T">The type of the nested value.</typeparam>
-    /// <param name="values">The collection of nested values to validate.</param>
-    /// <param name="nestedValidations">A function that takes the nested value and returns a collection of problems if validation fails.</param>
-    /// <param name="property">The name of the property being validated.</param>
-    /// <returns>A RuleSet containing validation problems, if any.</returns>
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public RuleSet NotNullNested<T>(
-        IEnumerable<T>? values,
-        Func<T, Problems?> nestedValidations,
-        [CallerArgumentExpression(nameof(values))] string? property = null)
-        where T : class
-    {
-        if (values is null)
-            return NullOrEmptyProblem(property);
-
-        return Nested(values, nestedValidations, property);
-    }
-
-    /// <summary>
     /// Validates a nested value to ensure that it is not null and applies the specified <see cref="ValidateFunc"/>.
     /// </summary>
     /// <typeparam name="T">The type of the nested value.</typeparam>
@@ -1850,27 +1828,6 @@ public readonly ref struct RuleSet
             return NullOrEmptyProblem(property);
 
         return Nested(value, validation, property);
-    }
-
-    /// <summary>
-    /// Validates a collection of nested values to ensure that it is not null and applies the specified <see cref="ValidateFunc"/>.
-    /// </summary>
-    /// <typeparam name="T">The type of the nested value.</typeparam>
-    /// <param name="values">The collection of nested values to validate.</param>
-    /// <param name="validation">A function that takes the nested value and returns a validation result.</param>
-    /// <param name="property">The name of the property being validated.</param>
-    /// <returns>A RuleSet containing validation problems, if any.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public RuleSet NotNullNested<T>(
-        IEnumerable<T>? values,
-        Func<T, ValidateFunc> validation,
-        [CallerArgumentExpression(nameof(values))] string? property = null)
-        where T : class
-    {
-        if (values is null)
-            return NullOrEmptyProblem(property);
-
-        return Nested(values, validation, property);
     }
 
     /// <summary>
@@ -1897,10 +1854,53 @@ public readonly ref struct RuleSet
     /// </summary>
     /// <typeparam name="T">The type of the nested value.</typeparam>
     /// <param name="values">The collection of nested values to validate.</param>
+    /// <param name="nestedValidations">A function that takes the nested value and returns a collection of problems if validation fails.</param>
+    /// <param name="property">The name of the property being validated.</param>
+    /// <returns>A RuleSet containing validation problems, if any.</returns>
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet NotNullAllNested<T>(
+        IEnumerable<T>? values,
+        Func<T, Problems?> nestedValidations,
+        [CallerArgumentExpression(nameof(values))] string? property = null)
+        where T : class
+    {
+        if (values is null)
+            return NullOrEmptyProblem(property);
+
+        return AllNested(values, nestedValidations, property);
+    }
+
+    /// <summary>
+    /// Validates a collection of nested values to ensure that it is not null and applies the specified <see cref="ValidateFunc"/>.
+    /// </summary>
+    /// <typeparam name="T">The type of the nested value.</typeparam>
+    /// <param name="values">The collection of nested values to validate.</param>
+    /// <param name="validation">A function that takes the nested value and returns a validation result.</param>
     /// <param name="property">The name of the property being validated.</param>
     /// <returns>A RuleSet containing validation problems, if any.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public RuleSet NotNullNested<T>(
+    public RuleSet NotNullAllNested<T>(
+        IEnumerable<T>? values,
+        Func<T, ValidateFunc> validation,
+        [CallerArgumentExpression(nameof(values))] string? property = null)
+        where T : class
+    {
+        if (values is null)
+            return NullOrEmptyProblem(property);
+
+        return AllNested(values, validation, property);
+    }
+
+    /// <summary>
+    /// Validates a collection of nested values to ensure that it is not null and applies the specified nested validations.
+    /// </summary>
+    /// <typeparam name="T">The type of the nested value.</typeparam>
+    /// <param name="values">The collection of nested values to validate.</param>
+    /// <param name="property">The name of the property being validated.</param>
+    /// <returns>A RuleSet containing validation problems, if any.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet NotNullAllNested<T>(
         IEnumerable<T>? values,
         [CallerArgumentExpression(nameof(values))] string? property = null)
         where T : class, IValidable
@@ -1908,7 +1908,7 @@ public readonly ref struct RuleSet
         if (values is null)
             return NullOrEmptyProblem(property);
 
-        return Nested(values, property);
+        return AllNested(values, property);
     }
 
     /// <summary>
@@ -1944,6 +1944,64 @@ public readonly ref struct RuleSet
     }
 
     /// <summary>
+    /// Validates a nested value with the <see cref="ValidateFunc"/> of the specified type.
+    /// </summary>
+    /// <typeparam name="T">The type of the nested value.</typeparam>
+    /// <param name="value">The nested value to validate.</param>
+    /// <param name="validation">A function that takes the nested value and returns a validation result.</param>
+    /// <param name="property">The name of the property being validated.</param>
+    /// <returns>A RuleSet containing validation problems, if any.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet Nested<T>(
+        T? value,
+        Func<T, ValidateFunc> validation,
+        [CallerArgumentExpression(nameof(value))] string? property = null)
+        where T : class
+    {
+        if (value is not null && validation(value)(out var nestedProblems))
+        {
+            foreach (var problem in nestedProblems)
+                problem.ChainProperty(RemovePrefix(property));
+
+            if (problems is null)
+                return new RuleSet(type, nestedProblems, propertyPrefix);
+
+            problems.AddRange(nestedProblems);
+            return new RuleSet(type, problems, propertyPrefix);
+        }
+
+        return this;
+    }
+
+    /// <summary>
+    /// Validates a nested value to ensure that it is not null and implements the <see cref="IValidable"/> interface.
+    /// </summary>
+    /// <typeparam name="T">The type of the nested value.</typeparam>
+    /// <param name="value">The nested value to validate.</param>
+    /// <param name="property">The name of the property being validated.</param>
+    /// <returns>A RuleSet containing validation problems, if any.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet Nested<T>(
+        T? value,
+        [CallerArgumentExpression(nameof(value))] string? property = null)
+        where T : class, IValidable
+    {
+        if (value is not null && value.HasProblems(out var nestedProblems))
+        {
+            foreach (var problem in nestedProblems)
+                problem.ChainProperty(property);
+
+            if (problems is null)
+                return new RuleSet(type, nestedProblems, propertyPrefix);
+
+            problems.AddRange(nestedProblems);
+            return new RuleSet(type, problems, propertyPrefix);
+        }
+
+        return this;
+    }
+
+    /// <summary>
     /// Validates a collection of nested values with the specified nested validations.
     /// </summary>
     /// <typeparam name="T">The type of the nested value.</typeparam>
@@ -1952,7 +2010,7 @@ public readonly ref struct RuleSet
     /// <param name="property">The name of the property being validated.</param>
     /// <returns>A RuleSet containing validation problems, if any.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public RuleSet Nested<T>(
+    public RuleSet AllNested<T>(
         IEnumerable<T>? values,
         Func<T, Problems?> nestedValidations,
         [CallerArgumentExpression(nameof(values))] string? property = null)
@@ -1985,36 +2043,6 @@ public readonly ref struct RuleSet
     }
 
     /// <summary>
-    /// Validates a nested value with the <see cref="ValidateFunc"/> of the specified type.
-    /// </summary>
-    /// <typeparam name="T">The type of the nested value.</typeparam>
-    /// <param name="value">The nested value to validate.</param>
-    /// <param name="validation">A function that takes the nested value and returns a validation result.</param>
-    /// <param name="property">The name of the property being validated.</param>
-    /// <returns>A RuleSet containing validation problems, if any.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public RuleSet Nested<T>(
-        T? value,
-        Func<T, ValidateFunc> validation,
-        [CallerArgumentExpression(nameof(value))] string? property = null)
-        where T : class
-    {
-        if (value is not null && validation(value)(out var nestedProblems))
-        {
-            foreach (var problem in nestedProblems)
-                problem.ChainProperty(RemovePrefix(property));
-
-            if (problems is null)
-                return new RuleSet(type, nestedProblems, propertyPrefix);
-
-            problems.AddRange(nestedProblems);
-            return new RuleSet(type, problems, propertyPrefix);
-        }
-
-        return this;
-    }
-
-    /// <summary>
     /// Validates a collection of nested values with the <see cref="ValidateFunc"/> of the specified type.
     /// </summary>
     /// <typeparam name="T">The type of the nested value.</typeparam>
@@ -2023,7 +2051,7 @@ public readonly ref struct RuleSet
     /// <param name="property">The name of the property being validated.</param>
     /// <returns>A RuleSet containing validation problems, if any.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public RuleSet Nested<T>(
+    public RuleSet AllNested<T>(
         IEnumerable<T>? values,
         Func<T, ValidateFunc> validation,
         [CallerArgumentExpression(nameof(values))] string? property = null)
@@ -2053,34 +2081,6 @@ public readonly ref struct RuleSet
     }
 
     /// <summary>
-    /// Validates a nested value to ensure that it is not null and implements the <see cref="IValidable"/> interface.
-    /// </summary>
-    /// <typeparam name="T">The type of the nested value.</typeparam>
-    /// <param name="value">The nested value to validate.</param>
-    /// <param name="property">The name of the property being validated.</param>
-    /// <returns>A RuleSet containing validation problems, if any.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public RuleSet Nested<T>(
-        T? value,
-        [CallerArgumentExpression(nameof(value))] string? property = null)
-        where T : class, IValidable
-    {
-        if (value is not null && value.HasProblems(out var nestedProblems))
-        {
-            foreach (var problem in nestedProblems)
-                problem.ChainProperty(property);
-
-            if (problems is null)
-                return new RuleSet(type, nestedProblems, propertyPrefix);
-
-            problems.AddRange(nestedProblems);
-            return new RuleSet(type, problems, propertyPrefix);
-        }
-
-        return this;
-    }
-
-    /// <summary>
     /// Validates a collection of nested values to ensure that they are not null and implement the <see cref="IValidable"/> interface.
     /// </summary>
     /// <typeparam name="T">The type of the nested value.</typeparam>
@@ -2088,7 +2088,7 @@ public readonly ref struct RuleSet
     /// <param name="property">The name of the property being validated.</param>
     /// <returns>A RuleSet containing validation problems, if any.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public RuleSet Nested<T>(
+    public RuleSet AllNested<T>(
         IEnumerable<T>? values,
         [CallerArgumentExpression(nameof(values))] string? property = null)
         where T : class, IValidable
@@ -2157,7 +2157,7 @@ public readonly ref struct RuleSet
     /// <returns>A RuleSet containing validation problems, if any.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet Validate<T>(
-        IEnumerable<T> values,
+        IEnumerable<T>? values,
         [CallerArgumentExpression(nameof(values))] string? property = null)
         where T : struct, IValidable
     {
