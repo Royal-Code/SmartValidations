@@ -129,7 +129,7 @@
   <data name="ContainsMessageTemplate" xml:space="preserve">
     <value>The '{0}' field must contains '{1}'</value>
   </data>
-  <data name="DoesNotContainMessageTemplate" xml:space="preserve">
+  <data name="NotContainMessageTemplate" xml:space="preserve">
     <value>The '{0}' field must not contains '{1}'</value>
   </data>
   <data name="EmailMessageTemplate" xml:space="preserve">

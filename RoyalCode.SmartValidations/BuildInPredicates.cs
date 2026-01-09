@@ -123,7 +123,7 @@ public static class BuildInPredicates
     /// Validates whether the specified string does not contain the given substring using the comparison option.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool DoesNotContain(string? value, string substring, StringComparison comparison = StringComparison.Ordinal)
+    public static bool NotContain(string? value, string substring, StringComparison comparison = StringComparison.Ordinal)
         => value is null || !value.Contains(substring, comparison);
 
     /// <summary>

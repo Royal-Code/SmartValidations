@@ -19,7 +19,7 @@ namespace RoyalCode.SmartValidations {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class R {
@@ -93,15 +93,6 @@ namespace RoyalCode.SmartValidations {
         internal static string ContainsMessageTemplate {
             get {
                 return ResourceManager.GetString("ContainsMessageTemplate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The &apos;{0}&apos; field must not contains &apos;{1}&apos;.
-        /// </summary>
-        internal static string DoesNotContainMessageTemplate {
-            get {
-                return ResourceManager.GetString("DoesNotContainMessageTemplate", resourceCulture);
             }
         }
         
@@ -255,6 +246,15 @@ namespace RoyalCode.SmartValidations {
         internal static string MinMessageTemplate {
             get {
                 return ResourceManager.GetString("MinMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field must not contains &apos;{1}&apos;.
+        /// </summary>
+        internal static string NotContainMessageTemplate {
+            get {
+                return ResourceManager.GetString("NotContainMessageTemplate", resourceCulture);
             }
         }
         

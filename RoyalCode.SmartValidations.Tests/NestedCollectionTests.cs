@@ -116,7 +116,7 @@ file class OrderColl : IValidable
     public bool HasProblems([NotNullWhen(true)] out Problems? problems)
     {
         return Rules.Set<OrderColl>()
-            .AllNested(Addresses, address => Rules.Set<AddressColl>()
+            .Nested(Addresses, address => Rules.Set<AddressColl>()
                 .WithPropertyPrefix("address")
                 .NotEmpty(address.Street)
                 .NotEmpty(address.City)
@@ -154,8 +154,8 @@ file class FooColl : IValidable
     {
         return Rules.Set<FooColl>()
             .NotEmpty(Value)
-            .AllNested(Bars)
-            .AllNested(Bazes, b => b.HasProblems)
+            .Nested(Bars)
+            .Nested(Bazes, b => b.HasProblems)
             .HasProblems(out problems);
     }
 }

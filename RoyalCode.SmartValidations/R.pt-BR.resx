@@ -129,7 +129,7 @@
   <data name="ContainsMessageTemplate" xml:space="preserve">
     <value>O campo "{0}" deve conter o valor "{1}"</value>
   </data>
-  <data name="DoesNotContainMessageTemplate" xml:space="preserve">
+  <data name="NotContainMessageTemplate" xml:space="preserve">
     <value>O campo "{0}" não deve conter o valor "{1}"</value>
   </data>
   <data name="EmailMessageTemplate" xml:space="preserve">
@@ -192,6 +192,9 @@
   <data name="NotNullOrEmptyMessageTemplate" xml:space="preserve">
     <value>O campo "{0}" deve ser preenchido</value>
   </data>
+  <data name="NoWhiteSpaceMessageTemplate" xml:space="preserve">
+    <value>O campo '{0}' não deve ter espaços em branco</value>
+  </data>
   <data name="NullOrLengthMessageTemplate" xml:space="preserve">
     <value>O campo "{0}", quando preenchido, deve ter um comprimento entre "{1}" e "{2}" caracteres</value>
   </data>
@@ -213,22 +216,19 @@
   <data name="NullOrNotMessageTemplate" xml:space="preserve">
     <value>O campo "{0}", quando preenchido, deve conter um valor</value>
   </data>
+  <data name="OnlyDigitsMessageTemplate" xml:space="preserve">
+    <value>O campo '{0}' deve ter apenas dígitos (números)</value>
+  </data>
+  <data name="OnlyLettersMessageTemplate" xml:space="preserve">
+    <value>O campo '{0}' deve ter apenas letras</value>
+  </data>
+  <data name="OnlyLettersOrDigitsMessageTemplate" xml:space="preserve">
+    <value>O campo '{0}' deve ter apenas letras ou dígitos (números)</value>
+  </data>
   <data name="StartsWithMessageTemplate" xml:space="preserve">
     <value>O campo "{0}" deve começar com "{1}"</value>
   </data>
   <data name="UrlMessageTemplate" xml:space="preserve">
     <value>O campo "{0}" deve ser um URL válido</value>
-  </data>
-  <data name="OnlyLettersMessageTemplate" xml:space="preserve">
-    <value>O campo '{0}' deve ter apenas letras</value>
-  </data>
-  <data name="OnlyDigitsMessageTemplate" xml:space="preserve">
-    <value>O campo '{0}' deve ter apenas dígitos (números)</value>
-  </data>
-  <data name="OnlyLettersOrDigitsMessageTemplate" xml:space="preserve">
-    <value>O campo '{0}' deve ter apenas letras ou dígitos (números)</value>
-  </data>
-  <data name="NoWhiteSpaceMessageTemplate" xml:space="preserve">
-    <value>O campo '{0}' não deve ter espaços em branco</value>
   </data>
 </root>

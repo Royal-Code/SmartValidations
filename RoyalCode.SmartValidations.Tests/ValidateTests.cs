@@ -1,4 +1,5 @@
 ﻿using RoyalCode.SmartProblems;
+using System.Diagnostics.CodeAnalysis;
 
 namespace RoyalCode.SmartValidations.Tests;
 
@@ -159,7 +160,7 @@ file struct Product : IValidable
     public int Quantity { get; set; }
     public decimal Price { get; set; }
 
-    public bool HasProblems(out Problems? problems)
+    public bool HasProblems([NotNullWhen(true)] out Problems? problems)
     {
         return Rules.Set<Product>()
             .NotEmpty(Name)
@@ -173,7 +174,7 @@ file class Catalog : IValidable
 {
     public string? Title { get; set; }
     public Product[]? Products { get; set; }
-    public bool HasProblems(out Problems? problems)
+    public bool HasProblems([NotNullWhen(true)] out Problems? problems)
     {
         return Rules.Set<Catalog>()
             .NotEmpty(Title)
