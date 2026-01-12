@@ -1,28 +1,33 @@
 # SmartValidations
 
-Biblioteca de validação fluente para .NET, construída sobre SmartProblems, focada em validar propriedades de modelos (especialmente DTOs/requests) e produzir `Problems` quando regras falham.
+Fluent, model-first validation for .NET that produces structured Problems instead of exceptions. Built on top of SmartProblems to deliver actionable, localized, and machine-readable validation results.
 
-Objetivo
-- Validar propriedades de um modelo em uma única passagem usando um `RuleSet`.
-- Retornar `Problems` via integração com SmartProblems (Problem, Problems, Result), sem lançar exceções.
-- Facilitar validações aninhadas (objetos e coleções) e compor regras de forma fluente.
+Why SmartValidations
+- Single-pass model validation: express all rules fluently in one `RuleSet`.
+- No exceptions for control flow: return `Problems` you can serialize and show to users.
+- Strongly-typed and fluent: compile-time safety with `INumber<T>`, `CallerArgumentExpression`, and generics.
+- First-class nested validation: validate objects and collections, automatically chaining property paths (with indexes for lists).
+- Ready for APIs and UI: consistent error shapes, localization-friendly message templates, and rich metadata.
 
-Targets e requisitos
+Targets and requirements
 - .NET 8, .NET 9, .NET 10.
-- C# 12+ com uso de `CallerArgumentExpression` e genéricos com `INumber<T>`.
-- Depende de SmartProblems para agregar e enriquecer erros.
+- C# 12+ using `CallerArgumentExpression` and generic math (`INumber<T>`).
+- Depends on SmartProblems for `Problem` and `Problems`.
 
-Instalação
-- Adicione SmartValidations e SmartProblems ao seu projeto (NuGet quando disponível).
+Installation
+- Add SmartValidations and SmartProblems (NuGet when available).
 
-Conceitos principais
-- `Rules.Set()` / `Rules.Set<T>()`: cria um `RuleSet` para aplicar regras.
-- `RuleSet`: DSL fluente que acumula `Problems` quando validações falham.
-- `BuildInPredicates`: funções utilitárias usadas internamente pelas regras.
-- `IValidable` e `ValidateFunc`: pontos de integração para validações aninhadas.
+Core concepts
+- `Rules.Set()` / `Rules.Set<T>()`: creates a `RuleSet` for applying rules.
+- `RuleSet`: fluent DSL that accumulates `Problems` whenever a rule fails.
+- `IValidable` and `ValidateFunc`: plug-in points for nested validations.
+- Implicit conversion: a `RuleSet` can be treated as `Problems?` or queried via `HasProblems(out var problems)`.
 
-Uso básico
+Quick start
 ```csharp
+using RoyalCode.SmartValidations;
+using RoyalCode.SmartProblems;
+
 public class CreateOrderRequest
 {
     public string CustomerName { get; set; } = string.Empty;
@@ -38,9 +43,9 @@ public class CreateOrderRequest
 }
 ```
 
-Validações de strings e padrões
+String and pattern rules
 ```csharp
-Rules.Set()
+var set = Rules.Set()
     .NotEmpty(Name)
     .MinLength(Name, 3)
     .MaxLength(Name, 100)
@@ -48,95 +53,134 @@ Rules.Set()
     .NoWhiteSpace(Username)
     .Matches(Email, @"^.+@.+\..+$", "email pattern")
     .Email(Email)
-    .Url(Website)
-    .HasProblems(out var problems);
+    .Url(Website);
+
+if (set.HasProblems(out var problems))
+{
+    // Serialize problems to your API response
+}
 ```
 
-Comparações e limites
+Comparisons and ranges
 ```csharp
-Rules.Set()
+var set = Rules.Set()
     .Equal(Code, "ABC", StringComparison.OrdinalIgnoreCase)
     .NotEqual(Status, "inactive")
     .Min(Age, 18)
     .Max(ItemsCount, 100)
     .MinMax(Score, 0, 100)
     .LessThan(StartDate, EndDate)
-    .GreaterThanOrEqual(Quantity, 1)
-    .HasProblems(out var problems);
+    .GreaterThanOrEqual(Quantity, 1);
 ```
 
-Regras customizadas (`Must`)
+Custom rules with Must
 ```csharp
-Rules.Set()
-    .Must(Password, p => p.Length >= 8 && p.Any(char.IsDigit),
-        (prop, val) => $"{prop} must contain at least 8 chars and a digit.")
-    .BothMust(Start, End, (s, e) => s < e,
-        (p1, p2, v1, v2) => $"{p1} must be before {p2}.")
-    .HasProblems(out var problems);
+var set = Rules.Set()
+    .Must(Password,
+        p => p is { Length: >= 8 } && p.Any(char.IsDigit) && p.Any(char.IsUpper),
+        (prop, _) => $"{prop} must contain at least 8 chars, an uppercase letter and a digit.",
+        ruleName: "password.policy")
+    .BothMust(Start, End,
+        (s, e) => s < e,
+        (p1, p2, _, _) => $"{p1} must be before {p2}.",
+        ruleName: "period.order");
 ```
 
-Validações aninhadas (objetos)
+Nested validation (objects)
+```csharp
+public class CheckoutRequest : IValidable
+{
+    public string CustomerId { get; set; } = string.Empty;
+    public Address? ShippingAddress { get; set; }
+    public Address? BillingAddress { get; set; }
+
+    public bool HasProblems(out Problems? problems)
+    {
+        return Rules.Set<CheckoutRequest>()
+            .NotEmpty(CustomerId)
+            .NotNullNested(ShippingAddress, addr => Rules.Set<Address>()
+                .WithPropertyPrefix("addr")
+                .NotEmpty(addr.Street)
+                .NotEmpty(addr.City)
+                .NotEmpty(addr.ZipCode)
+                .NotEmpty(addr.Country))
+            .Nested(BillingAddress, addr => Rules.Set<Address>()
+                .WithPropertyPrefix("addr")
+                .NotEmpty(addr.Street)
+                .NotEmpty(addr.City)
+                .NotEmpty(addr.ZipCode)
+                .NotEmpty(addr.Country))
+            .HasProblems(out problems);
+    }
+}
+```
+
+Nested validation (collections)
 ```csharp
 public class Order : IValidable
 {
-    public string CustomerName { get; set; } = string.Empty;
-    public decimal TotalAmount { get; set; }
-    public Address? ShippingAddress { get; set; }
+    public List<OrderItem>? Items { get; set; }
 
     public bool HasProblems(out Problems? problems)
     {
         return Rules.Set<Order>()
-            .NotEmpty(CustomerName)
-            .GreaterThan(TotalAmount, 0)
-            .NotNullNested(ShippingAddress, address => Rules.Set<Address>()
-                .WithPropertyPrefix("address")
-                .NotEmpty(address.Street)
-                .NotEmpty(address.City)
-                .NotEmpty(address.ZipCode)
-                .NotEmpty(address.Country))
+            .NotEmpty(Items)
+            .Nested(Items, item => Rules.Set<OrderItem>()
+                .WithPropertyPrefix("item")
+                .NotEmpty(item.ProductId)
+                .GreaterThan(item.Quantity, 0)
+                .GreaterThanOrEqual(item.Price, 0))
             .HasProblems(out problems);
     }
 }
 ```
 
-Validações aninhadas (coleções)
+Validating structs (value objects)
 ```csharp
-public class OrderColl : IValidable
+public readonly struct Price : IValidable
 {
-    public List<Address>? Addresses { get; set; }
+    public decimal Amount { get; }
+    public string Currency { get; }
+
+    public Price(decimal amount, string currency)
+    {
+        Amount = amount;
+        Currency = currency;
+    }
 
     public bool HasProblems(out Problems? problems)
     {
-        return Rules.Set<OrderColl>()
-            .Nested(Addresses, address => Rules.Set<Address>()
-                .WithPropertyPrefix("address")
-                .NotEmpty(address.Street)
-                .NotEmpty(address.City)
-                .NotEmpty(address.ZipCode)
-                .NotEmpty(address.Country))
+        return Rules.Set<Price>()
+            .GreaterThanOrEqual(Amount, 0)
+            .NotEmpty(Currency)
             .HasProblems(out problems);
     }
 }
+
+// Replace property name with the argument name automatically
+var prices = new[] { new Price(-1, ""), new Price(10, "USD") };
+var set = Rules.Set().Validate((IEnumerable<Price>)prices);
 ```
 
-Integração com SmartProblems
-- Cada regra que falha adiciona um `Problem` via `Problems.InvalidParameter(...)` com metadados:
-  - `rule`: nome da regra (`Rules.RuleProperty`).
-  - `current`: valor atual (`Rules.CurrentValueProperty`).
-  - `expected`: valor(es) esperado(s) (`Rules.ExpectedValueProperty`).
-  - `pattern`: expressão regular utilizada (`Rules.PatternProperty`).
-- O `RuleSet` pode ser convertido implicitamente em `Problems?` ou consultado via `HasProblems(out var problems)`.
+Property names and prefixes
+- Property names are captured by `CallerArgumentExpression`, so refactors keep error paths accurate.
+- Use `WithPropertyPrefix("prefix")` to remove a known prefix from nested paths when chaining problems.
+- Collections automatically include an index (e.g., `Items[2].Quantity`).
 
-Nomes de propriedades e prefixos
-- `CallerArgumentExpression` captura o nome da propriedade automaticamente.
-- `WithPropertyPrefix("prefix")` permite remover o prefixo do nome ao encadear erros de objetos aninhados.
-- Coleções incluem índice no encadeamento de propriedade.
+SmartProblems integration
+- Every failing rule adds a `Problem` via `Problems.InvalidParameter(...)` with metadata like:
+  - `rule` (`Rules.RuleProperty`): the rule name (e.g., `min`, `max`, `lessThan`).
+  - `current` (`Rules.CurrentValueProperty`): the current value.
+  - `expected` (`Rules.ExpectedValueProperty`): expected value(s), when applicable.
+  - `pattern` (`Rules.PatternProperty`): regex used in `Matches/NotMatches`.
+  - For dual-operand rules (`Both*`, comparisons), properties and values are attached for both operands.
 
-Boas práticas
-- Concentre a validação em uma função por modelo de entrada (único `RuleSet`).
-- Use `IValidable`/`ValidateFunc` para validar agregados e objetos aninhados.
-- Prefira mensagens em `R` para internacionalização e consistência.
-- Utilize `StringComparison` apropriado em regras de string.
+Best practices
+- Centralize validation per request/DTO in a single function that returns `Problems?`.
+- Favor `IValidable`/`ValidateFunc` to validate aggregates and nested objects.
+- Prefer message templates from `R` for localization consistency.
+- Use explicit `StringComparison` for string rules.
+- Avoid throwing for validation flow—return `Problems` and let callers decide.
 
-Licença
-- Consulte a licença do repositório.
+License
+- See repository license.

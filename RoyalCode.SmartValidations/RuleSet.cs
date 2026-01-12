@@ -1729,7 +1729,7 @@ public readonly ref struct RuleSet
 
         Problems? allProblems = problems;
 
-        int index = 0;
+        int index = -1;
         foreach (var value in values)
         {
             index++;
@@ -1776,7 +1776,6 @@ public readonly ref struct RuleSet
         int index = 0;
         foreach (var value in values)
         {
-            index++;
             if (value is not null && validation(value)(out var nestedProblems))
             {
                 foreach (var problem in nestedProblems)
@@ -1787,6 +1786,7 @@ public readonly ref struct RuleSet
                 else
                     allProblems.AddRange(nestedProblems);
             }
+            index++;
         }
 
         if (allProblems is null)
@@ -1816,7 +1816,6 @@ public readonly ref struct RuleSet
         int index = 0;
         foreach (var value in values)
         {
-            index++;
             if (value is not null && value.HasProblems(out var nestedProblems))
             {
                 foreach (var problem in nestedProblems)
@@ -1827,6 +1826,7 @@ public readonly ref struct RuleSet
                 else
                     allProblems.AddRange(nestedProblems);
             }
+            index++;
         }
 
         if (allProblems is null)
@@ -1888,7 +1888,6 @@ public readonly ref struct RuleSet
         int index = 0;
         foreach (var value in values)
         {
-            index++;
             if (value.HasProblems(out var nestedProblems))
             {
                 nestedProblems.ForEach(RemovePrefix(property), (param, prop) => prop.ReplaceProperty($"{param}[{index}]"));
@@ -1898,6 +1897,7 @@ public readonly ref struct RuleSet
                 else
                     allProblems.AddRange(nestedProblems);
             }
+            index++;
         }
 
         if (allProblems is null)

@@ -68,7 +68,7 @@ public class ValidateTests
 
         // Assert property names for each problem
         var problemList = problems.ToList();
-        Assert.Contains(problemList, p => p.Property == nameof(Catalog.Products));
+        Assert.Contains(problemList, p => p.Property == $"{nameof(Catalog.Products)}[0]");
     }
 
     [Fact]
@@ -95,7 +95,7 @@ public class ValidateTests
 
         // Assert property names for each problem
         var problemList = problems.ToList();
-        var expectedPropertyName = $"{nameof(catalog)}.{nameof(Catalog.Products)}";
+        var expectedPropertyName = $"{nameof(catalog)}.{nameof(Catalog.Products)}[0]";
         Assert.Contains(problemList, p => p.Property == expectedPropertyName);
     }
 
