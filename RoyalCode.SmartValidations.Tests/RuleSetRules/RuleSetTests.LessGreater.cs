@@ -86,7 +86,7 @@ public partial class RuleSetTests
         // Assert
         Assert.True(set.HasProblems(out var problems));
         var p = Assert.Single(problems!);
-        Assert.Equal(Rules.LessThanOrEqual, p.Extensions[Rules.RuleProperty]);
+        Assert.Equal(Rules.LessThanOrEqual, p.Extensions![Rules.RuleProperty]);
         var props = Assert.IsType<string?[]>(p.Extensions["properties"]);
         Assert.Equal(new[] { nameof(value1), nameof(value2) }, props);
         var vals = Assert.IsType<int[]>(p.Extensions["values"]);
@@ -121,7 +121,7 @@ public partial class RuleSetTests
         // Assert
         Assert.True(set.HasProblems(out var problems));
         var p = Assert.Single(problems!);
-        Assert.Equal(Rules.GreaterThan, p.Extensions[Rules.RuleProperty]);
+        Assert.Equal(Rules.GreaterThan, p.Extensions![Rules.RuleProperty]);
         var props = Assert.IsType<string?[]>(p.Extensions["properties"]);
         Assert.Equal(new[] { nameof(value1), nameof(value2) }, props);
         var vals = Assert.IsType<int[]>(p.Extensions["values"]);
@@ -156,7 +156,7 @@ public partial class RuleSetTests
         // Assert
         Assert.True(set.HasProblems(out var problems));
         var p = Assert.Single(problems!);
-        Assert.Equal(Rules.GreaterThanOrEqual, p.Extensions[Rules.RuleProperty]);
+        Assert.Equal(Rules.GreaterThanOrEqual, p.Extensions![Rules.RuleProperty]);
         var props = Assert.IsType<string?[]>(p.Extensions["properties"]);
         Assert.Equal(new[] { nameof(value1), nameof(value2) }, props);
         var vals = Assert.IsType<int[]>(p.Extensions["values"]);

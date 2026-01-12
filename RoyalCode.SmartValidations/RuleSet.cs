@@ -1908,6 +1908,165 @@ public readonly ref struct RuleSet
 
     #endregion
 
+    #region When/Unless
+
+    /// <summary>
+    /// Conditionally applies a set of rules to the current <see cref="RuleSet"/>.
+    /// </summary>
+    /// <param name="condition">
+    /// When <see langword="true"/>, the <paramref name="ruleSetBuilder"/> is executed against the current
+    /// <see cref="RuleSet"/>; otherwise, the current <see cref="RuleSet"/> is returned unchanged.
+    /// </param>
+    /// <param name="ruleSetBuilder">
+    /// A function that receives the current <see cref="RuleSet"/> and returns a <see cref="RuleSet"/> with
+    /// potential problems appended.
+    /// </param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet When(bool condition, RuleSetBuilder ruleSetBuilder)
+    {
+        return condition ? ruleSetBuilder(this) : this;
+    }
+
+    /// <summary>
+    /// Applies the provided rules unless the <paramref name="condition"/> is <see langword="true"/>.
+    /// </summary>
+    /// <param name="condition">
+    /// When <see langword="true"/>, no rules are applied and the current <see cref="RuleSet"/> is returned;
+    /// when <see langword="false"/>, the <paramref name="ruleSetBuilder"/> is executed against the current
+    /// <see cref="RuleSet"/>.
+    /// </param>
+    /// <param name="ruleSetBuilder">
+    /// A function that receives the current <see cref="RuleSet"/> and returns a <see cref="RuleSet"/> with
+    /// potential problems appended.
+    /// </param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet Unless(bool condition, RuleSetBuilder ruleSetBuilder)
+    {
+        return condition ? this : ruleSetBuilder(this);
+    }
+
+    /// <summary>
+    /// Applies an alternative set of rules unless the condition rules succeed.
+    /// Both rule groups are evaluated in isolation (using a new <see cref="RuleSet"/> that shares the same type and property prefix).
+    /// If both groups produce problems, the problems from both groups are added to the current <see cref="RuleSet"/>; otherwise, no problems are added.
+    /// </summary>
+    /// <param name="conditionRules">The rules representing the condition to suppress the alternative rules.</param>
+    /// <param name="alternativeRules">The alternative rules to apply when the condition rules do not pass.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet Unless(RuleSetBuilder conditionRules, RuleSetBuilder alternativeRules)
+    {
+        if (conditionRules(new RuleSet(type, null, propertyPrefix)).HasProblems(out var condProblems)
+            && alternativeRules(new RuleSet(type, null, propertyPrefix)).HasProblems(out var altProblems))
+        {
+            return WithProblems(condProblems, altProblems);
+        }
+
+        return this;
+    }
+
+    /// <summary>
+    /// Uses pre-evaluated rule groups with the same semantics as other <c>Unless</c> overloads.
+    /// If both the <paramref name="conditionRules"/> and <paramref name="alternativeRules"/> contain problems,
+    /// the problems from both are added to the current <see cref="RuleSet"/>; otherwise, no problems are added.
+    /// </summary>
+    /// <param name="conditionRules">The already evaluated condition rule group.</param>
+    /// <param name="alternativeRules">The already evaluated alternative rule group.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet Unless(RuleSet conditionRules, RuleSet alternativeRules)
+    {
+        if (conditionRules.HasProblems(out var condProblems)
+            && alternativeRules.HasProblems(out var altProblems))
+        {
+            return WithProblems(condProblems, altProblems);
+        }
+
+        return this;
+    }
+
+    /// <summary>
+    /// Applies an alternative rule group produced by a factory unless the condition rule group (already evaluated) succeeds.
+    /// If both groups produce problems, their problems are added to the current <see cref="RuleSet"/>; otherwise, no problems are added.
+    /// </summary>
+    /// <param name="conditionRules">The already evaluated condition rule group.</param>
+    /// <param name="alternativeRules">A factory that produces the alternative rule group.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet Unless(RuleSet conditionRules, RuleSetFactory alternativeRules)
+    {
+        if (conditionRules.HasProblems(out var condProblems)
+            && alternativeRules().HasProblems(out var altProblems))
+        {
+            return WithProblems(condProblems, altProblems);
+        }
+
+        return this;
+    }
+
+    /// <summary>
+    /// Applies an alternative rule group built from the current context unless the condition rule group (already evaluated) succeeds.
+    /// If both groups produce problems, their problems are added to the current <see cref="RuleSet"/>; otherwise, no problems are added.
+    /// </summary>
+    /// <param name="conditionRules">The already evaluated condition rule group.</param>
+    /// <param name="alternativeRules">A builder executed against a fresh <see cref="RuleSet"/> with the same type and property prefix.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet Unless(RuleSet conditionRules, RuleSetBuilder alternativeRules)
+    {
+        if (conditionRules.HasProblems(out var condProblems)
+            && alternativeRules(new RuleSet(type, null, propertyPrefix)).HasProblems(out var altProblems))
+        {
+            return WithProblems(condProblems, altProblems);
+        }
+
+        return this;
+    }
+
+    /// <summary>
+    /// Applies an alternative rule group produced by a factory unless the condition rule group (also produced by a factory) succeeds.
+    /// Both groups are evaluated in isolation; if both produce problems, their problems are added to the current <see cref="RuleSet"/>;
+    /// otherwise, no problems are added.
+    /// </summary>
+    /// <param name="conditionRules">A factory that produces the condition rule group.</param>
+    /// <param name="alternativeRules">A factory that produces the alternative rule group.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet Unless(RuleSetFactory conditionRules, RuleSetFactory alternativeRules)
+    {
+        if (conditionRules().HasProblems(out var condProblems)
+            && alternativeRules().HasProblems(out var altProblems))
+        {
+            return WithProblems(condProblems, altProblems);
+        }
+
+        return this;
+    }
+
+    /// <summary>
+    /// Applies an alternative rule group built from the current context unless the condition rule group produced by a factory succeeds.
+    /// Both groups are evaluated in isolation; if both produce problems, their problems are added to the current <see cref="RuleSet"/>;
+    /// otherwise, no problems are added.
+    /// </summary>
+    /// <param name="conditionRules">A factory that produces the condition rule group.</param>
+    /// <param name="alternativeRules">A builder executed against a fresh <see cref="RuleSet"/> with the same type and property prefix.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet Unless(RuleSetFactory conditionRules, RuleSetBuilder alternativeRules)
+    {
+        if (conditionRules().HasProblems(out var condProblems)
+            && alternativeRules(new RuleSet(type, null, propertyPrefix)).HasProblems(out var altProblems))
+        {
+            return WithProblems(condProblems, altProblems);
+        }
+
+        return this;
+    }
+
+    #endregion
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private RuleSet WithNullOrEmptyProblem(string? property)
     {
@@ -2050,6 +2209,15 @@ public readonly ref struct RuleSet
             .With("values", new object?[] { value1, value2 });
 
         return WithProblem(problem);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private RuleSet WithProblems(Problems problems1, Problems problems2)
+    {
+        var allProblems = problems ?? [];
+        allProblems.AddRange(problems1);
+        allProblems.AddRange(problems2);
+        return new RuleSet(type, allProblems, propertyPrefix);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

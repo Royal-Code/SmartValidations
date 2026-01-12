@@ -22,6 +22,7 @@ Core concepts
 - `RuleSet`: fluent DSL that accumulates `Problems` whenever a rule fails.
 - `IValidable` and `ValidateFunc`: plug-in points for nested validations.
 - Implicit conversion: a `RuleSet` can be treated as `Problems?` or queried via `HasProblems(out var problems)`.
+- Conditional rules: `When` and `Unless` let you apply rule groups conditionally or as alternatives.
 
 Quick start
 ```csharp
@@ -71,6 +72,32 @@ var set = Rules.Set()
     .MinMax(Score, 0, 100)
     .LessThan(StartDate, EndDate)
     .GreaterThanOrEqual(Quantity, 1);
+```
+
+Conditional rules (When/Unless)
+```csharp
+// Apply rules only when a condition is true
+var set = Rules.Set()
+    .When(isGuestCheckout,
+        s => s.NotEmpty(Email).Email(Email));
+
+// Skip rules when a condition is true
+set = set.Unless(hasAddressOnFile,
+    s => s.NotEmpty(ShippingAddress.Street)
+         .NotEmpty(ShippingAddress.City)
+         .NotEmpty(ShippingAddress.ZipCode));
+
+// Alternative groups: add problems from both if both fail
+set = set.Unless(
+    s => s.NotEmpty(PromoCode),        // condition group
+    s => s.Min(TotalAmount, 100));     // alternative group
+
+// Using factories/builders with prefixes preserved/normalized
+set = Rules.Set<object>()
+    .WithPropertyPrefix("order")
+    .Unless(
+        () => Rules.Set().WithPropertyPrefix("order").NotEmpty(order.CustomerId),
+        s => s.NotEmpty(order.CustomerId)); // Property becomes "CustomerId" (prefix removed)
 ```
 
 Custom rules with Must
@@ -174,6 +201,7 @@ SmartProblems integration
   - `expected` (`Rules.ExpectedValueProperty`): expected value(s), when applicable.
   - `pattern` (`Rules.PatternProperty`): regex used in `Matches/NotMatches`.
   - For dual-operand rules (`Both*`, comparisons), properties and values are attached for both operands.
+  - Conditional rules (`When/Unless`) simply control whether rule groups run; metadata remains consistent for each failing rule.
 
 Best practices
 - Centralize validation per request/DTO in a single function that returns `Problems?`.

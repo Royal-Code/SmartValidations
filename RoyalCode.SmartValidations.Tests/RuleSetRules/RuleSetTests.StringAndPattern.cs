@@ -18,7 +18,7 @@ public partial class RuleSetTests
         Assert.True(set.HasProblems(out var problems));
         var p = Assert.Single(problems!);
         Assert.Equal(nameof(value), p.Property);
-        Assert.Equal(Rules.MatchPattern, p.Extensions[Rules.RuleProperty]);
+        Assert.Equal(Rules.MatchPattern, p.Extensions![Rules.RuleProperty]);
         Assert.Equal(pattern, p.Extensions[Rules.PatternProperty]);
         Assert.Equal("abc", p.Extensions[Rules.CurrentValueProperty]);
     }
@@ -51,7 +51,7 @@ public partial class RuleSetTests
         // Assert
         Assert.True(set.HasProblems(out var problems));
         var p = Assert.Single(problems!);
-        Assert.Equal(Rules.MatchPattern, p.Extensions[Rules.RuleProperty]);
+        Assert.Equal(Rules.MatchPattern, p.Extensions![Rules.RuleProperty]);
         Assert.Equal(regex.ToString(), p.Extensions[Rules.PatternProperty]);
         Assert.Equal("abc", p.Extensions[Rules.CurrentValueProperty]);
     }
@@ -70,7 +70,7 @@ public partial class RuleSetTests
         Assert.True(set.HasProblems(out var problems));
         var p = Assert.Single(problems!);
         Assert.Equal(nameof(value), p.Property);
-        Assert.Equal(Rules.NotMatchPattern, p.Extensions[Rules.RuleProperty]);
+        Assert.Equal(Rules.NotMatchPattern, p.Extensions![Rules.RuleProperty]);
         Assert.Equal(pattern, p.Extensions[Rules.PatternProperty]);
         Assert.Equal("abc", p.Extensions[Rules.CurrentValueProperty]);
     }
@@ -88,7 +88,7 @@ public partial class RuleSetTests
         // Assert
         Assert.True(set.HasProblems(out var problems));
         var p = Assert.Single(problems!);
-        Assert.Equal(Rules.StartsWith, p.Extensions[Rules.RuleProperty]);
+        Assert.Equal(Rules.StartsWith, p.Extensions![Rules.RuleProperty]);
         Assert.Equal("hello", p.Extensions[Rules.CurrentValueProperty]);
         Assert.Equal(expected, p.Extensions[Rules.ExpectedValueProperty]);
     }
@@ -106,7 +106,7 @@ public partial class RuleSetTests
         // Assert
         Assert.True(set.HasProblems(out var problems));
         var p = Assert.Single(problems!);
-        Assert.Equal(Rules.EndsWith, p.Extensions[Rules.RuleProperty]);
+        Assert.Equal(Rules.EndsWith, p.Extensions![Rules.RuleProperty]);
         Assert.Equal("file.txt", p.Extensions[Rules.CurrentValueProperty]);
         Assert.Equal(expected, p.Extensions[Rules.ExpectedValueProperty]);
     }
@@ -124,7 +124,7 @@ public partial class RuleSetTests
         // Assert
         Assert.True(set.HasProblems(out var problems));
         var p = Assert.Single(problems!);
-        Assert.Equal(Rules.Contains, p.Extensions[Rules.RuleProperty]);
+        Assert.Equal(Rules.Contains, p.Extensions![Rules.RuleProperty]);
         Assert.Equal("abcdef", p.Extensions[Rules.CurrentValueProperty]);
         Assert.Equal(expected, p.Extensions[Rules.ExpectedValueProperty]);
     }
@@ -142,7 +142,7 @@ public partial class RuleSetTests
         // Assert
         Assert.True(set.HasProblems(out var problems));
         var p = Assert.Single(problems!);
-        Assert.Equal(Rules.NotContain, p.Extensions[Rules.RuleProperty]);
+        Assert.Equal(Rules.NotContain, p.Extensions![Rules.RuleProperty]);
         Assert.Equal("abcdef", p.Extensions[Rules.CurrentValueProperty]);
         Assert.Equal(unexpected, p.Extensions[Rules.ExpectedValueProperty]);
     }
@@ -159,7 +159,7 @@ public partial class RuleSetTests
         // Assert
         Assert.True(set.HasProblems(out var problems));
         var p = Assert.Single(problems!);
-        Assert.Equal(Rules.OnlyLetters, p.Extensions[Rules.RuleProperty]);
+        Assert.Equal(Rules.OnlyLetters, p.Extensions![Rules.RuleProperty]);
         Assert.Equal(value, p.Extensions[Rules.CurrentValueProperty]);
     }
 
@@ -175,7 +175,7 @@ public partial class RuleSetTests
         // Assert
         Assert.True(set.HasProblems(out var problems));
         var p = Assert.Single(problems!);
-        Assert.Equal(Rules.OnlyDigits, p.Extensions[Rules.RuleProperty]);
+        Assert.Equal(Rules.OnlyDigits, p.Extensions![Rules.RuleProperty]);
         Assert.Equal(value, p.Extensions[Rules.CurrentValueProperty]);
     }
 
@@ -191,7 +191,7 @@ public partial class RuleSetTests
         // Assert
         Assert.True(set.HasProblems(out var problems));
         var p = Assert.Single(problems!);
-        Assert.Equal(Rules.OnlyLettersOrDigits, p.Extensions[Rules.RuleProperty]);
+        Assert.Equal(Rules.OnlyLettersOrDigits, p.Extensions![Rules.RuleProperty]);
         Assert.Equal(value, p.Extensions[Rules.CurrentValueProperty]);
     }
 
@@ -207,7 +207,7 @@ public partial class RuleSetTests
         // Assert
         Assert.True(set.HasProblems(out var problems));
         var p = Assert.Single(problems!);
-        Assert.Equal(Rules.NoWhiteSpace, p.Extensions[Rules.RuleProperty]);
+        Assert.Equal(Rules.NoWhiteSpace, p.Extensions![Rules.RuleProperty]);
         Assert.Equal(value, p.Extensions[Rules.CurrentValueProperty]);
     }
 }
