@@ -1,4 +1,4 @@
-﻿namespace RoyalCode.SmartValidations.Tests;
+﻿namespace RoyalCode.SmartValidations.Tests.Predicates;
 
 public class BuildInRulesTests
 {

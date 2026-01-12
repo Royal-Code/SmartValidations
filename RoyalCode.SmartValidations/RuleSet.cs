@@ -1,8 +1,6 @@
 ﻿using RoyalCode.SmartProblems;
 using RoyalCode.SmartProblems.Entities;
-using System;
 using System.ComponentModel.DataAnnotations;
-using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Runtime.CompilerServices;
@@ -77,6 +75,19 @@ public readonly ref struct RuleSet
             : $"{this.propertyPrefix}.{propertyPrefix}";
 
         return new RuleSet(type, problems, propPrefix);
+    }
+
+    /// <summary>
+    /// Get the property name and display name for a given property.
+    /// </summary>
+    /// <param name="property">The property name that are being validated.</param>
+    /// <param name="propertyName">The property name without prefix.</param>
+    /// <param name="displayName">The display name of the property.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public void GetPropertyNameAndDisplayName(string? property, out string? propertyName, out string displayName)
+    {
+        propertyName = RemovePrefix(property);
+        displayName = GetDisplayName(propertyName);
     }
 
     /// <summary>
@@ -1175,16 +1186,8 @@ public readonly ref struct RuleSet
         [CallerArgumentExpression(nameof(value2))] string? property2 = null)
         where T : IComparable<T>
     {
-        if (BuildInPredicates.LessThan(value1, value2))
-            return this;
-
-        property1 = RemovePrefix(property1);
-        property2 = RemovePrefix(property2);
-        var property1Name = DisplayNames.Instance.GetDisplayName(type, property1);
-        var property2Name = DisplayNames.Instance.GetDisplayName(type, property2);
-
-        return WithProblem(Problems.InvalidParameter(
-            string.Format(R.LessThanMessageTemplate, property1Name, property2Name)));
+        return BuildInPredicates.LessThan(value1, value2)
+            ? this: WithProblem(Rules.LessThan, value1, value2, R.LessThanMessageTemplate, property1, property2);
     }
 
     /// <summary>
@@ -1204,16 +1207,8 @@ public readonly ref struct RuleSet
         [CallerArgumentExpression(nameof(value2))] string? property2 = null)
         where T : struct, IComparable<T>
     {
-        if (BuildInPredicates.LessThan(value1, value2))
-            return this;
-
-        property1 = RemovePrefix(property1);
-        property2 = RemovePrefix(property2);
-        var property1Name = DisplayNames.Instance.GetDisplayName(type, property1);
-        var property2Name = DisplayNames.Instance.GetDisplayName(type, property2);
-
-        return WithProblem(Problems.InvalidParameter(
-            string.Format(R.LessThanMessageTemplate, property1Name, property2Name)));
+        return BuildInPredicates.LessThan(value1, value2)
+            ? this : WithProblem(Rules.LessThan, value1, value2, R.LessThanMessageTemplate, property1, property2);
     }
 
     /// <summary>
@@ -1233,16 +1228,9 @@ public readonly ref struct RuleSet
         [CallerArgumentExpression(nameof(value2))] string? property2 = null)
         where T : IComparable<T>
     {
-        if (BuildInPredicates.LessThanOrEqual(value1, value2))
-            return this;
-
-        property1 = RemovePrefix(property1);
-        property2 = RemovePrefix(property2);
-        var property1Name = DisplayNames.Instance.GetDisplayName(type, property1);
-        var property2Name = DisplayNames.Instance.GetDisplayName(type, property2);
-
-        return WithProblem(Problems.InvalidParameter(
-            string.Format(R.LessThanOrEqualMessageTemplate, property1Name, property2Name)));
+        return BuildInPredicates.LessThanOrEqual(value1, value2)
+            ? this
+            : WithProblem(Rules.LessThanOrEqual, value1, value2, R.LessThanOrEqualMessageTemplate, property1, property2);
     }
 
     /// <summary>
@@ -1262,16 +1250,9 @@ public readonly ref struct RuleSet
         [CallerArgumentExpression(nameof(value2))] string? property2 = null)
         where T : struct, IComparable<T>
     {
-        if (BuildInPredicates.LessThanOrEqual(value1, value2))
-            return this;
-
-        property1 = RemovePrefix(property1);
-        property2 = RemovePrefix(property2);
-        var property1Name = DisplayNames.Instance.GetDisplayName(type, property1);
-        var property2Name = DisplayNames.Instance.GetDisplayName(type, property2);
-
-        return WithProblem(Problems.InvalidParameter(
-            string.Format(R.LessThanOrEqualMessageTemplate, property1Name, property2Name)));
+        return BuildInPredicates.LessThanOrEqual(value1, value2)
+            ? this
+            : WithProblem(Rules.LessThanOrEqual, value1, value2, R.LessThanOrEqualMessageTemplate, property1, property2);
     }
 
     /// <summary>
@@ -1291,16 +1272,9 @@ public readonly ref struct RuleSet
         [CallerArgumentExpression(nameof(value2))] string? property2 = null)
         where T : IComparable<T>
     {
-        if (BuildInPredicates.GreaterThan(value1, value2))
-            return this;
-
-        property1 = RemovePrefix(property1);
-        property2 = RemovePrefix(property2);
-        var property1Name = DisplayNames.Instance.GetDisplayName(type, property1);
-        var property2Name = DisplayNames.Instance.GetDisplayName(type, property2);
-
-        return WithProblem(Problems.InvalidParameter(
-            string.Format(R.GreaterThanMessageTemplate, property1Name, property2Name)));
+        return BuildInPredicates.GreaterThan(value1, value2)
+            ? this
+            : WithProblem(Rules.GreaterThan, value1, value2, R.GreaterThanMessageTemplate, property1, property2);
     }
 
     /// <summary>
@@ -1320,16 +1294,9 @@ public readonly ref struct RuleSet
         [CallerArgumentExpression(nameof(value2))] string? property2 = null)
         where T : struct, IComparable<T>
     {
-        if (BuildInPredicates.GreaterThan(value1, value2))
-            return this;
-
-        property1 = RemovePrefix(property1);
-        property2 = RemovePrefix(property2);
-        var property1Name = DisplayNames.Instance.GetDisplayName(type, property1);
-        var property2Name = DisplayNames.Instance.GetDisplayName(type, property2);
-
-        return WithProblem(Problems.InvalidParameter(
-            string.Format(R.GreaterThanMessageTemplate, property1Name, property2Name)));
+        return BuildInPredicates.GreaterThan(value1, value2)
+            ? this
+            : WithProblem(Rules.GreaterThan, value1, value2, R.GreaterThanMessageTemplate, property1, property2);
     }
 
     /// <summary>
@@ -1349,16 +1316,9 @@ public readonly ref struct RuleSet
         [CallerArgumentExpression(nameof(value2))] string? property2 = null)
         where T : IComparable<T>
     {
-        if (BuildInPredicates.GreaterThanOrEqual(value1, value2))
-            return this;
-
-        property1 = RemovePrefix(property1);
-        property2 = RemovePrefix(property2);
-        var property1Name = DisplayNames.Instance.GetDisplayName(type, property1);
-        var property2Name = DisplayNames.Instance.GetDisplayName(type, property2);
-
-        return WithProblem(Problems.InvalidParameter(
-            string.Format(R.GreaterThanOrEqualMessageTemplate, property1Name, property2Name)));
+        return BuildInPredicates.GreaterThanOrEqual(value1, value2)
+            ? this
+            : WithProblem(Rules.GreaterThanOrEqual, value1, value2, R.GreaterThanOrEqualMessageTemplate, property1, property2);
     }
 
     /// <summary>
@@ -1378,16 +1338,9 @@ public readonly ref struct RuleSet
         [CallerArgumentExpression(nameof(value2))] string? property2 = null)
         where T : struct, IComparable<T>
     {
-        if (BuildInPredicates.GreaterThanOrEqual(value1, value2))
-            return this;
-
-        property1 = RemovePrefix(property1);
-        property2 = RemovePrefix(property2);
-        var property1Name = DisplayNames.Instance.GetDisplayName(type, property1);
-        var property2Name = DisplayNames.Instance.GetDisplayName(type, property2);
-
-        return WithProblem(Problems.InvalidParameter(
-            string.Format(R.GreaterThanOrEqualMessageTemplate, property1Name, property2Name)));
+        return BuildInPredicates.GreaterThanOrEqual(value1, value2)
+            ? this
+            : WithProblem(Rules.GreaterThanOrEqual, value1, value2, R.GreaterThanOrEqualMessageTemplate, property1, property2);
     }
 
     #endregion
@@ -1401,21 +1354,18 @@ public readonly ref struct RuleSet
     /// <param name="value">The value to validate.</param>
     /// <param name="predicate">The predicate to validate.</param>
     /// <param name="messageFormatter">The message formatter.</param>
+    /// <param name="ruleName">The rule name.</param>
     /// <param name="property">The property name.</param>
     /// <returns>A <see cref="RuleSet"/> reference.</returns>
     public RuleSet Must<T>(
         T value, 
         Func<T, bool> predicate, 
         Func<string, T, string> messageFormatter,
+        string? ruleName = null,
         [CallerArgumentExpression(nameof(value))] string? property = null)
     {
-        if (predicate(value)) 
-            return this;
-
-        property = RemovePrefix(property);
-        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
-
-        return WithProblem(Problems.InvalidParameter(messageFormatter(propertyName, value), property));
+        return predicate(value)
+            ? this: WithCustomProblem(ruleName, value, messageFormatter, property);
     }
 
     /// <summary>
@@ -1427,6 +1377,7 @@ public readonly ref struct RuleSet
     /// <param name="param">The parameter to validate.</param>
     /// <param name="predicate">The predicate to validate.</param>
     /// <param name="messageFormatter">The message formatter.</param>
+    /// <param name="ruleName">The rule name.</param>
     /// <param name="property">The property name.</param>
     /// <returns>A <see cref="RuleSet"/> reference.</returns>
     public RuleSet Must<TValue, TParam>(
@@ -1434,15 +1385,12 @@ public readonly ref struct RuleSet
         TParam param,
         Func<TValue, TParam, bool> predicate,
         Func<string, TValue, TParam, string> messageFormatter,
+        string? ruleName = null,
         [CallerArgumentExpression(nameof(value))] string? property = null)
     {
-        if (predicate(value, param))
-            return this;
-
-        property = RemovePrefix(property);
-        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
-
-        return WithProblem(Problems.InvalidParameter(messageFormatter(propertyName, value, param), property));
+        return predicate(value, param)
+            ? this
+            : WithCustomProblem(ruleName, value, param, messageFormatter, property);
     }
 
     /// <summary>
@@ -1454,6 +1402,7 @@ public readonly ref struct RuleSet
     /// <param name="value2">The second value to validate.</param>
     /// <param name="predicate">The predicate to validate.</param>
     /// <param name="messageFormatter">The message formatter.</param>
+    /// <param name="ruleName">The rule name.</param>
     /// <param name="property1">The first property name.</param>
     /// <param name="property2">The second property name.</param>
     /// <returns>A <see cref="RuleSet"/> reference.</returns>
@@ -1462,18 +1411,13 @@ public readonly ref struct RuleSet
         T2 value2,
         Func<T1, T2, bool> predicate,
         Func<string, string, T1, T2, string> messageFormatter,
+        string? ruleName = null,
         [CallerArgumentExpression(nameof(value1))] string? property1 = null,
         [CallerArgumentExpression(nameof(value2))] string? property2 = null)
     {
-        if (predicate(value1, value2))
-            return this;
-
-        property1 = RemovePrefix(property1);
-        property2 = RemovePrefix(property2);
-        var property1Name = DisplayNames.Instance.GetDisplayName(type, property1);
-        var property2Name = DisplayNames.Instance.GetDisplayName(type, property2);
-
-        return WithProblem(Problems.InvalidParameter(messageFormatter(property1Name, property2Name, value1, value2)));
+        return predicate(value1, value2)
+            ? this
+            : WithCustomProblem(ruleName, value1, value2, messageFormatter, property1, property2);
     }
 
     /// <summary>
@@ -1487,6 +1431,7 @@ public readonly ref struct RuleSet
     /// <param name="param">The parameter to validate.</param>
     /// <param name="predicate">The predicate to validate.</param>
     /// <param name="messageFormatter">The message formatter.</param>
+    /// <param name="ruleName">The rule name.</param>
     /// <param name="property1">The first property name.</param>
     /// <param name="property2">The second property name.</param>
     /// <returns>A <see cref="RuleSet"/> reference.</returns>
@@ -1496,19 +1441,13 @@ public readonly ref struct RuleSet
         TParam param,
         Func<T1, T2, TParam, bool> predicate,
         Func<string, string, T1, T2, TParam, string> messageFormatter,
+        string? ruleName = null,
         [CallerArgumentExpression(nameof(value1))] string? property1 = null,
         [CallerArgumentExpression(nameof(value2))] string? property2 = null)
     {
-        if (predicate(value1, value2, param))
-            return this;
-
-        property1 = RemovePrefix(property1);
-        property2 = RemovePrefix(property2);
-        var property1Name = DisplayNames.Instance.GetDisplayName(type, property1);
-        var property2Name = DisplayNames.Instance.GetDisplayName(type, property2);
-
-        return WithProblem(Problems.InvalidParameter(
-            messageFormatter(property1Name, property2Name, value1, value2, param)));
+        return predicate(value1, value2, param)
+            ? this
+            : WithCustomProblem(ruleName, value1, value2, param, messageFormatter, property1, property2);
     }
 
     #endregion
@@ -1529,14 +1468,9 @@ public readonly ref struct RuleSet
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet Email(string? value, [CallerArgumentExpression(nameof(value))] string? property = null)
     {
-        if (BuildInPredicates.IsEmail(value))
-            return this;
-
-        property = RemovePrefix(property);
-        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
-
-        return WithProblem(Problems.InvalidParameter(
-            string.Format(R.EmailMessageTemplate, propertyName), property));
+        return BuildInPredicates.IsEmail(value)
+            ? this
+            : WithProblem(Rules.Email, value, R.EmailMessageTemplate, property);
     }
 
     /// <summary>
@@ -1553,14 +1487,9 @@ public readonly ref struct RuleSet
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet Url(string? value, [CallerArgumentExpression(nameof(value))] string? property = null)
     {
-        if (BuildInPredicates.IsUrl(value))
-            return this;
-
-        property = RemovePrefix(property);
-        var propertyName = DisplayNames.Instance.GetDisplayName(type, property);
-
-        return WithProblem(Problems.InvalidParameter(
-            string.Format(R.UrlMessageTemplate, propertyName), property));
+        return BuildInPredicates.IsUrl(value)
+            ? this
+            : WithProblem(Rules.Url, value, R.UrlMessageTemplate, property);
     }
 
     #endregion
@@ -1956,16 +1885,20 @@ public readonly ref struct RuleSet
 
         var allProblems = problems;
 
+        int index = 0;
         foreach (var value in values)
+        {
+            index++;
             if (value.HasProblems(out var nestedProblems))
             {
-                nestedProblems.ForEach(RemovePrefix(property), (param, prop) => prop.ReplaceProperty(param));
+                nestedProblems.ForEach(RemovePrefix(property), (param, prop) => prop.ReplaceProperty($"{param}[{index}]"));
 
                 if (allProblems is null)
                     allProblems = nestedProblems;
                 else
                     allProblems.AddRange(nestedProblems);
             }
+        }
 
         if (allProblems is null)
             return this;
@@ -2056,6 +1989,70 @@ public readonly ref struct RuleSet
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private RuleSet WithCustomProblem<T>(string? rule, T value, Func<string, T, string> messageFormatter, string? property)
+    {
+        GetPropertyNameAndDisplayName(property, out var propertyName, out var displayName);
+
+        var problem = Problems.InvalidParameter(messageFormatter(displayName, value), propertyName);
+
+        if (rule is not null)
+            problem.With(Rules.RuleProperty, rule);
+
+        problem.With(Rules.CurrentValueProperty, value);
+
+        return WithProblem(problem);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private RuleSet WithCustomProblem<T, P>(string? rule, T value, P param, Func<string, T, P, string> messageFormatter, string? property)
+    {
+        GetPropertyNameAndDisplayName(property, out var propertyName, out var displayName);
+
+        var problem = Problems.InvalidParameter(messageFormatter(displayName, value, param), propertyName);
+
+        if (rule is not null)
+            problem.With(Rules.RuleProperty, rule);
+
+        problem.With(Rules.CurrentValueProperty, value);
+
+        return WithProblem(problem);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private RuleSet WithCustomProblem<T1, T2>(string? rule, T1 value1, T2 value2, Func<string, string, T1, T2, string> messageFormatter, string? property1, string? property2)
+    {
+        GetPropertyNameAndDisplayName(property1, out var property1Name, out var displayName1);
+        GetPropertyNameAndDisplayName(property2, out var property2Name, out var displayName2);
+
+        var problem = Problems.InvalidParameter(messageFormatter(displayName1, displayName2, value1, value2));
+
+        if (rule is not null)
+            problem.With(Rules.RuleProperty, rule);
+
+        problem.With("properties", new string?[] { property1Name, property2Name })
+            .With("values", new object?[] { value1, value2 });
+
+        return WithProblem(problem);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private RuleSet WithCustomProblem<T1, T2, P>(string? rule, T1 value1, T2 value2, P param, Func<string, string, T1, T2, P, string> messageFormatter, string? property1, string? property2)
+    {
+        GetPropertyNameAndDisplayName(property1, out var property1Name, out var displayName1);
+        GetPropertyNameAndDisplayName(property2, out var property2Name, out var displayName2);
+
+        var problem = Problems.InvalidParameter(messageFormatter(displayName1, displayName2, value1, value2, param));
+
+        if (rule is not null)
+            problem.With(Rules.RuleProperty, rule);
+
+        problem.With("properties", new string?[] { property1Name, property2Name })
+            .With("values", new object?[] { value1, value2 });
+
+        return WithProblem(problem);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private string? RemovePrefix(string? property)
     {
         if (propertyPrefix is not null && property is not null && property.StartsWith($"{propertyPrefix}."))
@@ -2070,10 +2067,5 @@ public readonly ref struct RuleSet
         return DisplayNames.Instance.GetDisplayName(type, propertyName);
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private void GetPropertyNameAndDisplayName(string? property, out string? propertyName, out string displayName)
-    {
-        propertyName = RemovePrefix(property);
-        displayName = GetDisplayName(propertyName);
-    }
+    
 }

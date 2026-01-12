@@ -184,4 +184,34 @@ public static class Rules
     /// Rule name for null or minimum and maximum length validation.
     /// </summary>
     public const string NullOrLength = "null-or-length";
+
+    /// <summary>
+    /// Rule name for greater than validation.
+    /// </summary>
+    public const string LessThan = "less-than";
+
+    /// <summary>
+    /// Rule name for greater than or equal validation.
+    /// </summary>
+    public const string LessThanOrEqual = "less-than-or-equal";
+
+    /// <summary>
+    /// Rule name for less than or equal validation.
+    /// </summary>
+    public const string GreaterThan = "greater-than";
+
+    /// <summary>
+    /// Rule name for greater than or equal validation.
+    /// </summary>
+    public const string GreaterThanOrEqual = "greater-than-or-equal";
+
+    /// <summary>
+    /// Rule name for email format validation.
+    /// </summary>
+    public const string Email = "email";
+
+    /// <summary>
+    /// Rule name for URL format validation.
+    /// </summary>
+    public const string Url = "url";
 }
