@@ -15,6 +15,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".items", ".items", "{132AE6
 		.github\workflows\smart-validations.yml = .github\workflows\smart-validations.yml
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{ECA29771-7394-4C22-AE8D-7799B74FF645}"
+	ProjectSection(SolutionItems) = preProject
+		.docs\problems.md = .docs\problems.md
+		.docs\validations.md = .docs\validations.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,5 +38,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{ECA29771-7394-4C22-AE8D-7799B74FF645} = {132AE6EC-FBAA-4D33-9723-E129C9CF0C4B}
 	EndGlobalSection
 EndGlobal
