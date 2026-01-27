@@ -1,6 +1,7 @@
 # SmartValidations
 
-Fluent, model-first validation for .NET that produces structured Problems instead of exceptions. Built on top of SmartProblems to deliver actionable, localized, and machine-readable validation results.
+Fluent, model-first validation for .NET that produces structured Problems instead of exceptions.
+Built on top of SmartProblems to deliver actionable, localized, and machine-readable validation results.
 
 Why SmartValidations
 - Single-pass model validation: express all rules fluently in one `RuleSet`.
