@@ -105,6 +105,116 @@ public class NestedCollectionTests
         Assert.False(hasProblems);
         Assert.Null(problems);
     }
+
+    [Fact]
+    public void Nested_NullItem_IsSkipped()
+    {
+        // Arrange
+        List<BarColl> bars = [null!, new BarColl { Value = "ok" }];
+
+        // Act
+        var set = Rules.Set().Nested(bars);
+
+        // Assert
+        Assert.False(set.HasProblems(out var problems));
+        Assert.Null(problems);
+    }
+
+    [Fact]
+    public void Nested_Func_NullItem_IsSkipped()
+    {
+        // Arrange
+        List<AddressColl> addresses =
+        [
+            null!,
+            new AddressColl { Street = "456 Oak Ave", City = "Othertown", ZipCode = "67890", Country = "USA" }
+        ];
+
+        // Act
+        var set = Rules.Set().Nested(addresses, address => Rules.Set<AddressColl>()
+            .WithPropertyPrefix("address")
+            .NotEmpty(address.Street)
+            .NotEmpty(address.City)
+            .NotEmpty(address.ZipCode)
+            .NotEmpty(address.Country));
+
+        // Assert
+        Assert.False(set.HasProblems(out var problems));
+        Assert.Null(problems);
+    }
+
+    [Fact]
+    public void NotNullNested_Func_NullItem_ReportsProblem()
+    {
+        // Arrange
+        List<AddressColl> addresses =
+        [
+            null!,
+            new AddressColl { Street = "456 Oak Ave", City = "Othertown", ZipCode = "67890", Country = "USA" }
+        ];
+
+        // Act
+        var set = Rules.Set().NotNullNested(addresses, address => Rules.Set<AddressColl>()
+            .WithPropertyPrefix("address")
+            .NotEmpty(address.Street)
+            .NotEmpty(address.City)
+            .NotEmpty(address.ZipCode)
+            .NotEmpty(address.Country));
+
+        // Assert
+        Assert.True(set.HasProblems(out var problems));
+        var p = Assert.Single(problems!);
+        Assert.Equal($"{nameof(addresses)}[0]", p.Property);
+        Assert.Equal(Rules.NotNullOrNotEmpty, p.Extensions![Rules.RuleProperty]);
+    }
+
+    [Fact]
+    public void NotNullNested_IValidable_NullItem_ReportsProblem()
+    {
+        // Arrange
+        List<BarColl> bars = [null!, new BarColl { Value = "ok" }];
+
+        // Act
+        var set = Rules.Set().NotNullNested(bars);
+
+        // Assert
+        Assert.True(set.HasProblems(out var problems));
+        var p = Assert.Single(problems!);
+        Assert.Equal($"{nameof(bars)}[0]", p.Property);
+        Assert.Equal(Rules.NotNullOrNotEmpty, p.Extensions![Rules.RuleProperty]);
+    }
+
+    [Fact]
+    public void NotNullNested_ValidateFunc_NullItem_ReportsProblem()
+    {
+        // Arrange
+        List<BazColl> bazes = [null!, new BazColl { Value = "ok" }];
+
+        // Act
+        var set = Rules.Set().NotNullNested(bazes, b => b.HasProblems);
+
+        // Assert
+        Assert.True(set.HasProblems(out var problems));
+        var p = Assert.Single(problems!);
+        Assert.Equal($"{nameof(bazes)}[0]", p.Property);
+        Assert.Equal(Rules.NotNullOrNotEmpty, p.Extensions![Rules.RuleProperty]);
+    }
+
+    [Fact]
+    public void NotNullNested_NullItemAndInvalidItem_ReportsBothProblems()
+    {
+        // Arrange
+        List<BarColl> bars = [null!, new BarColl { Value = string.Empty }];
+
+        // Act
+        var set = Rules.Set().NotNullNested(bars);
+
+        // Assert
+        Assert.True(set.HasProblems(out var problems));
+        Assert.Equal(2, problems!.Count);
+        Assert.Contains(problems, p => p.Property == $"{nameof(bars)}[0]");
+        Assert.Contains(problems, p => p.Property == $"{nameof(bars)}[1].{nameof(BarColl.Value)}");
+    }
 }
 
 [DisplayName("Order (Collection)")]

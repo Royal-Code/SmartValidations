@@ -623,7 +623,7 @@ public sealed class OrderRequest : IValidable
 }
 ```
 
-`NotNullNested` adiciona problema se o objeto for nulo. `Nested` ignora nulo.
+`NotNullNested` adiciona problema se o objeto for nulo (em coleções, também para itens nulos, com propriedade indexada). `Nested` ignora nulo.
 
 ### Validação inline com prefixo
 

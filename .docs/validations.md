@@ -283,6 +283,7 @@ Comparações relativas
 Datas e horários
 - `InPast` / `InFuture` / `Today` para `DateTime`, `DateTimeOffset`, `DateOnly`
 - `After` / `Before` / `Between` para os mesmos tipos
+- As regras relativas (`InPast`, `InFuture`, `Today`) usam `BuildInPredicates.Clock` (`TimeProvider`, padrão `TimeProvider.System`); substitua em testes para resultados determinísticos.
 
 E-mail e URL
 - `Email(string?)` e `Url(string?)`
@@ -295,8 +296,8 @@ Customização
 
 Validação aninhada
 - Objetos opcionais: `Nested(value, Func<T, Problems?>)` / `Nested(value, Func<T, ValidateFunc>)` / `Nested(value) where T: IValidable`
-- Coleções opcionais: `Nested(IEnumerable<T>, ...)` com indexação automática
-- Objetos e coleções obrigatórios: `NotNullNested(...)` com as mesmas variações; gera problema quando o valor/coleção é `null`.
+- Coleções opcionais: `Nested(IEnumerable<T>, ...)` com indexação automática; itens `null` são ignorados
+- Objetos e coleções obrigatórios: `NotNullNested(...)` com as mesmas variações; gera problema quando o valor/coleção é `null` e, em coleções, quando um item é `null` (com propriedade indexada, ex.: `Items[2]`).
 
 Structs com `IValidable`
 - `Validate<T>(value) where T: struct, IValidable`

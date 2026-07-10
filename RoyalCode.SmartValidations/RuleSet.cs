@@ -11,6 +11,11 @@ namespace RoyalCode.SmartValidations;
 /// <summary>
 /// Struct to apply validation rules and collect the result.
 /// </summary>
+/// <remarks>
+/// After the first failed rule, all copies of a <see cref="RuleSet"/> share the same underlying
+/// <see cref="Problems"/> collection. Use it as a single fluent chain; do not branch an intermediate
+/// <see cref="RuleSet"/> into independent chains.
+/// </remarks>
 public readonly ref struct RuleSet
 {
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]
@@ -142,7 +147,7 @@ public readonly ref struct RuleSet
     }
 
     /// <summary>
-    /// Validates a number to ensure that the value is not null or empty.
+    /// Validates a number to ensure that the value is not null or empty. Zero is considered empty.
     /// </summary>
     /// <typeparam name="T">The value type.</typeparam>
     /// <param name="value">The value to validate.</param>
@@ -160,7 +165,7 @@ public readonly ref struct RuleSet
     }
 
     /// <summary>
-    /// Validates a number to ensure that the value is not null or empty.
+    /// Validates a number to ensure that the value is not null or empty. Zero is considered empty.
     /// </summary>
     /// <typeparam name="T">The value type.</typeparam>
     /// <param name="value">The value to validate.</param>
@@ -457,7 +462,7 @@ public readonly ref struct RuleSet
     /// Validates a string to ensure that the value is equal to the expected value.
     /// </summary>
     /// <param name="value">The string value to validate.</param>
-    /// <param name="expected">The expected value.</param>
+    /// <param name="expected">The expected value. Must not be null.</param>
     /// <param name="comparison">The string comparison type.</param>
     /// <param name="property">The property name.</param>
     /// <returns>A <see cref="RuleSet"/> reference.</returns>
@@ -515,7 +520,7 @@ public readonly ref struct RuleSet
     /// Validates a string to ensure that the value is not equal to the expected value.
     /// </summary>
     /// <param name="value">The string value to validate.</param>
-    /// <param name="expected">The expected value.</param>
+    /// <param name="expected">The expected value. Must not be null.</param>
     /// <param name="comparison">The string comparison type.</param>
     /// <param name="property">The property name.</param>
     /// <returns>A <see cref="RuleSet"/> reference.</returns>
@@ -711,7 +716,7 @@ public readonly ref struct RuleSet
     /// <returns>A <see cref="RuleSet"/> reference.</returns>
     public RuleSet Matches(
         string? value,
-        string pattern,
+        [StringSyntax(StringSyntaxAttribute.Regex)] string pattern,
         string? patternDescription = null,
         [CallerArgumentExpression(nameof(value))] string? property = null)
     {
@@ -749,7 +754,7 @@ public readonly ref struct RuleSet
     /// <returns>A <see cref="RuleSet"/> reference.</returns>
     public RuleSet NotMatches(
         string? value,
-        string pattern,
+        [StringSyntax(StringSyntaxAttribute.Regex)] string pattern,
         string? patternDescription = null,
         [CallerArgumentExpression(nameof(value))] string? property = null)
     {
@@ -1192,6 +1197,7 @@ public readonly ref struct RuleSet
 
     /// <summary>
     /// Validates if the first value is less than the second value.
+    /// Null is treated as the smallest possible value, following the same convention as <see cref="Comparer{T}.Default"/>.
     /// </summary>
     /// <typeparam name="T">The value type.</typeparam>
     /// <param name="value1">The first value to validate.</param>
@@ -1235,6 +1241,7 @@ public readonly ref struct RuleSet
 
     /// <summary>
     /// Validates if the first value is less than or equal to the second value.
+    /// Null is treated as the smallest possible value, following the same convention as <see cref="Comparer{T}.Default"/>.
     /// </summary>
     /// <typeparam name="T">The value type.</typeparam>
     /// <param name="value1">The first value to validate.</param>
@@ -1279,6 +1286,7 @@ public readonly ref struct RuleSet
 
     /// <summary>
     /// Validates if the first value is greater than the second value.
+    /// Null is treated as the smallest possible value, following the same convention as <see cref="Comparer{T}.Default"/>.
     /// </summary>
     /// <typeparam name="T">The value type.</typeparam>
     /// <param name="value1">The first value to validate.</param>
@@ -1323,6 +1331,7 @@ public readonly ref struct RuleSet
 
     /// <summary>
     /// Validates if the first value is greater than or equal to the second value.
+    /// Null is treated as the smallest possible value, following the same convention as <see cref="Comparer{T}.Default"/>.
     /// </summary>
     /// <typeparam name="T">The value type.</typeparam>
     /// <param name="value1">The first value to validate.</param>
@@ -1852,7 +1861,7 @@ public readonly ref struct RuleSet
 
     #endregion
 
-    #region Mist
+    #region Misc
 
     /// <summary>
     /// <para>
@@ -2015,14 +2024,14 @@ public readonly ref struct RuleSet
     }
 
     /// <summary>
-    /// Validates a collection of nested values to ensure that it is not null and applies the specified nested validations.
+    /// Validates a collection of nested values to ensure that the collection and its items are not null,
+    /// applying the specified nested validations. Null items are reported as problems.
     /// </summary>
     /// <typeparam name="T">The type of the nested value.</typeparam>
     /// <param name="values">The collection of nested values to validate.</param>
     /// <param name="nestedValidations">A function that takes the nested value and returns a collection of problems if validation fails.</param>
     /// <param name="property">The name of the property being validated.</param>
     /// <returns>A RuleSet containing validation problems, if any.</returns>
-
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RuleSet NotNullNested<T>(
         IEnumerable<T>? values,
@@ -2033,11 +2042,30 @@ public readonly ref struct RuleSet
         if (values is null)
             return WithNullOrEmptyProblem(property);
 
-        return Nested(values, nestedValidations, property);
+        var set = this;
+        int index = 0;
+        foreach (var value in values)
+        {
+            if (value is null)
+            {
+                set = set.WithNullOrEmptyProblem($"{property}[{index}]");
+            }
+            else if (nestedValidations(value) is { } nestedProblems)
+            {
+                foreach (var problem in nestedProblems)
+                    problem.ChainProperty(RemovePrefix(property), index);
+
+                set = set.WithProblems(nestedProblems);
+            }
+            index++;
+        }
+
+        return set;
     }
 
     /// <summary>
-    /// Validates a collection of nested values to ensure that it is not null and applies the specified <see cref="ValidateFunc"/>.
+    /// Validates a collection of nested values to ensure that the collection and its items are not null,
+    /// applying the specified <see cref="ValidateFunc"/>. Null items are reported as problems.
     /// </summary>
     /// <typeparam name="T">The type of the nested value.</typeparam>
     /// <param name="values">The collection of nested values to validate.</param>
@@ -2054,11 +2082,30 @@ public readonly ref struct RuleSet
         if (values is null)
             return WithNullOrEmptyProblem(property);
 
-        return Nested(values, validation, property);
+        var set = this;
+        int index = 0;
+        foreach (var value in values)
+        {
+            if (value is null)
+            {
+                set = set.WithNullOrEmptyProblem($"{property}[{index}]");
+            }
+            else if (validation(value)(out var nestedProblems))
+            {
+                foreach (var problem in nestedProblems)
+                    problem.ChainProperty(RemovePrefix(property), index);
+
+                set = set.WithProblems(nestedProblems);
+            }
+            index++;
+        }
+
+        return set;
     }
 
     /// <summary>
-    /// Validates a collection of nested values to ensure that it is not null and applies the specified nested validations.
+    /// Validates a collection of nested values to ensure that the collection and its items are not null,
+    /// applying the <see cref="IValidable"/> validation of each item. Null items are reported as problems.
     /// </summary>
     /// <typeparam name="T">The type of the nested value.</typeparam>
     /// <param name="values">The collection of nested values to validate.</param>
@@ -2073,7 +2120,25 @@ public readonly ref struct RuleSet
         if (values is null)
             return WithNullOrEmptyProblem(property);
 
-        return Nested(values, property);
+        var set = this;
+        int index = 0;
+        foreach (var value in values)
+        {
+            if (value is null)
+            {
+                set = set.WithNullOrEmptyProblem($"{property}[{index}]");
+            }
+            else if (value.HasProblems(out var nestedProblems))
+            {
+                foreach (var problem in nestedProblems)
+                    problem.ChainProperty(property, index);
+
+                set = set.WithProblems(nestedProblems);
+            }
+            index++;
+        }
+
+        return set;
     }
 
     /// <summary>
@@ -2168,6 +2233,7 @@ public readonly ref struct RuleSet
 
     /// <summary>
     /// Validates a collection of nested values with the specified nested validations.
+    /// Null items are skipped.
     /// </summary>
     /// <typeparam name="T">The type of the nested value.</typeparam>
     /// <param name="values">The collection of nested values to validate.</param>
@@ -2186,22 +2252,20 @@ public readonly ref struct RuleSet
 
         Problems? allProblems = problems;
 
-        int index = -1;
+        int index = 0;
         foreach (var value in values)
         {
+            if (value is not null && nestedValidations(value) is { } nestedProblems)
+            {
+                foreach (var problem in nestedProblems)
+                    problem.ChainProperty(RemovePrefix(property), index);
+
+                if (allProblems is null)
+                    allProblems = nestedProblems;
+                else
+                    allProblems.AddRange(nestedProblems);
+            }
             index++;
-
-            var nestedProblems = nestedValidations(value);
-            if (nestedProblems is null)
-                continue;
-
-            foreach (var problem in nestedProblems)
-                problem.ChainProperty(RemovePrefix(property), index);
-
-            if (allProblems is null)
-                allProblems = nestedProblems;
-            else
-                allProblems.AddRange(nestedProblems);
         }
 
         if (allProblems is null)
@@ -2212,6 +2276,7 @@ public readonly ref struct RuleSet
 
     /// <summary>
     /// Validates a collection of nested values with the <see cref="ValidateFunc"/> of the specified type.
+    /// Null items are skipped.
     /// </summary>
     /// <typeparam name="T">The type of the nested value.</typeparam>
     /// <param name="values">The collection of nested values to validate.</param>
@@ -2253,7 +2318,8 @@ public readonly ref struct RuleSet
     }
 
     /// <summary>
-    /// Validates a collection of nested values to ensure that they are not null and implement the <see cref="IValidable"/> interface.
+    /// Validates a collection of nested values that implement the <see cref="IValidable"/> interface.
+    /// Null items are skipped.
     /// </summary>
     /// <typeparam name="T">The type of the nested value.</typeparam>
     /// <param name="values">The collection of nested values to validate.</param>
@@ -2666,6 +2732,16 @@ public readonly ref struct RuleSet
             .With("values", new object?[] { value1, value2 });
 
         return WithProblem(problem);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private RuleSet WithProblems(Problems newProblems)
+    {
+        if (problems is null)
+            return new RuleSet(type, newProblems, propertyPrefix);
+
+        problems.AddRange(newProblems);
+        return new RuleSet(type, problems, propertyPrefix);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

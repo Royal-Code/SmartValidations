@@ -16,7 +16,19 @@ public static class BuildInPredicates
     private static readonly EmailAddressAttribute EmailAddressValidator = new();
     private static readonly UrlAttribute UrlValidator = new();
 
-    #region Mist
+    /// <summary>
+    /// The timeout applied when matching string patterns, protecting against catastrophic backtracking.
+    /// A <see cref="RegexMatchTimeoutException"/> is thrown when exceeded.
+    /// </summary>
+    public static readonly TimeSpan RegexMatchTimeout = TimeSpan.FromSeconds(1);
+
+    /// <summary>
+    /// The time provider used by the date rules (<c>InPast</c>, <c>InFuture</c>, <c>Today</c>).
+    /// Defaults to <see cref="TimeProvider.System"/>. Replace it to obtain deterministic results in tests.
+    /// </summary>
+    public static TimeProvider Clock { get; set; } = TimeProvider.System;
+
+    #region Misc
 
     /// <summary>
     /// Determines whether the specified value matches the pattern of a valid email address.
@@ -69,10 +81,11 @@ public static class BuildInPredicates
 
     /// <summary>
     /// Validates whether the specified string matches the given regular expression pattern.
+    /// The match is limited by <see cref="RegexMatchTimeout"/>.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool Matches(string? value, string pattern)
-        => value is not null && Regex.IsMatch(value, pattern);
+    public static bool Matches(string? value, [StringSyntax(StringSyntaxAttribute.Regex)] string pattern)
+        => value is not null && Regex.IsMatch(value, pattern, RegexOptions.None, RegexMatchTimeout);
 
     /// <summary>
     /// Validates whether the specified string matches the given regular expression.
@@ -83,11 +96,11 @@ public static class BuildInPredicates
 
     /// <summary>
     /// Validates whether the specified string does not match the given regular expression pattern.
-    /// Null is considered valid.
+    /// Null is considered valid. The match is limited by <see cref="RegexMatchTimeout"/>.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool NotMatches(string? value, string pattern)
-        => value is null || !Regex.IsMatch(value, pattern);
+    public static bool NotMatches(string? value, [StringSyntax(StringSyntaxAttribute.Regex)] string pattern)
+        => value is null || !Regex.IsMatch(value, pattern, RegexOptions.None, RegexMatchTimeout);
 
     /// <summary>
     /// Validates whether the specified string does not match the given regular expression.
@@ -158,17 +171,17 @@ public static class BuildInPredicates
     #region NotEmpty
 
     /// <summary>
-    /// Validates whether the specified value is not empty.
+    /// Validates whether the specified value is not empty. For numbers, zero is considered empty.
     /// </summary>
     /// <typeparam name="T">The value type.</typeparam>
     /// <param name="value">The value to validate.</param>
     /// <returns>True if the value is not empty, otherwise false.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool NotEmpty<T>([NotNullWhen(true)] T value) where T: INumber<T> 
+    public static bool NotEmpty<T>([NotNullWhen(true)] T value) where T: INumber<T>
         => value != T.Zero;
 
     /// <summary>
-    /// Validates whether the specified value is not empty.
+    /// Validates whether the specified value is not empty. For numbers, zero is considered empty.
     /// </summary>
     /// <typeparam name="T">The value type.</typeparam>
     /// <param name="value">The value to validate.</param>
@@ -214,8 +227,8 @@ public static class BuildInPredicates
     /// <param name="value">The value to validate.</param>
     /// <returns>True if the value is not empty, otherwise false.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool NotEmpty<T>([NotNullWhen(true)] IEnumerable<T>? value) 
-        => value is not null && value.Any();
+    public static bool NotEmpty<T>([NotNullWhen(true)] IEnumerable<T>? value)
+        => value is not null && (value.TryGetNonEnumeratedCount(out var count) ? count != 0 : value.Any());
 
     /// <summary>
     /// Validates whether the specified value is not empty.
@@ -668,6 +681,7 @@ public static class BuildInPredicates
 
     /// <summary>
     /// Validates whether the specified value is less than the other value.
+    /// Null is treated as the smallest possible value, following the same convention as <see cref="Comparer{T}.Default"/>.
     /// </summary>
     /// <typeparam name="T">The value type.</typeparam>
     /// <param name="value">The value to validate.</param>
@@ -694,6 +708,7 @@ public static class BuildInPredicates
 
     /// <summary>
     /// Validates whether the specified value is less than or equal to the other value.
+    /// Null is treated as the smallest possible value, following the same convention as <see cref="Comparer{T}.Default"/>.
     /// </summary>
     /// <typeparam name="T">The value type.</typeparam>
     /// <param name="value">The value to validate.</param>
@@ -720,6 +735,7 @@ public static class BuildInPredicates
 
     /// <summary>
     /// Validates whether the specified value is greater than the other value.
+    /// Null is treated as the smallest possible value, following the same convention as <see cref="Comparer{T}.Default"/>.
     /// </summary>
     /// <typeparam name="T">The value type.</typeparam>
     /// <param name="value">The value to validate.</param>
@@ -746,6 +762,7 @@ public static class BuildInPredicates
 
     /// <summary>
     /// Validates whether the specified value is greater than or equal to the other value.
+    /// Null is treated as the smallest possible value, following the same convention as <see cref="Comparer{T}.Default"/>.
     /// </summary>
     /// <typeparam name="T">The value type.</typeparam>
     /// <param name="value">The value to validate.</param>
@@ -860,7 +877,7 @@ public static class BuildInPredicates
     /// <returns>True if the value is in the past, otherwise false.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool InPast(DateTime value)
-        => value < DateTime.Now;
+        => value < Clock.GetLocalNow().DateTime;
 
     /// <summary>
     /// Validates whether the specified value is in the past.
@@ -869,7 +886,7 @@ public static class BuildInPredicates
     /// <returns>True if the value is in the past, otherwise false.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool InPast(DateTimeOffset value)
-        => value < DateTimeOffset.Now;
+        => value < Clock.GetLocalNow();
 
     /// <summary>
     /// Validates whether the specified value is in the past.
@@ -878,7 +895,7 @@ public static class BuildInPredicates
     /// <returns>True if the value is in the past, otherwise false.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool InPast(DateOnly value)
-        => value < DateOnly.FromDateTime(DateTime.Now);
+        => value < DateOnly.FromDateTime(Clock.GetLocalNow().DateTime);
 
     /// <summary>
     /// Validates whether the specified value is in the future.
@@ -887,7 +904,7 @@ public static class BuildInPredicates
     /// <returns>True if the value is in the future, otherwise false.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool InFuture(DateTime value)
-        => value > DateTime.Now;
+        => value > Clock.GetLocalNow().DateTime;
 
     /// <summary>
     /// Validates whether the specified value is in the future.
@@ -896,7 +913,7 @@ public static class BuildInPredicates
     /// <returns>True if the value is in the future, otherwise false.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool InFuture(DateTimeOffset value)
-        => value > DateTimeOffset.Now;
+        => value > Clock.GetLocalNow();
 
     /// <summary>
     /// Validates whether the specified value is in the future.
@@ -905,7 +922,7 @@ public static class BuildInPredicates
     /// <returns>True if the value is in the future, otherwise false.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool InFuture(DateOnly value)
-        => value > DateOnly.FromDateTime(DateTime.Now);
+        => value > DateOnly.FromDateTime(Clock.GetLocalNow().DateTime);
 
     /// <summary>
     /// Validates whether the specified value is today.
@@ -914,16 +931,17 @@ public static class BuildInPredicates
     /// <returns>True if the value is today, otherwise false.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool Today(DateTime value)
-        => value.Date == DateTime.Now.Date;
+        => value.Date == Clock.GetLocalNow().Date;
 
     /// <summary>
     /// Validates whether the specified value is today.
+    /// The value is converted to the <see cref="Clock"/> local time zone before comparing the dates.
     /// </summary>
     /// <param name="value">The value to validate.</param>
     /// <returns>True if the value is today, otherwise false.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool Today(DateTimeOffset value)
-        => value.Date == DateTimeOffset.Now.Date;
+        => TimeZoneInfo.ConvertTime(value, Clock.LocalTimeZone).Date == Clock.GetLocalNow().Date;
 
     /// <summary>
     /// Validates whether the specified value is today.
@@ -932,7 +950,7 @@ public static class BuildInPredicates
     /// <returns>True if the value is today, otherwise false.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool Today(DateOnly value)
-        => value == DateOnly.FromDateTime(DateTime.Now);
+        => value == DateOnly.FromDateTime(Clock.GetLocalNow().DateTime);
 
     /// <summary>
     /// Validates whether the specified value is after the compareTo value.

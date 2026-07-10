@@ -170,6 +170,9 @@ return Rules.Set<EventPeriod>()
 - Use `HttpsUrl` when HTTPS is required.
 - Use `RelativeUrl` for paths such as `/orders/1`, `orders/1`, `../orders/1` or query-only relative targets.
 - Use date rules directly in `RuleSet`; do not wrap `BuildInPredicates` in `Must` for these cases.
+- `InPast`, `InFuture` and `Today` read the current time from `BuildInPredicates.Clock`, a `TimeProvider` that defaults to `TimeProvider.System`.
+- In tests, assign a fixed `TimeProvider` to `BuildInPredicates.Clock` for deterministic date validations, and restore the original value afterwards.
+- Do not use `DateTime.Now` workarounds to make date rules testable; replace `BuildInPredicates.Clock` instead.
 
 ## Nested Objects
 
@@ -261,8 +264,8 @@ Rules:
 
 - Collection item paths include indexes, for example `Items[0].ProductId`.
 - Use `NotEmpty(values)` when an empty collection is invalid.
-- Use `NotNullNested(values, ...)` when `null` collection is invalid.
-- Use `Nested(values, ...)` when `null` collection is valid.
+- Use `NotNullNested(values, ...)` when a `null` collection is invalid; it also reports `null` items with indexed paths such as `Items[2]`.
+- Use `Nested(values, ...)` when a `null` collection is valid; `null` items are skipped.
 - Do not combine `NotEmpty(values)` with `NotNullNested(values, ...)` unless duplicate null problems are acceptable.
 
 ## IValidable Classes
