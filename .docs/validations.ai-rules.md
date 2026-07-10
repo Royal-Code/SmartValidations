@@ -40,8 +40,12 @@ Use SmartValidations to produce structured `Problems` with `RuleSet` and `IValid
 - Positive number: `Positive(value)`.
 - Non-zero number: `NotZero(value)`.
 - Compare two values: `LessThan`, `LessThanOrEqual`, `GreaterThan`, `GreaterThanOrEqual`.
+- Value must equal a fixed constant: `Equal(value, expected)`; must differ from it: `NotEqual(value, expected)`.
+- Two properties must match (e.g. password confirmation): `BothEqual(value1, value2)`; must differ: `BothNotEqual(value1, value2)`.
+- Two fields must be filled together or both null: `BothNullOrNotEmpty(value1, value2)`.
+- String format with no built-in rule: `Matches(value, pattern, patternDescription)`.
 - Required email: `NotEmpty(email).Email(email)`.
-- Optional email: use `NullOrNotEmpty(email)` and validate format only when a value is present.
+- Optional email: `When(email is not null, s => s.Email(email))`; `Email(null)` reports a problem, so guard optional fields with `When`.
 - Absolute URL: `Url(value)` or `AbsoluteUrl(value)`.
 - HTTPS URL: `HttpsUrl(value)`.
 - Relative URL/path: `RelativeUrl(value)`.
@@ -120,6 +124,7 @@ return Rules.Set<OrderItem>()
 
 - Prefer `Min`, `Max`, `MinMax`, `Positive`, `Negative`, `Zero` and `NotZero` for fixed constraints.
 - Use comparison rules only when both operands are meaningful values from the model.
+- Nullable comparison overloads treat `null` as the smallest possible value (same convention as `Comparer<T>.Default`); add `NotNull` before them only when `null` itself must be invalid.
 
 ```csharp
 return Rules.Set<Period>()
@@ -165,6 +170,7 @@ return Rules.Set<EventPeriod>()
 ```
 
 - Use `Email` after `NotEmpty` for required email fields.
+- For optional email or URL fields, wrap the format rule in `When(value is not null, s => s.Email(value))`; format rules report a problem for null values.
 - Use `Url` for generic absolute URL accepted by `UrlAttribute`.
 - Use `AbsoluteUrl` when an absolute URL is semantically required.
 - Use `HttpsUrl` when HTTPS is required.
@@ -240,11 +246,12 @@ public bool HasProblems(out Problems? problems)
 {
     return Rules.Set<Order>()
         .NotEmpty(Items)
-        .Nested(Items, item => Rules.Set<OrderItem>()
-            .WithPropertyPrefix(nameof(item))
-            .NotEmpty(item.ProductId)
-            .Positive(item.Quantity)
-            .Min(item.Price, 0m))
+        .When(Items is not null, s => s.NotNullNested(Items, item =>
+            Rules.Set<OrderItem>()
+                .WithPropertyPrefix(nameof(item))
+                .NotEmpty(item.ProductId)
+                .Positive(item.Quantity)
+                .Min(item.Price, 0m)))
         .HasProblems(out problems);
 }
 ```
@@ -266,7 +273,7 @@ Rules:
 - Use `NotEmpty(values)` when an empty collection is invalid.
 - Use `NotNullNested(values, ...)` when a `null` collection is invalid; it also reports `null` items with indexed paths such as `Items[2]`.
 - Use `Nested(values, ...)` when a `null` collection is valid; `null` items are skipped.
-- Do not combine `NotEmpty(values)` with `NotNullNested(values, ...)` unless duplicate null problems are acceptable.
+- For required non-empty collections with non-null items, use `NotEmpty(values)` plus `When(values is not null, s => s.NotNullNested(values, ...))` to avoid duplicate null problems.
 
 ## IValidable Classes
 

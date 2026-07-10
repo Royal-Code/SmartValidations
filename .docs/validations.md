@@ -128,12 +128,15 @@ public readonly struct Money : IValidable
 }
 
 var prices = new[] { new Money(-1, ""), new Money(10, "USD") };
-var set = Rules.Set().Validate((IEnumerable<Money>)prices);
+var set = Rules.Set().Validate(prices);
 if (set.HasProblems(out var problems))
 {
-    // problems conterá caminhos com índices: [0], [1]
+    // apenas o item inválido gera problemas; o Property de cada problema
+    // será o nome do argumento com índice: "prices[0]"
 }
 ```
+
+Observação: `Validate` substitui o `Property` dos problemas internos pelo nome do argumento (com índice em coleções). No exemplo, tanto a falha de `Amount` quanto a de `Currency` do primeiro item terão `Property == "prices[0]"`; o campo específico permanece no texto da mensagem. Esse comportamento é pensado para value objects, onde o nome externo é mais significativo que o campo interno — para preservar o caminho completo (ex.: `Items[0].Quantity`), use `Nested` com classes.
 
 ## 5. Exemplos de uso aninhados (objetos e coleções)
 
@@ -181,6 +184,8 @@ Problems? ValidateAddress(Address address)
         .NotEmpty(address.Street)
         .NotEmpty(address.City)
         .NotEmpty(address.ZipCode);
+
+var order = new Order { ShippingAddress = new Address() };
 
 var set2 = Rules.Set<Order>()
     .WithPropertyPrefix(nameof(order))
@@ -237,6 +242,7 @@ var strong = Rules.Set()
 
 - Internacionalização
   - As mensagens são formatadas por templates (ex.: `R.MinMessageTemplate`) e nomes de exibição via `DisplayNames`.
+  - Os templates são recursos localizáveis (`R.resx`); a biblioteca inclui inglês (padrão) e `pt-BR`, selecionados pela `CultureInfo.CurrentUICulture` da thread.
   - Configure seus display names (DataAnnotations ou provedor customizado) para mensagens amigáveis.
 
 ## 7. Referência da API
@@ -250,6 +256,7 @@ Escopo de uso do `RuleSet`
 - `RuleSet` é `readonly ref struct`.
 - Use em escopo local e síncrono; não armazene em campos, não capture em lambdas assíncronas e não tente atravessar `await`.
 - O uso principal esperado é dentro de `HasProblems(out Problems?)` ou funções síncronas que retornam `Problems?`.
+- Use como uma única cadeia fluente: após a primeira falha, as cópias de um `RuleSet` compartilham a mesma coleção de `Problems` — não ramifique um `RuleSet` intermediário em cadeias independentes.
 
 Criação e inspeção
 - `Rules.Set()` / `Rules.Set<T>()` / `RuleSet.For<T>()`
@@ -262,6 +269,7 @@ Nulos e vazios
 - `NotEmpty` para: `string`, `INumber<T>`, `T? where T: struct, INumber<T>`, arrays, `ICollection<T>`, `IReadOnlyCollection<T>`, `IEnumerable<T>`, `DateTime(Offset)`, `DateOnly`, `Guid`
 - `NullOrNotEmpty` para: `string`, `INumber<T>`, `T? where T: struct, INumber<T>`
 - Duais: `BothNullOrNotEmpty(string?, string?)`
+- Semântica de "vazio": zero para números, `MinValue` para datas, `Guid.Empty` para GUIDs, nula/em branco para strings, sem itens para coleções.
 
 Igualdade/Desigualdade
 - `Equal` e `NotEqual` para `string` (com `StringComparison`) e tipos `IEquatable<T>` (inclui versões `Nullable<T>`)
@@ -271,6 +279,7 @@ Strings e padrões
 - `Matches` / `NotMatches` com `string pattern` ou `Regex`
 - `StartsWith` / `EndsWith` / `Contains` / `NotContain`
 - `OnlyLetters` / `OnlyDigits` / `OnlyLettersOrDigits` / `NoWhiteSpace`
+- As sobrecargas com `string pattern` aplicam `BuildInPredicates.RegexMatchTimeout` (1s) como proteção contra backtracking catastrófico.
 
 Numéricos e faixas
 - `Min` / `Max` / `MinMax` (e variantes `NullOrMin`, `NullOrMax`, `NullOrMinMax`)
@@ -279,6 +288,7 @@ Numéricos e faixas
 
 Comparações relativas
 - `LessThan` / `LessThanOrEqual` / `GreaterThan` / `GreaterThanOrEqual` (para tipos `IComparable<T>` e suas variantes `Nullable`)
+- Nas variantes `Nullable`, `null` é tratado como o menor valor possível (mesma convenção de `Comparer<T>.Default`).
 
 Datas e horários
 - `InPast` / `InFuture` / `Today` para `DateTime`, `DateTimeOffset`, `DateOnly`
@@ -323,6 +333,7 @@ Metadados em `Problem` (SmartProblems)
 - Para limites fixos, prefira `Min`, `Max`, `MinMax`, `Positive`, `Negative`, `Zero` e `NotZero`; deixe `LessThan`/`GreaterThan` para comparação entre valores.
 - Use `HttpsUrl`, `AbsoluteUrl`, `RelativeUrl` e regras de data diretamente no `RuleSet` antes de recorrer a `Must`.
 - Não armazene `RuleSet` fora do escopo local de validação; ele é um `ref struct`.
+- Trate o `RuleSet` como uma cadeia fluente única; não ramifique um set intermediário em cadeias independentes (as cópias compartilham os `Problems`).
 - Em coleções, valide cada item com `Nested`/`Validate` para obter caminhos com índice.
 
 ## 9. Resumo
