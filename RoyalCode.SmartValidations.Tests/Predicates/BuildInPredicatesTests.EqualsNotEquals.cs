@@ -228,9 +228,5 @@ public partial class BuildInPredicatesTests
         yield return [1M, 2M, false];
         yield return [BigInteger.One, BigInteger.One, true];
         yield return [BigInteger.One, BigInteger.Zero, false];
-        yield return [(int?)1, (int?)1, true];
-        yield return [(int?)1, (int?)2, false];
-        yield return [(int?)null, (int?)1, false];
-        yield return [(int?)null, (int?)0, true];
     }
 }

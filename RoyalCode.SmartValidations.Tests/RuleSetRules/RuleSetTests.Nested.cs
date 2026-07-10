@@ -93,11 +93,45 @@ public partial class RuleSetTests
         // Prefix removed; property should not start with the prefix
         Assert.Equal("Child.IsValid", problem.Property);
     }
+
+    [Fact]
+    public void Nested_IValidable_ChainsFullPropertyPath_WithPrefix()
+    {
+        // Arrange
+        var parent = new Parent { Child = new Child { IsValid = false } };
+        var set = Rules.Set<Parent>().WithPropertyPrefix("parent");
+
+        // Act
+        set = set.Nested(parent.Child);
+
+        // Assert
+        Assert.True(set.HasProblems(out var problems));
+        var problem = Assert.Single(problems!);
+        Assert.Equal("parent.Child.ChildProp", problem.Property);
+    }
+
+    [Fact]
+    public void Nested_IValidableCollection_ChainsFullIndexedPropertyPath_WithPrefix()
+    {
+        // Arrange
+        var parent = new Parent { Children = [new Child { IsValid = false }] };
+        var set = Rules.Set<Parent>().WithPropertyPrefix("parent");
+
+        // Act
+        set = set.Nested(parent.Children);
+
+        // Assert
+        Assert.True(set.HasProblems(out var problems));
+        var problem = Assert.Single(problems!);
+        Assert.Equal("parent.Children[0].ChildProp", problem.Property);
+    }
 }
 
 file class Parent
 {
     public Child? Child { get; set; }
+
+    public List<Child>? Children { get; set; }
 }
 
 file class Child : IValidable

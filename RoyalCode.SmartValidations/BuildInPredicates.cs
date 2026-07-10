@@ -61,7 +61,7 @@ public static class BuildInPredicates
     /// <returns>True if the URL is a valid relative URL, otherwise false.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsRelativeUrl([NotNullWhen(true)] string? value)
-        => value is not null && UrlValidator.IsValid(value) && Uri.TryCreate(value, UriKind.Relative, out _);
+        => !string.IsNullOrWhiteSpace(value) && Uri.TryCreate(value, UriKind.Relative, out var uri) && !uri.IsAbsoluteUri;
 
     #endregion
 

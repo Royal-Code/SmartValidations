@@ -79,11 +79,6 @@ public partial class BuildInPredicatesTests
 
     public static IEnumerable<object[]> Nullable_Numbers_Data()
     {
-        foreach (var value in Numbers_Data())
-        {
-            yield return value;
-        }
-
         yield return [(byte?)1, true];
         yield return [(byte?)0, false];
         yield return [(short?)1, true];

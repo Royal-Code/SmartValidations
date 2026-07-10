@@ -99,4 +99,83 @@ public partial class RuleSetTests
         Assert.Equal(Rules.Url, p.Extensions![Rules.RuleProperty]);
         Assert.Equal(model.Url, p.Extensions[Rules.CurrentValueProperty]);
     }
+
+    [Fact]
+    public void HttpsUrl_Valid_NoProblems()
+    {
+        // Arrange
+        string? url = "https://example.com/path?q=1";
+
+        // Act
+        var set = Rules.Set().HttpsUrl(url);
+
+        // Assert
+        Assert.False(set.HasProblems(out var problems));
+        Assert.Null(problems);
+    }
+
+    [Fact]
+    public void HttpsUrl_NotHttps_ProducesProblem()
+    {
+        // Arrange
+        string? url = "http://example.com";
+
+        // Act
+        var set = Rules.Set().HttpsUrl(url);
+
+        // Assert
+        Assert.True(set.HasProblems(out var problems));
+        var p = Assert.Single(problems!);
+        Assert.Equal(nameof(url), p.Property);
+        Assert.Equal(Rules.HttpsUrl, p.Extensions![Rules.RuleProperty]);
+        Assert.Equal(url, p.Extensions[Rules.CurrentValueProperty]);
+    }
+
+    [Fact]
+    public void AbsoluteUrl_Relative_ProducesProblem()
+    {
+        // Arrange
+        string? url = "/orders/1";
+
+        // Act
+        var set = Rules.Set().AbsoluteUrl(url);
+
+        // Assert
+        Assert.True(set.HasProblems(out var problems));
+        var p = Assert.Single(problems!);
+        Assert.Equal(nameof(url), p.Property);
+        Assert.Equal(Rules.AbsoluteUrl, p.Extensions![Rules.RuleProperty]);
+        Assert.Equal(url, p.Extensions[Rules.CurrentValueProperty]);
+    }
+
+    [Fact]
+    public void RelativeUrl_RootPath_NoProblems()
+    {
+        // Arrange
+        string? url = "/orders/1";
+
+        // Act
+        var set = Rules.Set().RelativeUrl(url);
+
+        // Assert
+        Assert.False(set.HasProblems(out var problems));
+        Assert.Null(problems);
+    }
+
+    [Fact]
+    public void RelativeUrl_Absolute_ProducesProblem()
+    {
+        // Arrange
+        string? url = "https://example.com/orders/1";
+
+        // Act
+        var set = Rules.Set().RelativeUrl(url);
+
+        // Assert
+        Assert.True(set.HasProblems(out var problems));
+        var p = Assert.Single(problems!);
+        Assert.Equal(nameof(url), p.Property);
+        Assert.Equal(Rules.RelativeUrl, p.Extensions![Rules.RuleProperty]);
+        Assert.Equal(url, p.Extensions[Rules.CurrentValueProperty]);
+    }
 }

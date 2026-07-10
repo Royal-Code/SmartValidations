@@ -117,6 +117,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AbsoluteUrlMessageTemplate" xml:space="preserve">
+    <value>O campo "{0}" deve ser uma URL absoluta válida</value>
+  </data>
+  <data name="AfterMessageTemplate" xml:space="preserve">
+    <value>O campo "{0}" deve ser posterior a "{1}"</value>
+  </data>
+  <data name="BeforeMessageTemplate" xml:space="preserve">
+    <value>O campo "{0}" deve ser anterior a "{1}"</value>
+  </data>
+  <data name="BetweenMessageTemplate" xml:space="preserve">
+    <value>O campo "{0}" deve estar entre "{1}" e "{2}"</value>
+  </data>
   <data name="BothEqualMessageTemplate" xml:space="preserve">
     <value>O campo "{0}" deve ser igual ao campo "{1}"</value>
   </data>
@@ -155,6 +167,15 @@
   </data>
   <data name="GreaterThanOrEqualMessageTemplate" xml:space="preserve">
     <value>O valor do campo "{0}" deve ser maior ou igual ao valor do campo "{1}"</value>
+  </data>
+  <data name="HttpsUrlMessageTemplate" xml:space="preserve">
+    <value>O campo "{0}" deve ser uma URL HTTPS válida</value>
+  </data>
+  <data name="InFutureMessageTemplate" xml:space="preserve">
+    <value>O campo "{0}" deve estar no futuro</value>
+  </data>
+  <data name="InPastMessageTemplate" xml:space="preserve">
+    <value>O campo "{0}" deve estar no passado</value>
   </data>
   <data name="LengthMessageTemplate" xml:space="preserve">
     <value>O campo "{0}" deve ter um comprimento entre "{1}" e "{2}" caracteres</value>
@@ -195,6 +216,12 @@
   <data name="NoWhiteSpaceMessageTemplate" xml:space="preserve">
     <value>O campo '{0}' não deve ter espaços em branco</value>
   </data>
+  <data name="NegativeMessageTemplate" xml:space="preserve">
+    <value>O campo "{0}" deve ser negativo</value>
+  </data>
+  <data name="NotZeroMessageTemplate" xml:space="preserve">
+    <value>O campo "{0}" não deve ser zero</value>
+  </data>
   <data name="NullOrLengthMessageTemplate" xml:space="preserve">
     <value>O campo "{0}", quando preenchido, deve ter um comprimento entre "{1}" e "{2}" caracteres</value>
   </data>
@@ -225,10 +252,22 @@
   <data name="OnlyLettersOrDigitsMessageTemplate" xml:space="preserve">
     <value>O campo '{0}' deve ter apenas letras ou dígitos (números)</value>
   </data>
+  <data name="PositiveMessageTemplate" xml:space="preserve">
+    <value>O campo "{0}" deve ser positivo</value>
+  </data>
+  <data name="RelativeUrlMessageTemplate" xml:space="preserve">
+    <value>O campo "{0}" deve ser uma URL relativa válida</value>
+  </data>
   <data name="StartsWithMessageTemplate" xml:space="preserve">
     <value>O campo "{0}" deve começar com "{1}"</value>
   </data>
+  <data name="TodayMessageTemplate" xml:space="preserve">
+    <value>O campo "{0}" deve ser hoje</value>
+  </data>
   <data name="UrlMessageTemplate" xml:space="preserve">
     <value>O campo "{0}" deve ser um URL válido</value>
+  </data>
+  <data name="ZeroMessageTemplate" xml:space="preserve">
+    <value>O campo "{0}" deve ser zero</value>
   </data>
 </root>

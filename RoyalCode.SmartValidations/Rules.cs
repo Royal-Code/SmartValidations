@@ -214,4 +214,69 @@ public static class Rules
     /// Rule name for URL format validation.
     /// </summary>
     public const string Url = "url";
+
+    /// <summary>
+    /// Rule name for HTTPS URL format validation.
+    /// </summary>
+    public const string HttpsUrl = "https-url";
+
+    /// <summary>
+    /// Rule name for absolute URL format validation.
+    /// </summary>
+    public const string AbsoluteUrl = "absolute-url";
+
+    /// <summary>
+    /// Rule name for relative URL format validation.
+    /// </summary>
+    public const string RelativeUrl = "relative-url";
+
+    /// <summary>
+    /// Rule name for positive number validation.
+    /// </summary>
+    public const string Positive = "positive";
+
+    /// <summary>
+    /// Rule name for negative number validation.
+    /// </summary>
+    public const string Negative = "negative";
+
+    /// <summary>
+    /// Rule name for zero number validation.
+    /// </summary>
+    public const string Zero = "zero";
+
+    /// <summary>
+    /// Rule name for not zero number validation.
+    /// </summary>
+    public const string NotZero = "not-zero";
+
+    /// <summary>
+    /// Rule name for past date validation.
+    /// </summary>
+    public const string InPast = "in-past";
+
+    /// <summary>
+    /// Rule name for future date validation.
+    /// </summary>
+    public const string InFuture = "in-future";
+
+    /// <summary>
+    /// Rule name for today date validation.
+    /// </summary>
+    public const string Today = "today";
+
+    /// <summary>
+    /// Rule name for after date validation.
+    /// </summary>
+    public const string After = "after";
+
+    /// <summary>
+    /// Rule name for before date validation.
+    /// </summary>
+    public const string Before = "before";
+
+    /// <summary>
+    /// Rule name for date between validation.
+    /// </summary>
+    public const string Between = "between";
 }

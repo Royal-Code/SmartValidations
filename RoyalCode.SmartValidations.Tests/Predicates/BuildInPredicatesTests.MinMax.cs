@@ -177,9 +177,6 @@ public partial class BuildInPredicatesTests
 
     public static IEnumerable<object[]> Nullable_Comparable_Data()
     {
-        foreach(var data in Comparable_Data())
-            yield return data;
-
         yield return [(byte?)0, (byte)1, -1];
         yield return [(byte?)1, (byte)1, 0];
         yield return [(byte?)2, (byte)1, 1];

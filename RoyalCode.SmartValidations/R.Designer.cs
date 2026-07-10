@@ -61,6 +61,42 @@ namespace RoyalCode.SmartValidations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field must be a valid absolute URL.
+        /// </summary>
+        internal static string AbsoluteUrlMessageTemplate {
+            get {
+                return ResourceManager.GetString("AbsoluteUrlMessageTemplate", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field must be after &apos;{1}&apos;.
+        /// </summary>
+        internal static string AfterMessageTemplate {
+            get {
+                return ResourceManager.GetString("AfterMessageTemplate", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field must be before &apos;{1}&apos;.
+        /// </summary>
+        internal static string BeforeMessageTemplate {
+            get {
+                return ResourceManager.GetString("BeforeMessageTemplate", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field must be between &apos;{1}&apos; and &apos;{2}&apos;.
+        /// </summary>
+        internal static string BetweenMessageTemplate {
+            get {
+                return ResourceManager.GetString("BetweenMessageTemplate", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to The &apos;{0}&apos; field must be the same as the &apos;{1}&apos; field.
         /// </summary>
         internal static string BothEqualMessageTemplate {
@@ -168,6 +204,33 @@ namespace RoyalCode.SmartValidations {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field must be a valid HTTPS URL.
+        /// </summary>
+        internal static string HttpsUrlMessageTemplate {
+            get {
+                return ResourceManager.GetString("HttpsUrlMessageTemplate", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field must be in the future.
+        /// </summary>
+        internal static string InFutureMessageTemplate {
+            get {
+                return ResourceManager.GetString("InFutureMessageTemplate", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field must be in the past.
+        /// </summary>
+        internal static string InPastMessageTemplate {
+            get {
+                return ResourceManager.GetString("InPastMessageTemplate", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to The &quot;{0}&quot; field must have a length between &quot;{1}&quot; and &quot;{2}&quot; characters.
         /// </summary>
@@ -295,6 +358,24 @@ namespace RoyalCode.SmartValidations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field must be negative.
+        /// </summary>
+        internal static string NegativeMessageTemplate {
+            get {
+                return ResourceManager.GetString("NegativeMessageTemplate", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field must not be zero.
+        /// </summary>
+        internal static string NotZeroMessageTemplate {
+            get {
+                return ResourceManager.GetString("NotZeroMessageTemplate", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to The &apos;{0}&apos; field, when entered, must have a length between &apos;{1}&apos; and &apos;{2}&apos; characters.
         /// </summary>
         internal static string NullOrLengthMessageTemplate {
@@ -385,6 +466,24 @@ namespace RoyalCode.SmartValidations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field must be positive.
+        /// </summary>
+        internal static string PositiveMessageTemplate {
+            get {
+                return ResourceManager.GetString("PositiveMessageTemplate", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field must be a valid relative URL.
+        /// </summary>
+        internal static string RelativeUrlMessageTemplate {
+            get {
+                return ResourceManager.GetString("RelativeUrlMessageTemplate", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to The &apos;{0}&apos; field must start with &apos;{1}&apos;.
         /// </summary>
         internal static string StartsWithMessageTemplate {
@@ -394,11 +493,29 @@ namespace RoyalCode.SmartValidations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field must be today.
+        /// </summary>
+        internal static string TodayMessageTemplate {
+            get {
+                return ResourceManager.GetString("TodayMessageTemplate", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to The &apos;{0}&apos; field must be a valid URL.
         /// </summary>
         internal static string UrlMessageTemplate {
             get {
                 return ResourceManager.GetString("UrlMessageTemplate", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; field must be zero.
+        /// </summary>
+        internal static string ZeroMessageTemplate {
+            get {
+                return ResourceManager.GetString("ZeroMessageTemplate", resourceCulture);
             }
         }
     }

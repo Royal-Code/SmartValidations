@@ -1345,6 +1345,406 @@ public readonly ref struct RuleSet
 
     #endregion
 
+    #region Positive Negative Zero NotZero
+
+    /// <summary>
+    /// Validates whether the specified value is positive.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet Positive<T>(T value, [CallerArgumentExpression(nameof(value))] string? property = null)
+        where T : INumber<T>
+    {
+        return BuildInPredicates.Positive(value)
+            ? this
+            : WithProblem(Rules.Positive, value, R.PositiveMessageTemplate, property);
+    }
+
+    /// <summary>
+    /// Validates whether the specified value is positive.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet Positive<T>(T? value, [CallerArgumentExpression(nameof(value))] string? property = null)
+        where T : struct, INumber<T>
+    {
+        return BuildInPredicates.Positive(value)
+            ? this
+            : WithProblem(Rules.Positive, value, R.PositiveMessageTemplate, property);
+    }
+
+    /// <summary>
+    /// Validates whether the specified value is negative.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet Negative<T>(T value, [CallerArgumentExpression(nameof(value))] string? property = null)
+        where T : INumber<T>
+    {
+        return BuildInPredicates.Negative(value)
+            ? this
+            : WithProblem(Rules.Negative, value, R.NegativeMessageTemplate, property);
+    }
+
+    /// <summary>
+    /// Validates whether the specified value is negative.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet Negative<T>(T? value, [CallerArgumentExpression(nameof(value))] string? property = null)
+        where T : struct, INumber<T>
+    {
+        return BuildInPredicates.Negative(value)
+            ? this
+            : WithProblem(Rules.Negative, value, R.NegativeMessageTemplate, property);
+    }
+
+    /// <summary>
+    /// Validates whether the specified value is zero.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet Zero<T>(T value, [CallerArgumentExpression(nameof(value))] string? property = null)
+        where T : INumber<T>
+    {
+        return BuildInPredicates.Zero(value)
+            ? this
+            : WithProblem(Rules.Zero, value, R.ZeroMessageTemplate, property);
+    }
+
+    /// <summary>
+    /// Validates whether the specified value is zero.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet Zero<T>(T? value, [CallerArgumentExpression(nameof(value))] string? property = null)
+        where T : struct, INumber<T>
+    {
+        return BuildInPredicates.Zero(value)
+            ? this
+            : WithProblem(Rules.Zero, value, R.ZeroMessageTemplate, property);
+    }
+
+    /// <summary>
+    /// Validates whether the specified value is not zero.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet NotZero<T>(T value, [CallerArgumentExpression(nameof(value))] string? property = null)
+        where T : INumber<T>
+    {
+        return BuildInPredicates.NotZero(value)
+            ? this
+            : WithProblem(Rules.NotZero, value, R.NotZeroMessageTemplate, property);
+    }
+
+    /// <summary>
+    /// Validates whether the specified value is not zero.
+    /// </summary>
+    /// <typeparam name="T">The value type.</typeparam>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet NotZero<T>(T? value, [CallerArgumentExpression(nameof(value))] string? property = null)
+        where T : struct, INumber<T>
+    {
+        return BuildInPredicates.NotZero(value)
+            ? this
+            : WithProblem(Rules.NotZero, value, R.NotZeroMessageTemplate, property);
+    }
+
+    #endregion
+
+    #region Date
+
+    /// <summary>
+    /// Validates whether the specified value is in the past.
+    /// </summary>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet InPast(DateTime value, [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        return BuildInPredicates.InPast(value)
+            ? this
+            : WithProblem(Rules.InPast, value, R.InPastMessageTemplate, property);
+    }
+
+    /// <summary>
+    /// Validates whether the specified value is in the past.
+    /// </summary>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet InPast(DateTimeOffset value, [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        return BuildInPredicates.InPast(value)
+            ? this
+            : WithProblem(Rules.InPast, value, R.InPastMessageTemplate, property);
+    }
+
+    /// <summary>
+    /// Validates whether the specified value is in the past.
+    /// </summary>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet InPast(DateOnly value, [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        return BuildInPredicates.InPast(value)
+            ? this
+            : WithProblem(Rules.InPast, value, R.InPastMessageTemplate, property);
+    }
+
+    /// <summary>
+    /// Validates whether the specified value is in the future.
+    /// </summary>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet InFuture(DateTime value, [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        return BuildInPredicates.InFuture(value)
+            ? this
+            : WithProblem(Rules.InFuture, value, R.InFutureMessageTemplate, property);
+    }
+
+    /// <summary>
+    /// Validates whether the specified value is in the future.
+    /// </summary>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet InFuture(DateTimeOffset value, [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        return BuildInPredicates.InFuture(value)
+            ? this
+            : WithProblem(Rules.InFuture, value, R.InFutureMessageTemplate, property);
+    }
+
+    /// <summary>
+    /// Validates whether the specified value is in the future.
+    /// </summary>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet InFuture(DateOnly value, [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        return BuildInPredicates.InFuture(value)
+            ? this
+            : WithProblem(Rules.InFuture, value, R.InFutureMessageTemplate, property);
+    }
+
+    /// <summary>
+    /// Validates whether the specified value is today.
+    /// </summary>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet Today(DateTime value, [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        return BuildInPredicates.Today(value)
+            ? this
+            : WithProblem(Rules.Today, value, R.TodayMessageTemplate, property);
+    }
+
+    /// <summary>
+    /// Validates whether the specified value is today.
+    /// </summary>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet Today(DateTimeOffset value, [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        return BuildInPredicates.Today(value)
+            ? this
+            : WithProblem(Rules.Today, value, R.TodayMessageTemplate, property);
+    }
+
+    /// <summary>
+    /// Validates whether the specified value is today.
+    /// </summary>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet Today(DateOnly value, [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        return BuildInPredicates.Today(value)
+            ? this
+            : WithProblem(Rules.Today, value, R.TodayMessageTemplate, property);
+    }
+
+    /// <summary>
+    /// Validates whether the specified value is after the compare value.
+    /// </summary>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="compareTo">The value to compare with.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet After(DateTime value, DateTime compareTo, [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        return BuildInPredicates.After(value, compareTo)
+            ? this
+            : WithProblem(Rules.After, value, R.AfterMessageTemplate, property, compareTo);
+    }
+
+    /// <summary>
+    /// Validates whether the specified value is after the compare value.
+    /// </summary>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="compareTo">The value to compare with.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet After(DateTimeOffset value, DateTimeOffset compareTo, [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        return BuildInPredicates.After(value, compareTo)
+            ? this
+            : WithProblem(Rules.After, value, R.AfterMessageTemplate, property, compareTo);
+    }
+
+    /// <summary>
+    /// Validates whether the specified value is after the compare value.
+    /// </summary>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="compareTo">The value to compare with.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet After(DateOnly value, DateOnly compareTo, [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        return BuildInPredicates.After(value, compareTo)
+            ? this
+            : WithProblem(Rules.After, value, R.AfterMessageTemplate, property, compareTo);
+    }
+
+    /// <summary>
+    /// Validates whether the specified value is before the compare value.
+    /// </summary>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="compareTo">The value to compare with.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet Before(DateTime value, DateTime compareTo, [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        return BuildInPredicates.Before(value, compareTo)
+            ? this
+            : WithProblem(Rules.Before, value, R.BeforeMessageTemplate, property, compareTo);
+    }
+
+    /// <summary>
+    /// Validates whether the specified value is before the compare value.
+    /// </summary>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="compareTo">The value to compare with.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet Before(DateTimeOffset value, DateTimeOffset compareTo, [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        return BuildInPredicates.Before(value, compareTo)
+            ? this
+            : WithProblem(Rules.Before, value, R.BeforeMessageTemplate, property, compareTo);
+    }
+
+    /// <summary>
+    /// Validates whether the specified value is before the compare value.
+    /// </summary>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="compareTo">The value to compare with.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet Before(DateOnly value, DateOnly compareTo, [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        return BuildInPredicates.Before(value, compareTo)
+            ? this
+            : WithProblem(Rules.Before, value, R.BeforeMessageTemplate, property, compareTo);
+    }
+
+    /// <summary>
+    /// Validates whether the specified value is between the start and end values.
+    /// </summary>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="start">The start value.</param>
+    /// <param name="end">The end value.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet Between(DateTime value, DateTime start, DateTime end, [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        return BuildInPredicates.Between(value, start, end)
+            ? this
+            : WithBetweenProblem(Rules.Between, value, R.BetweenMessageTemplate, property, start, end);
+    }
+
+    /// <summary>
+    /// Validates whether the specified value is between the start and end values.
+    /// </summary>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="start">The start value.</param>
+    /// <param name="end">The end value.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet Between(DateTimeOffset value, DateTimeOffset start, DateTimeOffset end, [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        return BuildInPredicates.Between(value, start, end)
+            ? this
+            : WithBetweenProblem(Rules.Between, value, R.BetweenMessageTemplate, property, start, end);
+    }
+
+    /// <summary>
+    /// Validates whether the specified value is between the start and end values.
+    /// </summary>
+    /// <param name="value">The value to validate.</param>
+    /// <param name="start">The start value.</param>
+    /// <param name="end">The end value.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet Between(DateOnly value, DateOnly start, DateOnly end, [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        return BuildInPredicates.Between(value, start, end)
+            ? this
+            : WithBetweenProblem(Rules.Between, value, R.BetweenMessageTemplate, property, start, end);
+    }
+
+    #endregion
+
     #region Must
 
     /// <summary>
@@ -1490,6 +1890,63 @@ public readonly ref struct RuleSet
         return BuildInPredicates.IsUrl(value)
             ? this
             : WithProblem(Rules.Url, value, R.UrlMessageTemplate, property);
+    }
+
+    /// <summary>
+    /// <para>
+    ///     Validates a string to ensure that the value is a valid HTTPS URL.
+    /// </para>
+    /// <para>
+    ///     The validation is based on the <see cref="UrlAttribute"/> attribute validation.
+    /// </para>
+    /// </summary>
+    /// <param name="value">The string value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet HttpsUrl(string? value, [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        return BuildInPredicates.IsHttpsUrl(value)
+            ? this
+            : WithProblem(Rules.HttpsUrl, value, R.HttpsUrlMessageTemplate, property);
+    }
+
+    /// <summary>
+    /// <para>
+    ///     Validates a string to ensure that the value is a valid absolute URL.
+    /// </para>
+    /// <para>
+    ///     The validation is based on the <see cref="UrlAttribute"/> attribute validation.
+    /// </para>
+    /// </summary>
+    /// <param name="value">The string value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet AbsoluteUrl(string? value, [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        return BuildInPredicates.IsAbsoluteUrl(value)
+            ? this
+            : WithProblem(Rules.AbsoluteUrl, value, R.AbsoluteUrlMessageTemplate, property);
+    }
+
+    /// <summary>
+    /// <para>
+    ///     Validates a string to ensure that the value is a valid relative URL.
+    /// </para>
+    /// <para>
+    ///     The validation is based on <see cref="Uri"/> relative URL parsing.
+    /// </para>
+    /// </summary>
+    /// <param name="value">The string value to validate.</param>
+    /// <param name="property">The property name.</param>
+    /// <returns>A <see cref="RuleSet"/> reference.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RuleSet RelativeUrl(string? value, [CallerArgumentExpression(nameof(value))] string? property = null)
+    {
+        return BuildInPredicates.IsRelativeUrl(value)
+            ? this
+            : WithProblem(Rules.RelativeUrl, value, R.RelativeUrlMessageTemplate, property);
     }
 
     #endregion
