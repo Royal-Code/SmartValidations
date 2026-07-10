@@ -17,7 +17,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".items", ".items", "{132AE6
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{ECA29771-7394-4C22-AE8D-7799B74FF645}"
 	ProjectSection(SolutionItems) = preProject
+		.docs\problems.ai-rules.md = .docs\problems.ai-rules.md
 		.docs\problems.md = .docs\problems.md
+		.docs\smart-problems-validations.md = .docs\smart-problems-validations.md
 		.docs\validations.md = .docs\validations.md
 	EndProjectSection
 EndProject
@@ -41,5 +43,8 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{ECA29771-7394-4C22-AE8D-7799B74FF645} = {132AE6EC-FBAA-4D33-9723-E129C9CF0C4B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F03738F3-7660-4FCB-BC9C-A1032436C884}
 	EndGlobalSection
 EndGlobal
