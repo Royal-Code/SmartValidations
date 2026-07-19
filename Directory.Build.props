@@ -10,9 +10,9 @@
     </PropertyGroup>
     <PropertyGroup>
         <SVVer>1.0.0</SVVer>
-        <SVPreview>-preview-7.0</SVPreview>
+        <SVPreview>-preview-8.0</SVPreview>
     </PropertyGroup>
     <PropertyGroup>
-        <SPVer>1.0.0-preview-7.0</SPVer>
+        <SPVer>1.0.0-preview-8.0</SPVer>
     </PropertyGroup>
 </Project>
